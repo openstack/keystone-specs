@@ -8,9 +8,8 @@
 Example Spec - The title of your blueprint
 ==========================================
 
-Include the URL of your launchpad blueprint::
+`bp example <https://blueprints.launchpad.net/keystone/+spec/example>`_
 
-  https://blueprints.launchpad.net/keystone/+spec/example
 
 Introduction paragraph -- why are we doing anything? A single paragraph of
 prose that operators can understand.

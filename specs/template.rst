@@ -16,7 +16,8 @@ prose that operators can understand.
 
 Some notes about using this template:
 
-* Your spec should be in ReSTructured text, like this template.
+* Your spec should be in `ReSTructured text
+  <http://sphinx-doc.org/rest.html>`_, like this template.
 
 * Wrap text at 79 columns.
 
@@ -26,8 +27,6 @@ Some notes about using this template:
 
 * Do not delete any of the sections in this template.  If you have
   nothing to say for a whole section, just write: None
-
-* For help with syntax, see http://sphinx-doc.org/rest.html
 
 * To test out your formatting, build the docs using tox, or see:
   http://rst.ninjs.org

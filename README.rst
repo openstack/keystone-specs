@@ -19,10 +19,10 @@ moved to a directory specific to that release::
 
   specs/keystoneclient/<release>/
 
-You can find an example spec in `specs/template.rst`.
+You can find an example spec in ``specs/template.rst``.
 
 Specifications are proposed for a given release by adding them to the
-`specs/<release>` directory and posting it for review.  Not all approved
+``specs/<release>`` directory and posting it for review.  Not all approved
 blueprints will get fully implemented. The implementation status of a blueprint
 for a given release can be found by looking at the blueprint in Launchpad::
 

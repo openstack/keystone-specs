@@ -84,31 +84,29 @@ implementing this change:
   - Various LDAP attributes as selected by operators (e.g. email address) for
     LDAP backed identities created outside of Keystone
 
-  Since (ignoring the current experimental support for domain-specifc backends)
-  all IDs can only be related to the single chosen SQL or LDAP identity driver,
-  upgrading to Juno with multi-backend uuids should not affect these IDs that
-  have already been exposed. The proposal is that by default no identity
-  mapping entries will be created, since there is only the single standard
-  identity driver. The only case where entity IDs from the standard identity
-  driver will be mapped is if the cloud provider wants to ensure that the
-  whatever LDAP attribute is being used as the entity ID is not exposed as the
-  Public ID.  This is achieved by setting the ``backward_compatible_ids``
+  Since (ignoring the current experimental support for domain-specific
+  backends) all IDs can only be related to the single chosen SQL or LDAP
+  identity driver, upgrading to Juno with multi-backend UUIDs should not affect
+  these IDs that have already been exposed. The proposal is that by default no
+  identity mapping entries will be created, since there is only the single
+  standard identity driver. The only case where entity IDs from the standard
+  identity driver will be mapped is if the cloud provider wants to ensure that
+  the whatever LDAP attribute is being used as the entity ID is not exposed as
+  thePublic ID.  This is achieved by setting the ``backward_compatible_ids``
   configuration option to ``False``.
 
 - Public ID generator algorithm.
-  The default generator is proposed as simply a regular uuid4 hex string,
-  similar to how entities are normally identified.  It has also been suggested
-  that an option should be provided for such a Public ID to be regeneratable
-  from the underlying local identifier components, using a hash algorithm.
-  Use of a regeneratable ID will support the following use cases:
+  While the obvious choice is simply another regular uuid4 hex string, it is
+  proposed to use a hash algorithm so that Public IDs are regeneratable
+  from the underlying local identifier components. This has a number of
+  advantages:
 
   - Loss of entire mapping table.
     If the mapping table was ever lost, then an additional recovery mechanism
     (as opposed to reverting to a backup) would be to simply allow the table
     to regenerate on-the-fly as user and group entities were encountered by
-    Keystone.  This will be supported, although its usefulness needs to be
-    tempered with the fact that if the assignments table was also lost, then
-    such a facility could only be part of recovery.
+    Keystone. It should be noted, however, that if the assignments table was
+    also lost, then such a facility could only be part of recovery.
 
   - Ease of purging mapping table.
     In the case where the identities are managed outside of Keystone (e.g. LDAP
@@ -130,46 +128,43 @@ implementing this change:
     the regeneratable case, they would both create the same Public ID and
     avoid a table row clash.  While it should be noted that this issue
     already exists in the regular RW SQL backend (for example, two users
-    of the same name could be created with different uuids via two different
+    of the same name could be created with different UUIDs via two different
     Keystones), the case where a RO LDAP backend is providing the identity
     store via a mapping is far more likely to generate a clash (since it only
     requires two requests to read the same entity at roughly the same time
     while running multiple Keystones).
 
-  There are also several complexities that are created by supporting multiple
-  generators:
+  The selection of a hash algorithm to use is a balance between resulting key
+  size (and hence column width of any client that will need to store the
+  generated ID), probability of collision and security of the encoded data.
+  It should be noted that for most installations, the data being hashed
+  here (local ID and domain ID) is not likely to considered secret - hence the
+  actual security of the hash involved is less important. However, to
+  provide flexibility across all use cases, a pluggable generator backend
+  will be implemented, with a sha256 generator provided as the default. The
+  key produced by generators will be limited to a maximum string size 64 bytes
+  (and any generator producing more than that will cause an exception to be
+  thrown).
 
-  - In the codebase today the controllers generate the ID for an entity they
-    are creating, and pass this to the manager/driver layer. All our unit
+  There are also several complexities that are created by creating an
+  identity mapping layer:
+
+  - In the codebase today the controllers generate the UUID ID for an entity
+    they are creating, and pass this to the manager/driver layer. All our unit
     testing of the manager/driver layer also assumes that the caller specifies
-    the ID. It would seem inappropriate to expose the controller layer to
-    whatever generator algorithm was in use. While irrelevant for the usual
-    RO LDAP or federation case (since Keystone never gets to create entities),
-    for RW LDAP situations where the entities might be created by Keystone or
-    out-of-band via LDAP, one would want the use-cases listed above for hashing
-    to be valid for all entities, not just those that were not created by
-    Keystone.  The proposal is, therefore, to remove the ID generation from
-    the User and Group controllers, and let the identity manager carry out
-    this role. Note that this only affects the controller-manager interface,
-    not the driver interface itself.
+    the ID. Now that the manager layer is dynamically building a Public ID
+    mapping table, it seems inappropriate that the controller layer thinks it
+    is in control of ID generation. The proposal is, therefore, to remove
+    the ID generation from the User and Group controllers, and let the
+    identity manager carry out this role. Note that this only affects the
+    controller-manager interface, not the driver interface itself.  This
+    change, while only affecting a few lines of production code, will result
+    in a large set of mechanical changes to our unit tests.
 
-  - If the underlying driver supports uuids (for example the current SQL
-    backend), does it make sense to hash the uuid just because the algorithm
-    has been specified as hashing?  Today, this might seem overkill, although
-    perhaps in the future we might not wish to treat the identifiers of a
-    separate Keystone IDP as a valid Public ID?  The proposal is to ignore
-    the hashing algorithm if the underlying driver is uuid based (i.e. SQL).
-
-  - One potential advantage of hashing is that it can be quicker to determine
-    if you have a mapping stored already - i.e. you create the Public ID by
-    hashing and do a PK lookup, as opposed to search the table for an entry
-    that matches the three pieces of local identity information.  However,
-    such a PK look up would only work if the generation algorithm setting
-    is immutable (i.e. there "aren't" old entries in the mapping table that
-    use the standard uuid generator). Although this could be mitigated by
-    catching the attempt to create a second mapping to a different Public ID,
-    for now it is recommended that this option for PK lookup is left as a
-    future performance improvement.
+  - If the underlying driver supports UUIDs (for example the current SQL
+    backend), then there seems little advantage in taking a hash of the
+    UUID. The proposal therefore is to use the local UUID as the Public ID
+    for such drivers, and load a null mapping into the mapping table.
 
 Alternatives
 ------------
@@ -211,6 +206,11 @@ lines, then the currently proposed architecture for this change would allow
 a mapping backend to be implemented that simply provided the encoding to
 and from the Public ID rather than actually storing the mapping attributes
 in a table.
+
+An earlier version of this proposal suggested providing an option for
+the algorithm for Public ID generation, e.g. choosing between a regular
+UUID and a hash. This was dropped as there was little advantage in the use
+of regular UUIDs.
 
 Data Model Impact
 -----------------
@@ -364,7 +364,7 @@ The set of items required are:
 - Removal of the "domain deduction" parameter from the identity controller-
   manager interface.
 
-- Ensure a domain is either explicitely or implicitely defined for the List
+- Ensure a domain is either explicitly or implicitly defined for the List
   user and group entities in the controller.
 
 - Removal of the ``user_id`` and ``group_id`` parameters from the identity
@@ -375,7 +375,7 @@ The set of items required are:
 - Provide the two ID generators, UUID and hash, controller by a configuration
   option.
 
-- Modify the idenity manager layer to call the identity mapping layer to
+- Modify the identity manager layer to call the identity mapping layer to
   ensure only Public IDs are exposed to the controller.
 
 - Modify ``keystone-manage`` to provide options for purging the mappings.
@@ -404,7 +404,7 @@ Testing
 =======
 
 No additional tempest testing is proposed since the existing tests are
-sufficient to catch potential anomolies in the Public ID.
+sufficient to catch potential anomalies in the Public ID.
 
 
 Documentation Impact
@@ -417,4 +417,7 @@ are to the configuration guide.
 References
 ==========
 
-Juno Etherpad: https://etherpad.openstack.org/p/juno-keystone-user-ids
+1. Juno Etherpad: https://etherpad.openstack.org/p/juno-keystone-user-ids
+
+2. `NIST high level policy information on hashing algorithms and use
+   <http://csrc.nist.gov/groups/ST/hash/policy.html>`_

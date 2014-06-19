@@ -53,8 +53,9 @@ A detailed description of the problem:
 Proposed Change
 ===============
 
-Here is where you cover the change you propose to make in detail. How do you
-propose to solve this problem?
+Here is where you describe the change you propose to make. How do you propose
+to solve this problem? Address the issue at an architectural level, leaving the
+implementation details for code review.
 
 If this is one part of a larger effort make it clear where this piece ends. In
 other words, what's the scope of this effort?

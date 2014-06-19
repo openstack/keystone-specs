@@ -28,6 +28,15 @@ Keystone client approved specs:
 
    specs/keystoneclient/*
 
+
+Keystone middleware approved specs:
+
+.. toctree::
+  :glob:
+  :maxdepth: 1
+
+  specs/keystonemiddleware/*
+
 ==================
 Indices and tables
 ==================

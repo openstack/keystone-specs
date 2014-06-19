@@ -43,12 +43,14 @@ Problem Description
 
 A detailed description of the problem:
 
-* For a new feature this might be use cases. Ensure you are clear about the
+* For a new feature, this might be use cases. Ensure you are clear about the
   actors in each use case: End User vs Deployer
 
-* For a major reworking of part of the code it would describe the
-  problems in that feature that are being addressed.
+* For a major reworking of part of the code, it would describe the problems in
+  that feature that are being addressed.
 
+This section should clearly communicate *why* it is desirable for the community
+to have a solution to the issue.
 
 Proposed Change
 ===============

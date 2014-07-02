@@ -9,7 +9,7 @@ Service Token Composite Authorization
 =====================================
 
 `Proposed bp service-tokens
-<https://blueprints.launchpad.net/keystone/+spec/service-tokens>`_
+<https://blueprints.launchpad.net/keystonemiddleware/+spec/service-tokens>`_
 
 The concept behind the service token is to provide a mechanism to allow
 a service to handle a request in a different manner if the request is received

@@ -17,27 +17,27 @@ import testtools
 from testtools import matchers
 
 
+PROPOSED_CHANGE_SECTION = 'Proposed Change'
+IMPLEMENTATION_SECTION = 'Implementation'
+
 TITLES = {
     'Problem Description': [],
     'Proposed Change': [
         'Alternatives',
-        'Data Model Impact',
-        'REST API Impact',
         'Security Impact',
         'Notifications Impact',
         'Other End User Impact',
         'Performance Impact',
         'Other Deployer Impact',
-        'Developer Impact',
+        'Developer Impact'
     ],
     'Implementation': [
         'Assignee(s)',
-        'Work Items',
+        'Work Items'
     ],
     'Dependencies': [],
-    'Testing': [],
     'Documentation Impact': [],
-    'References': [],
+    'References': []
 }
 
 
@@ -64,7 +64,12 @@ class TestTitles(testtools.TestCase):
         return titles
 
     def _check_titles(self, titles):
-        self.assertEqual(TITLES, titles)
+        for section in TITLES:
+            self.assertIn(section, titles)
+        for subsection in TITLES[PROPOSED_CHANGE_SECTION]:
+            self.assertIn(subsection, titles[PROPOSED_CHANGE_SECTION])
+        for subsection in TITLES[IMPLEMENTATION_SECTION]:
+            self.assertIn(subsection, titles[IMPLEMENTATION_SECTION])
 
     def test_template(self):
         files = ['specs/template.rst'] + glob.glob('specs/*/*')

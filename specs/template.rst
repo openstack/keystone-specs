@@ -76,72 +76,6 @@ What other ways could we do this thing? Why aren't we using those? This doesn't
 have to be a full literature review, but it should demonstrate that thought has
 been put into why the proposed solution is an appropriate one.
 
-Data Model Impact
------------------
-
-Changes which require modifications to the data model often have a wider impact
-on the system.  The community often has strong opinions on how the data model
-should be evolved, from both a functional and performance perspective. It is
-therefore important to capture and gain agreement as early as possible on any
-proposed changes to the data model.
-
-Questions which need to be addressed by this section include:
-
-* What new data objects and/or database schema changes is this going to
-  require?
-
-* What database migrations will accompany this change.
-
-* How will the initial set of new data objects be generated, for example if you
-  need to take into account existing instances, or modify other existing data
-  describe how that will work.
-
-REST API Impact
----------------
-
-Each API method which is either added or changed should have the following
-
-* Specification for the method
-
-  * A description of what the method does suitable for use in
-    user documentation
-
-  * Method type (PATCH/POST/PUT/GET/DELETE)
-
-  * Normal HTTP response code(s)
-
-  * Expected error HTTP response code(s)
-
-    * A description for each possible error code should be included
-      describing semantic errors which can cause it such as
-      inconsistent parameters supplied to the method, or when an
-      instance is not in an appropriate state for the request to
-      succeed. Errors caused by syntactic problems covered by the JSON
-      schema definition do not need to be included.
-
-  * URL for the resource
-
-  * Parameters which can be passed via the URL
-
-  * JSON schema definition for the body data if allowed
-
-  * JSON schema definition for the response data if any
-
-* Example use case including typical API samples for both data supplied
-  by the caller and the response
-
-* Discuss any policy changes, and discuss what things a deployer needs to
-  think about when defining their policy.
-
-Note that the schema should be defined as restrictively as
-possible. Parameters which are required should be marked as such and
-only under exceptional circumstances should additional parameters
-which are not defined in the schema be permitted (eg
-additionalProperties should be False).
-
-Reuse of existing predefined parameter types such as regexps for
-passwords and user defined names is highly encouraged.
-
 Security Impact
 ---------------
 
@@ -276,20 +210,6 @@ Dependencies
 
 * Does this feature require any new library dependencies or code otherwise not
   included in OpenStack? Or does it depend on a specific version of library?
-
-
-Testing
-=======
-
-Please discuss how the change will be tested. We especially want to know what
-Tempest tests will be added. It is assumed that unit test coverage will be
-added so that doesn't need to be mentioned explicitly, but discussion of why
-you think unit tests are sufficient and we don't need to add more tempest
-tests would need to be included.
-
-Is this untestable in gate given current limitations (specific hardware /
-software configurations available)? If so, are there mitigation plans (3rd
-party testing, gate enhancements, etc).
 
 
 Documentation Impact

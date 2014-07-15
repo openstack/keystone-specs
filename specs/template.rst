@@ -52,13 +52,6 @@ A detailed description of the problem:
 This section should clearly communicate *why* it is desirable for the community
 to have a solution to the issue.
 
-..
- Stop here! On your first proposal to the specs repo, only include the above
- sections, so that the community can agree on the problem statement itself.
- Propose the problem description in the ``specs/next/`` directory. Once the
- community has accepted the problem description, propose a solution (filling in
- the sections below) to a release directory (``specs/juno/`` for example).
-
 Proposed Change
 ===============
 

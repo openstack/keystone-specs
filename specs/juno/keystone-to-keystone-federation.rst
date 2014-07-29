@@ -239,7 +239,7 @@ The flow illustrated in Figure 2 includes the following steps:
 
 3. User will send his scoped token, and "BETA" (a region ID) to ACME.
 
-4. ACME cloud returns the a SAML assertion.
+4. ACME cloud returns a SAML assertion.
 
 Resume previously established Icehouse federation behaviour:
 
@@ -335,7 +335,7 @@ Performance Impact
 The following operations may impact performance:
 
 * Since there could be as many service providers as regions, the catalog may
-  become larger. However this limitation exist today a catalog can have many
+  become larger. However this limitation exists today as a catalog can have many
   endpoints and also become pretty large with the endpoints that a user has
   access to.
 

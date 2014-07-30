@@ -4,7 +4,7 @@
 Identity Program Specifications
 ================================
 
-Contents:
+Template:
 
 .. toctree::
    :glob:

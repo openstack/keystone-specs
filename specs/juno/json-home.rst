@@ -60,13 +60,13 @@ Here's an example of a minimal document that only has ``/v3/users`` and
 
   {
     "resources": {
-      "http://docs.openstack.org/identity/rel/v3/users": {
+      "http://docs.openstack.org/api/openstack-identity/3/rel/users": {
         "href": "/v3/users"
       },
-      "http://docs.openstack.org/identity/rel/v3/user": {
+      "http://docs.openstack.org/api/openstack-identity/3/rel/user": {
         "href-template": "/v3/users/{user_id}",
         "href-vars": {
-          "user_id": "http://docs.openstack.org/identity/v3/param/user_id"
+          "user_id": "http://docs.openstack.org/api/openstack-identity/3/param/user_id"
         },
       },
       // ...
@@ -82,14 +82,17 @@ register a relation with IANA (see section 4.2 "Extension Relation Types" in
 `RFC 5988`_), they can use some unique URL instead. An application could
 potentially fetch this URL to get information about the relationship, so we
 should pick one that could potentially be used to serve up some info about what
-the relationship is and describe the resource. For v3 resources, the relation
-type link will be like ``http://docs.openstack.org/identity/rel/v3/<type>``,
-where ``<type>`` is like ``users``, ``user``, ``projects``, etc.
+the relationship is and describe the resource. The Nova project publishes their
+XSD files at ``http://docs.openstack.org/api/openstack-compute/2/xsd/`` so
+Keystone should publish its files in a similar location for consistency. For v3
+resources, the relation type link will be like
+``http://docs.openstack.org/api/openstack-identity/3/rel/<type>``, where
+``<type>`` is like ``users``, ``user``, ``projects``, etc.
 
 A relationship URL also has to be chosen for the parameters. For v3 parameters,
 these will be like
-``http://docs.openstack.org/identity/v3/param/<parameter-type>``, where
-``<parameter-type>`` is like ``user_id``, ``project_id``, etc.
+``http://docs.openstack.org/api/openstack-identity/3/param/<parameter-type>``,
+where ``<parameter-type>`` is like ``user_id``, ``project_id``, etc.
 
 The JSON Home document that the server returns will change depending on which
 extensions are enabled. The enabled extensions (that are in the pipeline) will
@@ -105,21 +108,21 @@ Here's an example of a resource for an extension, OS-EP-FILTER:
 
   {
     "resources": {
-      "http://docs.openstack.org/identity/rel/v3/ext/OS-EP-FILTER/1.0/project_endpoint": {
+      "http://docs.openstack.org/api/openstack-identity/3/ext/OS-EP-FILTER/1.0/rel/project_endpoint": {
         "href": "/v3/OS-EP-FILTER/projects/{project_id}/endpoints/{endpoint_id}",
         "href-vars": {
-          "project_id": "http://docs.openstack.org/identity/param/project_id",
-          "endpoint_id": "http://docs.openstack.org/identity/param/endpoint_id"
+          "project_id": "http://docs.openstack.org/api/openstack-identity/3/param/project_id",
+          "endpoint_id": "http://docs.openstack.org/api/openstack-identity/3/param/endpoint_id"
         }
       }
     }
   }
 
 The relationship type for extensions will be like
-``http://docs.openstack.org/identity/rel/<api-version>/ext/<extension-name>/<extension-version>/<resource>``.
+``http://docs.openstack.org/api/openstack-identity/<api-version>/ext/<extension-name>/<extension-version>/rel/<resource>``.
 
 The relationship type for a parameter used by an extension will be like
-``http://docs.openstack.org/identity/rel/<api-version>/ext/<extension-name>/<extension-version>/param/<param-id>``.
+``http://docs.openstack.org/api/openstack-identity/<api-version>/ext/<extension-name>/<extension-version>/param/<param-id>``.
 
 The extensions provided by Keystone have routers that implement the
 ``keystone.common.wsgi.ExtensionRouter`` class. A new ``V3ExtensionRouter``

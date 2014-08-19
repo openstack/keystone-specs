@@ -43,10 +43,12 @@ endpoints.
   route can be used as a replacement for both the federation and regular user
   based project lookup. It will allow for projects to be associated with the
   current authentication via more that just user association.
+  Deprecate ``GET /v3/OS-FEDERATION/projects`` in favour of this.
 
 * Create ``GET /v3/auth/domains``. List the domains that a new scoped token can
   be requested for using the current token as authentication. As with projects
   this combines the federated and regular domain lookup cases.
+  Deprecate ``GET /v3/OS-FEDERATION/domains`` in favour of this.
 
 I feel this also simplifies the security model because it means all requests to
 ``/auth`` are purely based on the current authentication scope rather than
@@ -117,7 +119,9 @@ Work Items
 ----------
 
 * Create new routes for projects and domains, join federation and listing APIs.
+* Deprecate the corresponding OS-FEDERATION routes.
 * Expose this information via keystoneclient.
+
 
 Dependencies
 ============

@@ -28,7 +28,7 @@ Proposed Change
 ===============
 
 On the service-side, we need an explicit API call to retrieve an authenticated
-service catalog, such as ``GET /v3/catalog``. This would return the exact
+service catalog, such as ``GET /v3/auth/catalog``. This would return the exact
 contents of a token's ``catalog`` object, with no modification other than
 perhaps ``links``, as is convention in the Identity v3 API. The goal is that
 the object should be usable by all existing clients of the v3 service catalog.
@@ -127,7 +127,9 @@ Work Items
 Dependencies
 ============
 
-None
+The addition of authentication specific routes to the ``/auth`` path is part of
+the ``auth-specific-data`` blueprint. However there is no dependency between
+the functionality of the different blueprints.
 
 Documentation Impact
 ====================

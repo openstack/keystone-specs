@@ -36,7 +36,7 @@ Use Case 1:
   LDAP, which the divisional domain references for authentication.
 
 * The domain admin team creates a top level project for each of the Dev  and
-  Test teams, and assign an admin from each team the project_admin role on
+  Test teams, and assign an admin from each team the ``project_admin`` role on
   their respective top level project. The domain admin team create a quota for
   each team on their respective top level project.
 * Each team can then creates projects below their top level project, and the
@@ -47,46 +47,46 @@ Proposed Change
 
 1. Create the hierarchy:
 
-* Example of the new project hierarchy:
+* Example of the new project hierarchy::
 
-+-------------------------------------+
-|               Division A            |
-|                                     |
-|        +-------------------------+  |
-|        | User: domain_admin_team |  |
-|        | Role: domain_admin      |  |
-|        +-------------------------+  |
-|                                     |
-|                 /\                  |
-|                                     |
-|                /  \                 |
-|                                     |
-|               /    \                |
-|                                     |
-|              /      \               |
-|                                     |
-|             /        \              |
-|                                     |
-|            /          \             |
-|                                     |
-| +--------------+ +--------------+   |
-| |   Dev        | |     Test     |   |
-| +--------------+ +--------------+   |
-| +--------------+ +--------------+   |
-| | User: Joe    | | User: Sam    |   |
-| | Role: p_admin| | Role: p_admin|   |
-| +--------------+ +--------------+   |
-|                                     |
-|       /                  \          |
-|                                     |
-|     /                      \        |
-|                                     |
-| +---------------+ +----------------+|
-| | Dev.subproject| | Test.subproject||
-| +---------------+ +----------------+|
-|                                     |
-| p_admin= role project_admin         |
-+-------------------------------------+
+   +-------------------------------------+
+   |               Division A            |
+   |                                     |
+   |        +-------------------------+  |
+   |        | User: domain_admin_team |  |
+   |        | Role: domain_admin      |  |
+   |        +-------------------------+  |
+   |                                     |
+   |                 /\                  |
+   |                                     |
+   |                /  \                 |
+   |                                     |
+   |               /    \                |
+   |                                     |
+   |              /      \               |
+   |                                     |
+   |             /        \              |
+   |                                     |
+   |            /          \             |
+   |                                     |
+   | +--------------+ +--------------+   |
+   | |   Dev        | |     Test     |   |
+   | +--------------+ +--------------+   |
+   | +--------------+ +--------------+   |
+   | | User: Joe    | | User: Sam    |   |
+   | | Role: p_admin| | Role: p_admin|   |
+   | +--------------+ +--------------+   |
+   |                                     |
+   |       /                  \          |
+   |                                     |
+   |     /                      \        |
+   |                                     |
+   | +---------------+ +----------------+|
+   | | Dev.subproject| | Test.subproject||
+   | +---------------+ +----------------+|
+   |                                     |
+   | p_admin= role project_admin         |
+   +-------------------------------------+
 
   * After that you must create domains and the projects hierarchies will be
     placed under those domains. You can create as many domains as you want and
@@ -115,47 +115,47 @@ Proposed Change
 
 6. Roles:
 
-  * Inherited roles assignments:
-    If a user has, say, a role assignment "project_member" that was marked as
-    inherited in a project, then this user will automatically have this role
-    on any child projects. Currently, inherited roles assignments only work
-    from domains to projects, this proposal expands this inheritance to work
-    down a hierarchy of projects.
+   * Inherited roles assignments:
+     If a user has, say, a role assignment "project_member" that was marked as
+     inherited in a project, then this user will automatically have this role
+     on any child projects. Currently, inherited roles assignments only work
+     from domains to projects, this proposal expands this inheritance to work
+     down a hierarchy of projects.
 
-  * This change will be implemented in the extension OS-INHERIT, like
-    currently working for domains.
+   * This change will be implemented in the extension OS-INHERIT, like
+     currently working for domains.
 
-  * Example:
+   * Example:
 
-    * The domain_admin_team creates the Dev and Test projects and assigns the
-      role "project_admin" to project_admin_user. As their role is inheritable
-      it will have access to their children.
+     * The domain_admin_team creates the Dev and Test projects and assigns the
+       role ``project_admin`` to project_admin_user. As their role is inheritable
+       it will have access to their children.
 
-    * As Joe has project_admin role assignment in Dev project, he can create
-      instances in this project and can create subproject and control quotas
-      to his subprojects. The same thing will happen to Sam in Test.
+     * As Joe has ``project_admin`` role assignment in Dev project, he can create
+       instances in this project and can create subproject and control quotas
+       to his subprojects. The same thing will happen to Sam in Test.
 
-    * The user_project_admin can grant/revoke roles to users in its project
-      and in its subprojects. A user with a member role can't grant/revoke
-      roles.
+     * The user_project_admin can grant/revoke roles to users in its project
+       and in its subprojects. A user with a member role can't grant/revoke
+       roles.
 
 7. Token:
 
-  * Token must be scoped to the target project on which the action is
-    performed.
+   * Token must be scoped to the target project on which the action is
+     performed.
 
-  * If the role assignment of a project is inheritable, tokens granted to
-    child projects will also contain this role assignment, otherwise it will
-    not have access.
+   * If the role assignment of a project is inheritable, tokens granted to
+     child projects will also contain this role assignment, otherwise it will
+     not have access.
 
 8. Users:
 
-  * This proposal does not change user/group management - this is still
-    handled at the domain level.
+   * This proposal does not change user/group management - this is still
+     handled at the domain level.
 
 Notes:
 
-  * Not available in Keystone V2 API.
+* Not available in Keystone V2 API.
 
 Alternatives
 ------------

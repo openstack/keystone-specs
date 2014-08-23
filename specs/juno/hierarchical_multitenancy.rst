@@ -231,42 +231,42 @@ Work Items
 ----------
 
 1. Projects in Keystone will gain a new field, parent_project_id, to create a
-tree of projects.(This change will me made in keystone core)
+   tree of projects. (This change will be made in Keystone core)
 
-2. Roles Assignments will be inherited down the project hierarchy tree but
+2. Role assignments will be inherited down the project hierarchy tree but
    currently, inherited role assignments are only supported from domain to
-   project. So he have to create a API for inherited roles for projects, we
-   have to implement the following functions: (This change will me made in
+   project. So we have to create a API for inherited roles for projects, we
+   have to implement the following functions: (This change will be made in
    extension OS-INHERIT)
 
-* A role assignment defined for a project A must be inherited by all the child
-  projects of project A;
-* A role assignment defined for a group X must be inherited by all the child
-  projects of that group X;
-* For a project A, list all the inherited roles assignment of A, which will
-  also be inherited by the child projects of project A;
-* For a group X, list all the inherited role assignment of ABC projecs, which
-  will also be inherited by the users in the group X in the child projects;
-* Check if a user has an inherited role assignment on a project;
-* Check if a group has an inherited role assignment on a project;
-* Revoke an inherited project role assignment from a user on a project;
-* Revoke an inherited project role assignment from group on a project.
+  * A role assignment defined for a project A must be inherited by all the child
+    projects of project A;
+  * A role assignment defined for a group X must be inherited by all the child
+    projects of that group X;
+  * For a project A, list all the inherited roles assignment of A, which will
+    also be inherited by the child projects of project A;
+  * For a group X, list all the inherited role assignment of ABC projecs, which
+    will also be inherited by the users in the group X in the child projects;
+  * Check if a user has an inherited role assignment on a project;
+  * Check if a group has an inherited role assignment on a project;
+  * Revoke an inherited project role assignment from a user on a project;
+  * Revoke an inherited project role assignment from group on a project.
 
 3. Currently GET /role_assignments is extended by OS-INHERIT to return role
    assignments that are inherited from domain to project. This proposal will
    further extend this to also include role assignments inherited from project
-   to project. (This change will me made in keystone core and extension
-   OS_INHERIT)
+   to project. (This change will be made in Keystone core and the OS-INHERIT
+   extension)
 
 4. Update the token contents to include roles inherited down the project
-   hierarchy.(This change will me made in keystone core)
+   hierarchy. (This change will be made in Keystone core)
 
-5. We will create a call in the API and later in keystoneclient to return the
-   hierarchy with the options:(This change will me made in keystone core)
+5. We will create a call in the API and python-keystoneclient to return the
+   hierarchy with the options: (This change will be made in Keystone core)
 
-* Parent projects
-* Children projects
-* Full hierarchy
+  * Parent projects
+  * Children projects
+  * Full hierarchy
 
 Dependencies
 ============

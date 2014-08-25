@@ -8,8 +8,8 @@
 Filter credentials by user ID
 =============================
 
-`bp example <https://blueprints.launchpad.net/keystone/+spec/filter-credentials-by-user>`_
-
+`bp filter-credentials-by-user
+<https://blueprints.launchpad.net/keystone/+spec/filter-credentials-by-user>`_
 
 Enable control of credentials for users via the Identity policy file
 

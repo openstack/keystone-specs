@@ -4,14 +4,6 @@
 Identity Program Specifications
 ================================
 
-Template:
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
-   specs/*
-
 Juno approved specs:
 
 .. toctree::
@@ -28,13 +20,16 @@ Kilo approved specs:
 
    specs/kilo/*
 
-Keystone client approved specs:
+.. NOTE(dhellmann): Uncomment this section after there is at least one
+   non-template spec for keystoneclient.
 
-.. toctree::
-   :glob:
-   :maxdepth: 1
+   Keystone client approved specs:
 
-   specs/keystoneclient/*
+   .. toctree::
+      :glob:
+      :maxdepth: 1
+
+      specs/keystoneclient/*
 
 
 Keystone middleware approved specs:

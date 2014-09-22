@@ -14,6 +14,7 @@ What's New in Version 3.4
 
 - Addition of ``parent_id`` optional attribute to projects. This enables the
   construction of a hierarchy of projects.
+- Addition of domain specific configuration management for a domain entity.
 
 What's New in Version 3.3
 -------------------------
@@ -3042,6 +3043,201 @@ Response:
 ::
 
     Status: 204 No Content
+
+
+Domain configuration management
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Keystone optionally supports the ability to manage domain specific
+configuration options via the API.
+
+::
+
+    GET /domains/{domain_id}/config
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/rel/domain_config``
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "config": {
+            "identity": {
+                "driver": "keystone.identity.backends.ldap.Identity"
+            },
+            "ldap": {
+                "url": "http://myldap/root",
+                "user_tree_dn": "ou=Users,dc=root,dc=org"
+            }
+        }
+    }
+
+Domain specific configuration options are structured within their group
+objects. Currently only the ``identity`` and ``ldap`` groups are supported, and
+these will be used to override the default configuration settings for the
+storage of users and groups by the identity server. Attempting to set
+configuration options for groups other than ``identity`` and ``ldap`` will
+result in an HTTP 403 Forbidden.
+
+It is also possible to read specific groups or options.
+
+::
+
+    GET /domains/{domain_id}/config/ldap
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "ldap": {
+            "url": "http://myldap/root",
+            "user_tree_dn": "ou=Users,dc=root,dc=org"
+        }
+    }
+
+An individual option may also be requested.
+
+::
+
+    GET /domains/{domain_id}/config/ldap/url
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "url": "http://myldap/root",
+    }
+
+Domain specific configuration options can also be created, updated and deleted
+using the POST, PATCH and DELETE HTTP commands. When updating, it is only
+necessary to include those options that are being updated.
+
+::
+
+    PATCH /domains/{domain_id}/config
+
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/rel/domain_config``
+
+Request:
+
+::
+
+    {
+        "config": {
+            "ldap": {
+                "url": "http://myldap/my_new_root",
+                "user_tree_dn": "ou=Users,dc=my_new_root,dc=org"
+            }
+        }
+    }
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "config": {
+            "identity": {
+                "driver": "keystone.identity.backends.ldap.Identity"
+            },
+            "ldap": {
+                "url": "http://myldap/my_new_root",
+                "user_tree_dn": "ou=Users,dc=my_new_root,dc=org"
+            }
+        }
+    }
+
+In a similar case to GET, an indiviudal option can be updated.
+
+::
+
+    PATCH /domains/{domain_id}/config/ldap/url
+
+Request:
+
+::
+
+    {
+        "url": "http://myldap/my_other_root",
+    }
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "config": {
+            "identity": {
+                "driver": "keystone.identity.backends.ldap.Identity"
+            },
+            "ldap": {
+                "url": "http://myldap/my_other_root",
+                "user_tree_dn": "ou=Users,dc=my_new_root,dc=org"
+            }
+        }
+    }
+
+In the above example, if the ``url`` option did not yet exist then an HTTP POST
+command would be required.
+
+The Keystone API will not return options that are considered sensitive,
+although these can be written/updated. The only option currently considered
+sensitive is the ``password`` option within the ``ldap`` group. To aid those
+situations where sensitive options are required to be included in other
+options that otherwise would not considered sensitive, the API supports a
+substitution ability for any sensitive options. For example, the
+password can be included as part of the ``url`` option.
+
+::
+
+    PATCH /domains/{domain_id}/config/ldap/url
+
+Request:
+
+::
+
+    {
+        "url": "http://myldap/my_other_root/my_user/%(password)s",
+    }
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "config": {
+            "identity": {
+                "driver": "keystone.identity.backends.ldap.Identity"
+            },
+            "ldap": {
+                "url": "http://myldap/my_other_root/my_user/$(password)s",
+                "user_tree_dn": "ou=Users,dc=my_new_root,dc=org"
+            }
+        }
+    }
+
+In this example, Keystone will substitute the referenced ``password`` option
+with its actual value when using the ``url`` to talk to the LDAP server. A
+sensitive option that is referenced in this way must be in the same option
+group as the referring option.
 
 Projects
 ~~~~~~~~

@@ -21,6 +21,7 @@ What's New in Version 3.6
 - Delete a subtree in the project hierarchy.
 - Additional identifier for tokens scoped to the designated ``admin project``.
 - Addition of ``domain_id`` filter to list user projects
+- One Role can imply another via role_inference rules.
 
 What's New in Version 3.5
 -------------------------
@@ -4809,6 +4810,8 @@ The key use cases we need to cover:
 
 - CRUD on a role
 
+- CRUD for role inference rules
+
 - Associating a role with a project or domain
 
 Create role
@@ -4949,6 +4952,9 @@ Response:
 Delete role
 ^^^^^^^^^^^
 
+Deleting a role also deletes all role inference rules where that role is
+either the prior or implied role.
+
 ::
 
     DELETE /roles/{role_id}
@@ -4961,6 +4967,221 @@ Response:
 ::
 
     Status: 204 No Content
+
+
+Create role inference rule
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    PUT /implied_roles/{prior_role_id}/implies/{implied_role_id}
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#createRoleInference``
+
+
+Response:
+
+::
+
+    Status: 201 Created
+
+    {
+        "role_inference": {
+            "prior_role": {
+                "id": "--prior-role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--prior-role-id--"
+                }
+                "name": "prior role name"
+            },
+            "implies":
+                {
+                    "id": "--implied-role1-id--",
+                    "link": {
+                        "self": "http://identity:35357/v3/roles/--implied-role1-id--"
+                    },
+                    "name": "implied role1 name"
+                }
+        },
+    }
+
+
+List implied roles for role
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    GET /implied_roles/{prior_role_id}
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
+
+
+Response:
+
+::
+
+    Status: 200 OK
+    {
+        "role_inference": {
+            "prior_role": {
+                "id": "--prior-role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--prior-role-id--"
+                }
+                "name": "prior role name"
+            },
+            "implies": [
+                {
+                    "id": "--implied-role1-id--",
+                    "link": {
+                        "self": "http://identity:35357/v3/roles/--implied-role1-id--"
+                    },
+                    "name": "implied role1 name"
+                },
+                {
+                    "id": "--implied-role2-id--",
+                    "link": {
+                        "self": "http://identity:35357/v3/roles/--implied-role2-id--"
+                    },
+                    "name": "implied role2 name"
+                }
+            ]
+        },
+        "links" : {
+            "self":     "self": "http://identity:35357/v3/implied_roles/--prior-role-id--"
+        }
+    }
+
+
+
+List all role inference rules
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    GET /implied_roles/
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
+
+
+Response:
+
+::
+
+    Status: 200 OK
+    {
+        "role_inferences": [
+            {
+                "prior_role": {
+                    "id": "--prior-role-id1--",
+                    "links": {
+                        "self": "http://identity:35357/v3/roles/--prior-role-id--"
+                    }
+                    "name": "prior role name"
+                },
+                "implies": [
+                    {
+                        "id": "--implied-role1-id--",
+                        "link": {
+                            "self": "http://identity:35357/v3/roles/--implied-role1-id--"
+                        },
+                        "name": "implied role1 name"
+                    },
+                    {
+                        "id": "--implied-role2-id--",
+                        "link": {
+                            "self": "http://identity:35357/v3/roles/--implied-role2-id--"
+                        },
+                        "name": "implied role2 name"
+                    }
+                ]
+            },
+            {
+                "prior_role": {
+                    "id": "--prior-role-id2--",
+                    "links": {
+                        "self" : "http://identity:35357/v3/roles/--prior-role-id--"
+                    }
+                    "name": "prior role name"
+                },
+                "implies": [
+                    {
+                        "id": "--implied-role3-id--",
+                        "link": {
+                            "self": "http://identity:35357/v3/roles/--implied-role1-id--"
+                        },
+                        "name": "implied role1 name"
+                    },
+                    {
+                        "id": "--implied-role4-id--",
+                        "link": {
+                            "self": "http://identity:35357/v3/roles/--implied-role2-id--"
+                        },
+                        "name": "implied role2 name"
+                    }
+                ]
+            }
+        ]
+    }
+
+
+Get role inference rule
+^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    GET /implied_roles/{prior_role_id}/implies/{implied_role_id}
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "prior_role": {
+            "id": "--prior-role-id--",
+            "links": {
+                "self": "http://identity:35357/v3/roles/--prior-role-id--"
+            }
+           "name": "prior role name"
+           "implies": {
+                "id": "--implied-role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--implied-role-id--"
+                }
+                "name": "implied role name"
+           }
+           "links": {
+               "self": "http://identity:35357/v3/Implied_roles/--prior-role-id--/implies/--implied-role-id--"
+           },
+        }
+    }
+
+
+Delete role inference rule
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    DELETE /implied_roles/{prior_role_id}/implies/{implied_role_id}
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#deleteRoleInference``
+
+Response:
+
+::
+
+    Status: 204 No Content
+
+
 
 Grant role to user on domain
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -5418,11 +5639,13 @@ that gave rise to this entity.
 If the query parameter ``effective`` is specified, rather than simply returning
 a list of role assignments that have been made, the API returns a list of
 effective assignments at the user, project and domain level, having allowed for
-the effects of group membership. Since the effects of group membership have
-already been allowed for, the group role assignment entities themselves will
-not be returned in the collection. This represents the effective role
-assignments that would be included in a scoped token. The same set of query
-parameters can also be used in combination with the ``effective`` parameter.
+the effects of group membership and role inference rules.. Since the
+effects of group membership have already been allowed for, the group
+role assignment entities themselves will not be returned in the
+collection. This represents the effective roleassignments that would
+be included in a scoped token. The same set of query parameters can
+also be used in combination with the ``effective`` parameter.
+
 For example:
 
 ``GET /role_assignments?user.id={user_id}&effective`` would, in other words,

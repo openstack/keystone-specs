@@ -21,6 +21,20 @@ moved to a directory specific to that release::
 
 You can find an example spec in ``specs/template.rst``.
 
+For specifications that have been reviewed and approved but have not been
+implemented::
+
+  specs/backlog/
+
+Specifications in this directory indicate the original author has either
+become unavailable, or has indicated that they are not going to implement the
+specification. The specifications found here are available as projects for
+people looking to get involved with Keystone. If you are interested in
+claiming a spec, start by posting a review for the specification that moves it
+from this directory to the next active release. Please set yourself as the new
+`primary assignee` and maintain the original author in the `other contributors`
+list.
+
 Specifications are proposed for a given release by adding them to the
 ``specs/<release>`` directory and posting it for review.  Not all approved
 blueprints will get fully implemented. The implementation status of a blueprint

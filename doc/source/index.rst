@@ -56,6 +56,16 @@ Keystone middleware approved specs:
 
   specs/keystonemiddleware/*
 
+Untargeted Specifications
+=========================
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/backlog/*
+
+
 Implemented Specifications
 ==========================
 
@@ -63,6 +73,7 @@ Implemented Specifications
   :maxdepth: 1
 
   implemented
+
 
 
 ==================

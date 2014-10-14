@@ -335,9 +335,9 @@ Performance Impact
 The following operations may impact performance:
 
 * Since there could be as many service providers as regions, the catalog may
-  become larger. However this limitation exists today as a catalog can have many
-  endpoints and also become pretty large with the endpoints that a user has
-  access to.
+  become larger. However this limitation exists today as a catalog can have
+  many endpoints and also become pretty large with the endpoints that a user
+  has access to.
 
 * More certificates to validate tokens against.
 

@@ -12,14 +12,14 @@ Audit Support for Keystone Federation
 <https://blueprints.launchpad.net/keystone/+spec/
 audit-support-for-federation>`_
 
-Keystone is expanding its support for federated identity to enable it to have
-a more seamless integration into enterprise environments and to leverage
-existing identity providers. The extra complexity associated with authentication
-and authorization in federated Keystone deployments demands suitable audit
-support to ensure the OpenStack environment is used in a compliant fashion. In
-this blueprint we describe proposed auditing support for Keystone federated
-identity operations using the `DMTF Cloud Auditing Data Federation (CADF) Open
-Standard <http://www.dmtf.org/standards/cadf>`_, and leveraging `PyCADF
+Keystone is expanding its support for federated identity to enable it to have a
+more seamless integration into enterprise environments and to leverage existing
+identity providers. The extra complexity associated with authentication and
+authorization in federated Keystone deployments demands suitable audit support
+to ensure the OpenStack environment is used in a compliant fashion. In this
+blueprint we describe proposed auditing support for Keystone federated identity
+operations using the `DMTF Cloud Auditing Data Federation (CADF) Open Standard
+<http://www.dmtf.org/standards/cadf>`_, and leveraging `PyCADF
 <http://docs.openstack.org/developer/pycadf/>`_.
 
 Problem Description

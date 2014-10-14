@@ -13,10 +13,10 @@ Standardizing the federation process
 
 
 We propose that the federated authentication process be reengineered so that a
-user_id is returned alongside the identity attributes. In addition, the saml2.py
-authentication module should be renamed as mapped.py to denote that it applies
-to all authentication methods which require the asserted identity attributes to
-be mapped into local attributes.
+user_id is returned alongside the identity attributes. In addition, the
+saml2.py authentication module should be renamed as mapped.py to denote that it
+applies to all authentication methods which require the asserted identity
+attributes to be mapped into local attributes.
 
 
 Problem Description
@@ -25,9 +25,10 @@ Problem Description
 The existing federation logic uses `saml2` auth plugin to establish a local
 Keystone identity, by mapping trusted external identity attributes to local
 identity attributes. Now that other federation protocols will be supported by
-Keystone, it makes no sense to apply mapping via a saml2 plugin. Some federation
-authentication protocols already determine the ID of the user, this should be
-leveraged by the protocol specific sub modules and not the mapping engine.
+Keystone, it makes no sense to apply mapping via a saml2 plugin. Some
+federation authentication protocols already determine the ID of the user, this
+should be leveraged by the protocol specific sub modules and not the mapping
+engine.
 
 Proposed Change
 ===============
@@ -41,11 +42,11 @@ In order to resolve the problem the following changes should be made:
 #. The function for extracting attributes should return a user_id among the
    asserted attributes.
 
-Splitting the logic of the Mapped plugin will allow subclassing of the plugin to
-handle protocols which provide attributes in a different way to mod_shib, while
-still enabling reuse of the mapping filter implementation. We can then use the
-correct method name according to the protocol used so that clients can easily
-determine their behaviour.
+Splitting the logic of the Mapped plugin will allow subclassing of the plugin
+to handle protocols which provide attributes in a different way to mod_shib,
+while still enabling reuse of the mapping filter implementation. We can then
+use the correct method name according to the protocol used so that clients can
+easily determine their behaviour.
 
 For instance, a configuration for a SAML2 and an Open ID Connect enabled
 Keystone might look like: ::

@@ -128,12 +128,12 @@ Proposed Change
    * Example:
 
      * The domain_admin_team creates the Dev and Test projects and assigns the
-       role ``project_admin`` to project_admin_user. As their role is inheritable
-       it will have access to their children.
+       role ``project_admin`` to project_admin_user. As their role is
+       inheritable it will have access to their children.
 
-     * As Joe has ``project_admin`` role assignment in Dev project, he can create
-       instances in this project and can create subproject and control quotas
-       to his subprojects. The same thing will happen to Sam in Test.
+     * As Joe has ``project_admin`` role assignment in Dev project, he can
+       create instances in this project and can create subproject and control
+       quotas to his subprojects. The same thing will happen to Sam in Test.
 
      * The user_project_admin can grant/revoke roles to users in its project
        and in its subprojects. A user with a member role can't grant/revoke
@@ -239,8 +239,8 @@ Work Items
    have to implement the following functions: (This change will be made in
    extension OS-INHERIT)
 
-  * A role assignment defined for a project A must be inherited by all the child
-    projects of project A;
+  * A role assignment defined for a project A must be inherited by all the
+    child projects of project A;
   * A role assignment defined for a group X must be inherited by all the child
     projects of that group X;
   * For a project A, list all the inherited roles assignment of A, which will

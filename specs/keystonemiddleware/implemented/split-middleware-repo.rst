@@ -138,16 +138,16 @@ Work Items
 
 * Create new repo.
 
-* Copy middleware code and tests from python-keystoneclient to new repo using the
-  oslo-incubator graduation utilities to maintain the change history.
+* Copy middleware code and tests from python-keystoneclient to new repo using
+  the oslo-incubator graduation utilities to maintain the change history.
 
-* Copy middleware (used by external services (e.g. ec2token)) code and tests from
-  keystone to the new repo using the oslo-incubator graduation utilities to
-  maintain the change history.
+* Copy middleware (used by external services (e.g. ec2token)) code and tests
+  from keystone to the new repo using the oslo-incubator graduation utilities
+  to maintain the change history.
 
-* Change keystoneclient and Keystone middleware so that it prints out a deprecated
-  message if it's used. This includes updating any deprecation messages to point
-  to the new package.
+* Change keystoneclient and Keystone middleware so that it prints out a
+  deprecated message if it's used. This includes updating any deprecation
+  messages to point to the new package.
 
 * Release an initial version of the keystonemiddleware package (to be performed
   before deprecation updates).

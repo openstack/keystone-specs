@@ -328,7 +328,8 @@ The two main impacts on a deployer will be:
     This will purge all mappings
   - ``keystone-manage mapping_purge --domain-name <name>``--
     This will purge all mappings for the named domain
-  - ``keystone-manage mapping_purge --domain-name <name> --local-id <ID> --type <user|group>``--
+  - ``keystone-manage mapping_purge --domain-name <name> --local-id <ID> --type
+    <user|group>``--
     This will purge the mapping for the named local identifier
   - ``keystone-manage mapping_purge --public-id <ID>``--
     This will purge the mapping for the named public ID

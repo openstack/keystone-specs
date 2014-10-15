@@ -38,6 +38,9 @@ Some notes about using this template:
   having to look at additional files which can not be viewed in gerrit.  It
   will also allow inline feedback on the diagram itself.
 
+If your spec has an impact on the HTTP API, propose the corresponding changes
+to the ``api/`` directory for review along with your spec.
+
 Problem Description
 ===================
 

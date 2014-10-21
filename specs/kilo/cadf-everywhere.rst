@@ -28,11 +28,11 @@ perform a successful audit.
 Proposed Change
 ===============
 
-Create CADF notifications upon the a `create`, `update`, and `deleted`
-events for the following resources::
+Create CADF notifications upon a `create`, `update`, and `deleted`
+events for the following resources:
 
 * group
-* project (i.e. “tenant”)
+* project (i.e. tenant)
 * role
 * user
 * trust (immutable resource - no update notification)
@@ -42,8 +42,8 @@ events for the following resources::
 * policy
 
 Note: We will not be removing the simple notifications as they are useful for
-callback functions, and there is already some support in `ceilometer` for these
-notifications.
+callback functions, and there is already some support in Ceilometer for these
+notifications. Barbican also relies on these as callbacks.
 
 Alternatives
 ------------
@@ -114,4 +114,8 @@ section for CADF notifications.
 References
 ==========
 
-None
+`CADF Spec
+<http://www.dmtf.org/sites/default/files/standards/documents/DSP0262_1.0.0.pdf>`_
+
+`OS Profile for CADF
+<http://www.dmtf.org/sites/default/files/standards/documents/DSP2038_1.0.0.pdf>`_

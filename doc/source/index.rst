@@ -1,5 +1,15 @@
 .. identity-specs documentation master file
 
+===============
+Identity V3 API
+===============
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   api/*
+
 ================================
 Identity Program Specifications
 ================================

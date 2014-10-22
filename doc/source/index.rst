@@ -14,14 +14,6 @@ Identity V3 API
 Identity Program Specifications
 ================================
 
-Juno approved specs:
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
-   specs/juno/*
-
 Kilo approved specs:
 
 .. toctree::
@@ -41,16 +33,6 @@ Kilo approved specs:
 
       specs/keystoneclient/*
 
-   .. NOTE(stevemar): Uncomment this section after there is at least one
-   implemeted spec for keystoneclient.
-
-   Keystone client implemented specs:
-
-   .. toctree::
-      :glob:
-      :maxdepth: 1
-
-      specs/keystoneclient/implemented/*
 
 Keystone middleware approved specs:
 
@@ -60,13 +42,13 @@ Keystone middleware approved specs:
 
   specs/keystonemiddleware/*
 
-Keystone middleware implemented specs:
+Implemented Specifications
+==========================
 
 .. toctree::
-  :glob:
   :maxdepth: 1
 
-  specs/keystonemiddleware/implemented/*
+  implemented
 
 
 ==================

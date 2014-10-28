@@ -70,9 +70,11 @@ Optional attributes:
 - ``roles``: (list of objects)
 
   Specifies the subset of the trustor's roles on the ``project_id`` to be
-  granted to the trustee when the token in consumed. The trustor must already
-  be granted these roles in the project referenced by the ``project_id``
-  attribute.
+  granted to the trustee when the token is consumed. The trustor must
+  already be granted these roles in the project referenced by the
+  ``project_id`` attribute. If redelegation is used (when trust-scoped token
+  is used and consumed trust has ``allow_redelegation`` set to ``true``)
+  this parameter should contain redelegated trust's roles only.
 
   Roles are only provided when the trust is created, and are subsequently
   available as a separate read-only collection. Each role can be specified by
@@ -80,17 +82,55 @@ Optional attributes:
 
 - ``expires_at`` (string, ISO 8601 extended format date time with microseconds)
 
-  Specifies the expiration time of the trust. A trust may be revoked ahead of
-  expiration. If the value represents a time in the past, the trust is
-  deactivated.
+  Specifies the expiration time of the trust. A trust may be revoked ahead
+  of expiration. If the value represents a time in the past, the trust is
+  deactivated. In the redelegation case it must not exceed the value of the
+  corresponding ``expires_at`` field of the redelegated trust or it may be
+  omitted, then the ``expires_at`` value is copied from the redelegated trust.
 
 - ``remaining_uses`` (integer or null)
 
-  Specifies how many times the trust can be used to obtain a token. This value
-  is decreased each time a token is issued through the trust. Once it reaches
-  0, no further tokens will be issued through the trust. The default value is
-  null, meaning there is no limit on the number of tokens issued through the
-  trust.
+  Specifies how many times the trust can be used to obtain a token. This
+  value is decreased each time a token is issued through the trust. Once
+  it reaches 0, no further tokens will be issued through the trust. The
+  default value is null, meaning there is no limit on the number of tokens
+  issued through the trust. If redelegation is enabled it must not be set.
+
+- ``allow_redelegation`` (boolean)
+
+  If ``allow_redelegation`` is set to ``true`` then a trust between a
+  ``trustor`` and any third-party user may be issued by the ``trustee``
+  just like a regular trust. If set to ``false``, stops further redelegation.
+  ``false`` by default, not stored in the trust.
+
+- ``redelegation_count`` (integer or null)
+
+  Specifies the maximum remaining depth of the redelegated trust chain. Each
+  subsequent trust has this field decremented by 1 automatically.
+  The initial ``trustor`` issuing new trust that can be redelegated, must set
+  ``allow_redelegation`` to ``true`` and may set ``redelegation_count`` to an
+  integer value less than or equal to ``max_redelegation_count`` configuration
+  parameter in order to limit the possible length of derivated trust chains.
+  The trust issued by the ``trustor`` using a regular token (not redelegating),
+  in which ``allow_redelegation`` is set to ``true`` (the new trust is
+  redelegatable), will be populated with the value specified in the
+  ``max_redelegation_count`` configuration parameter if ``redelegation_count``
+  is not set or set to ``null``.
+  If ``allow_redelegation`` is set to ``false`` then ``redelegation_count``
+  will be set to 0 in the trust on the server side.
+
+  If the trust is being issued by the ``trustee`` of a redelegatable
+  trust-scoped token (redelegation case) then ``redelegation_count`` should not
+  be set, as it will automatically be set to the value in the redelegatable
+  trust-scoped token decremented by 1. Note, if the resulting value is 0, this
+  means that the new trust will not be redelegatable, regardless of the value
+  of ``allow_redelegation``.
+
+- ``redelegated_trust_id`` (string, read-only)
+
+  Returned with redelegated trust provides information about the predecessor
+  in the trust chain. Specifying this field in a trust manipulation request
+  has no effect.
 
 Example entity:
 
@@ -102,6 +142,8 @@ Example entity:
             "impersonation": true,
             "project_id": "0f1233",
             "remaining_uses": null,
+            "allow_redelegation": true,
+            "redelegation_count": 2,
             "links": {
                 "self": "http://identity:35357/v3/trusts/987fe7"
             },
@@ -215,6 +257,63 @@ the ``trustor_user_id``. Example response:
         }
     }
 
+A token created from a redelegated trust will have an  ``OS-TRUST:trust``
+section containing the same fields as a regular trust token, only
+``redelegated_trust_id`` and ``redelegation_count`` are added.
+Example response:
+
+::
+
+    Headers: X-Subject-Token
+
+    X-Subject-Token: e80b74
+
+    {
+        "token": {
+            "expires_at": "2013-02-27T18:30:59.999999Z",
+            "issued_at": "2013-02-27T16:30:59.999999Z",
+            "methods": [
+                "password"
+            ],
+            "OS-TRUST:trust": {
+                "id": "fe0aef",
+                "impersonation": false,
+                "redelegated_trust_id": "3ba234",
+                "redelegation_count": 2,
+                "links": {
+                    "self": "http://identity:35357/v3/trusts/fe0aef"
+                },
+                "trustee_user": {
+                    "id": "0ca8f6",
+                    "links": {
+                        "self": "http://identity:35357/v3/users/0ca8f6"
+                    }
+                },
+                "trustor_user": {
+                    "id": "bd263c",
+                    "links": {
+                        "self": "http://identity:35357/v3/users/bd263c"
+                    }
+                }
+            },
+            "user": {
+                "domain": {
+                    "id": "1789d1",
+                    "links": {
+                        "self": "http://identity:35357/v3/domains/1789d1"
+                    },
+                    "name": "example.com"
+                },
+                "email": "joe@example.com",
+                "id": "0ca8f6",
+                "links": {
+                    "self": "http://identity:35357/v3/users/0ca8f6"
+                },
+                "name": "Joe"
+            }
+        }
+    }
+
 Create trust
 ~~~~~~~~~~~~
 
@@ -233,6 +332,7 @@ Request:
         "trust": {
             "expires_at": "2013-02-27T18:30:59.999999Z",
             "impersonation": true,
+            "allow_redelegation": true,
             "project_id": "ddef321",
             "roles": [
                 {
@@ -255,6 +355,7 @@ Response:
             "expires_at": "2013-02-27T18:30:59.999999Z",
             "id": "1ff900",
             "impersonation": true,
+            "redelegation_count": 10,
             "links": {
                 "self": "http://identity:35357/v3/OS-TRUST/trusts/1ff900"
             },
@@ -311,6 +412,7 @@ Response:
                 "id": "1ff900",
                 "expires_at": "2013-02-27T18:30:59.999999Z",
                 "impersonation": true,
+                "redelegation_count": 10,
                 "links": {
                     "self": "http://identity:35357/v3/OS-TRUST/trusts/1ff900"
                 },
@@ -321,6 +423,8 @@ Response:
             {
                 "id": "f4513a",
                 "impersonation": true,
+                "redelegation_count": 1,
+                "redelegated_trust_id": "34fc39",
                 "links": {
                     "self": "http://identity:35357/v3/OS-TRUST/trusts/f4513a"
                 },

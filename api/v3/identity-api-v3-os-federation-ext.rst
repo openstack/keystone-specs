@@ -1513,6 +1513,20 @@ Example of an OS-FEDERATION token:
         }
     }
 
+Web Single Sign On authentication
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*New in version 1.2*
+
+::
+    GET /auth/OS-FEDERATION/websso/{protocol}?origin=https%3A//horizon.example.com
+
+For Web Single Sign On authentication, users are expected to enter another
+URL endpoint. Upon successful authentication, instead of issuing a standard
+unscoped token, Keystone will issue JavaScript code that redirects the web
+browser to the originating Horizon. An unscoped federated token will be
+included in the form being sent.
+
 Generating Assertions
 ---------------------
 

@@ -10,18 +10,16 @@ Identity v3 API
 
    api/v3/*
 
-.. NOTE(dhellmann): Uncomment this section after there is at least one
-   non-template spec for keystoneclient.
 
-    =================
-    Identity v2.0 API
-    =================
+=================
+Identity v2.0 API
+=================
 
-    .. toctree::
-       :glob:
-       :maxdepth: 1
+.. toctree::
+   :glob:
+   :maxdepth: 1
 
-       api/v2.0/*
+   api/v2.0/*
 
 
 ================================

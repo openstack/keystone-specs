@@ -42,6 +42,15 @@ for a given release can be found by looking at the blueprint in Launchpad::
 
   http://blueprints.launchpad.net/keystone/<blueprint-name>
 
+.. WARNING::
+
+    Specifications not accepted by the second milestone of a release will not
+    be targeted for that release without an explicit exception granted. To
+    request an exception, send an email to the developer mailing list with the
+    details of the specification, why it should be accepted after the deadline,
+    and any supporting documentation (e.g. proof of concept code) that will
+    indicate to the core team it will be completed before feature freeze.
+
 Incomplete specifications have to be re-proposed for every release.  The review
 may be quick, but even if something was previously approved, it should be
 re-reviewed to make sure it still makes sense as written.

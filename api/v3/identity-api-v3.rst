@@ -9,6 +9,12 @@ The Identity API also provides endpoint discovery through a service
 catalog, identity management, project management, and a centralized
 repository for policy engine rule sets.
 
+What's New in Version 3.4
+-------------------------
+
+- Addition of `parent_id` optional attribute to projects. This enables the
+  construction of a hierarchy of projects.
+
 What's New in Version 3.3
 -------------------------
 
@@ -813,6 +819,13 @@ References the domain which owns the project; if a domain is not
 specified by the client, the Identity service implementation will
 default it to the domain to which the client's token is scoped.
 
+- ``parent_id`` (string) *New in version 3.4*
+
+References the parent project; if a parent project is not specified by the
+client, the Identity service will consider the project to be a top-level
+project (without any parents). All projects within a hierarchy must be owned
+by the same domain.
+
 -  ``description`` (string)
 
 -  ``enabled`` (boolean)
@@ -835,6 +848,7 @@ Example entity:
             "links": {
                 "self": "http://identity:35357/v3/projects/263fd9"
             }
+            "parent_id": "183ab2"
         }
     }
 
@@ -3118,6 +3132,11 @@ Get project
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/rel/project``
 
+*New in version 3.4*
+
+- ``subtree_as_list`` (key-only, no value expected)
+- ``parents_as_list`` (key-only, no value expected)
+
 Response:
 
 ::
@@ -3132,7 +3151,192 @@ Response:
             "links": {
                 "self": "https://identity:35357/v3/projects/263fd9"
             },
-            "name": "Dev Group A"
+            "name": "Dev Group A",
+            "parent_id": "183ab2"
+        }
+    }
+
+If additional information about the project's heirarchy is required, this API
+has two query parameters.
+
+::
+
+    GET /projects/{project_id}?parents_as_list
+
+The entire parent hierarchy will be included as a list in the response.
+This list will contain all projects found by traversing up the hierarchy
+to the top-level project.
+
+Response:
+
+::
+
+    {
+        "project": {
+            "domain_id": "1789d1",
+            "enabled": true,
+            "id": "263fd9",
+            "links": {
+                "self": "http://identity:35357/v3/projects/263fd9"
+            },
+            "name": "Dev Group A",
+            "parent_id": "183ab2",
+            "parents": [
+                {
+                    "project": {
+                        "domain_id": "1789d1",
+                        "enabled": true,
+                        "id": "183ab2",
+                        "links": {
+                            "self": "identity:35357/v3/projects/183ab2"
+                        },
+                        "name": "Dev Group A Parent",
+                        "parent_id": null
+                    }
+                }
+            ]
+        }
+    }
+
+::
+
+    GET /projects/{project_id}?subtree_as_list
+
+The entire child hierarchy will be included in the response as a list in the
+response. This list will contain all projects found by traversing down the
+hierarchy.
+
+Response:
+
+::
+
+    {
+        "project": {
+            "domain_id": "1789d1",
+            "enabled": true,
+            "id": "263fd9",
+            "links": {
+                "self": "http://identity:35357/v3/projects/263fd9"
+            },
+            "name": "Dev Group A",
+            "parent_id": "183ab2",
+            "subtree": [
+                {
+                    "project": {
+                        "domain_id": "1789d1",
+                        "enabled": true,
+                        "id": "9n1jhb",
+                        "links": {
+                            "self": "identity:35357/v3/projects/9n1jhb"
+                        },
+                        "name": "Dev Group A Child 1",
+                        "parent_id": "263fd9"
+                    }
+                },
+                {
+                    "project": {
+                        "domain_id": "1789d1",
+                        "enabled": true,
+                        "id": "4b6aa1",
+                        "links": {
+                            "self": "identity:35357/v3/projects/4b6aa1"
+                        },
+                        "name": "Dev Group A Child 2",
+                        "parent_id": "263fd9"
+                    }
+                },
+                {
+                    "project": {
+                        "domain_id": "1789d1",
+                        "enabled": true,
+                        "id": "b76xq8",
+                        "links": {
+                            "self": "identity:35357/v3/projects/b76xq8"
+                        },
+                        "name": "Dev Group A Grandchild",
+                        "parent_id": "4b6aa1"
+                    }
+                }
+            ]
+        }
+    }
+
+
+Note that the query parameters are not mutually exclusive. The API accept both
+parameters at the same time:
+
+::
+
+    GET /projects/{project_id}?parents_as_list&subtree_as_list
+
+Both the parent and child hierarchies will be included in the response.
+
+Response:
+
+::
+
+    {
+        "project": {
+            "domain_id": "1789d1",
+            "enabled": true,
+            "id": "263fd9",
+            "links": {
+                "self": "http://identity:35357/v3/projects/263fd9"
+            },
+            "name": "Dev Group A",
+            "parent_id": "183ab2",
+            "parents": [
+                {
+                    "project": {
+                        "domain_id": "1789d1",
+                        "enabled": true,
+                        "id": "183ab2",
+                        "links": {
+                            "self": "identity:35357/v3/projects/183ab2"
+                        },
+                        "name": "Dev Group A Parent",
+                        "parent_id": null
+                    }
+                }
+            ],
+            "subtree": [
+                {
+                    "project": {
+                        "domain_id": "1789d1",
+                        "enabled": true,
+                        "id": "9n1jhb",
+                        "links": {
+                            "self": "identity:35357/v3/projects/9n1jhb"
+                        },
+                        "name": "Dev Group A Child 1",
+                        "parent_id": "263fd9"
+                    }
+                },
+                {
+                    "project": {
+                        "domain_id": "1789d1",
+                        "enabled": true,
+                        "id": "4b6aa1",
+                        "links": {
+                            "self": "identity:35357/v3/projects/4b6aa1"
+                        },
+                        "name": "Dev Group A Child 2",
+                        "parent_id": "263fd9"
+                    }
+                },
+                {
+                    "project": {
+                        "domain_id": "1789d1",
+                        "enabled": true,
+                        "id": "b76xq8",
+                        "links": {
+                            "self": "identity:35357/v3/projects/b76xq8"
+                        },
+                        "name": "Dev Group A Grandchild",
+                        "parent_id": "4b6aa1"
+                    }
+                }
+            ]
         }
     }
 
@@ -3155,7 +3359,8 @@ Request:
             "description": "Project space for Test Group",
             "domain_id": "1789d1",
             "enabled": true,
-            "name": "Test Group"
+            "name": "Test Group",
+            "parent_id": "7fa612"
         }
     }
 
@@ -3174,9 +3379,15 @@ Response:
             "links": {
                 "self": "https://identity:35357/v3/projects/d52e32"
             },
-            "name": "Test Group"
+            "name": "Test Group",
+            "parent_id": "7fa612"
         }
     }
+
+*New in version 3.4*
+
+* Adding a project with a parent_id pointing to a project that
+  does not exist fails with a ``404 Not Found``
 
 Update project
 ^^^^^^^^^^^^^^
@@ -3217,9 +3428,17 @@ Response:
             "links": {
                 "self": "https://identity:35357/v3/projects/d52e32"
             },
-            "name": "Build Group"
+            "name": "Build Group",
+            "parent_id": "7fa612"
         }
     }
+
+* New in version 3.4 *
+
+* The update of the parent_id is not allowed and will fail
+  with a ``403 Forbidden``
+* Disabling a project that is not a leaf in the hierarchy (it is a
+  parent of one or more projects) will fail with a ``403 Forbidden``
 
 Delete project
 ^^^^^^^^^^^^^^
@@ -3234,6 +3453,11 @@ Relationship:
 ::
 
     Status: 204 No Content
+
+*New in version 3.4*
+
+* The deletion of a project that is not a leaf in the project
+  hierarchy will fail with a ``403 Forbidden``.
 
 Users
 ~~~~~

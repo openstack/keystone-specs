@@ -3437,8 +3437,10 @@ Response:
 
 * The update of the parent_id is not allowed and will fail
   with a ``403 Forbidden``
-* Disabling a project that is not a leaf in the hierarchy (it is a
-  parent of one or more projects) will fail with a ``403 Forbidden``
+* Disabling a project that has enabled projects in its subtree will fail with
+  a ``403 Forbidden``
+* Enabling a project that has disabled parents will fail with a
+  ``403 Forbidden``
 
 Delete project
 ^^^^^^^^^^^^^^
@@ -3457,7 +3459,7 @@ Relationship:
 *New in version 3.4*
 
 * The deletion of a project that is not a leaf in the project
-  hierarchy will fail with a ``403 Forbidden``.
+  hierarchy (does not have children) will fail with a ``403 Forbidden``.
 
 Users
 ~~~~~

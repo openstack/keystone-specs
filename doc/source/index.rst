@@ -26,6 +26,14 @@ Identity v2.0 API
 Identity Program Specifications
 ================================
 
+Project Documentation:
+
+.. toctree::
+   :maxdepth: 1
+
+   README <readme>
+   Specification Template <specs/template>
+
 Kilo approved specs:
 
 .. toctree::

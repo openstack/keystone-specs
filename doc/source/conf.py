@@ -69,7 +69,6 @@ copyright = u'%s, OpenStack Identity Team' % datetime.date.today().year
 # directories to ignore when looking for source files.
 exclude_patterns = [
     '_build',
-    '**/template.rst',
 ]
 
 # The reST default role (used for this markup: `text`) to use for all documents.

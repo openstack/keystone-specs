@@ -1,8 +1,11 @@
 .. identity-specs documentation master file
 
-===============
-Identity v3 API
-===============
+==========================
+Identity API Specification
+==========================
+
+v3 API
+======
 
 .. toctree::
    :glob:
@@ -11,9 +14,8 @@ Identity v3 API
    api/v3/*
 
 
-=================
-Identity v2.0 API
-=================
+v2.0 API
+========
 
 .. toctree::
    :glob:

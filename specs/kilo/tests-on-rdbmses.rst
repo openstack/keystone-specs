@@ -8,7 +8,7 @@
 Fix tests to run on non-SQLite databases
 ========================================
 
-`bp tests-on-rdbmses <https://blueprints.launchpad.net/keystone/ +spec/tests-on-rdbmses`
+`bp tests-on-rdbmses <https://blueprints.launchpad.net/keystone/+spec/tests-on-rdbmses>`_
 
 
 The Keystone tests need to be modified to work on non-SQLite database.

@@ -1110,9 +1110,9 @@ Example request:
         "auth": {
             "identity": {
                 "methods": [
-                    "saml2"
+                    "token"
                 ],
-                "saml2": {
+                "token: {
                     "id": "--federated-token-id--"
                 }
             }
@@ -1135,7 +1135,7 @@ Example of an OS-FEDERATION token:
     {
         "token": {
             "methods": [
-                "saml2"
+                "token"
             ],
             "roles": [
                 {

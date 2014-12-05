@@ -3156,7 +3156,7 @@ Response:
         }
     }
 
-If additional information about the project's heirarchy is required, this API
+If additional information about the project's hierarchy is required, this API
 has two query parameters.
 
 ::

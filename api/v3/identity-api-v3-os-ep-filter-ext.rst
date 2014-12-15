@@ -1,10 +1,10 @@
 OpenStack Identity API v3 OS-EP-FILTER Extension
 ================================================
 
-This extension enables creation of ad-hoc catalogs for each
-project-scoped token request. To do so, this extension uses either
-static project-endpoint associations or dynamic custom endpoints groups
-to associate service endpoints with projects.
+This extension enables creation of ad-hoc catalogs for each project-scoped
+token request. To do so, this extension uses either static project-endpoint
+associations or dynamic custom endpoints groups to associate service endpoints
+with projects.
 
 What's New in Version 1.1
 -------------------------
@@ -26,9 +26,9 @@ Represents a dynamic collection of service endpoints having the same
 characteristics, such as service\_id, interface, or region. Indeed, any
 endpoint attribute could be used as part of a filter.
 
-A classic use case is to filter endpoints based on region. For example,
-suppose a user wants to filter service endpoints returned in the service
-catalog by region, the following endpoint group may be used:
+A classic use case is to filter endpoints based on region. For example, suppose
+a user wants to filter service endpoints returned in the service catalog by
+region, the following endpoint group may be used:
 
 ::
 
@@ -54,9 +54,8 @@ API
 Project-Endpoint Associations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If a valid X-Auth-Token token in not present in the HTTP header and/or
-the user does not have the right authorization a HTTP 401 Unauthorized
-is returned.
+If a valid X-Auth-Token token in not present in the HTTP header and/or the user
+does not have the right authorization a HTTP 401 Unauthorized is returned.
 
 Create Association
 ^^^^^^^^^^^^^^^^^^
@@ -68,8 +67,8 @@ Create Association
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/ext/OS-EP-FILTER/1.0/rel/project_endpoint``
 
-Modifies the endpoint resource adding an association between the project
-and the endpoint.
+Modifies the endpoint resource adding an association between the project and
+the endpoint.
 
 Response:
 
@@ -87,8 +86,7 @@ Check Association
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/ext/OS-EP-FILTER/1.0/rel/project_endpoint``
 
-Verifies the existence of an association between a project and an
-endpoint.
+Verifies the existence of an association between a project and an endpoint.
 
 Response:
 
@@ -154,8 +152,7 @@ Delete Association
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/ext/OS-EP-FILTER/1.0/rel/project_endpoint``
 
-Eliminates a previously created association between a project and an
-endpoint.
+Eliminates a previously created association between a project and an endpoint.
 
 Response:
 
@@ -220,23 +217,22 @@ Endpoint Groups
 
 Required attributes:
 
--  ``name`` (string)
+- ``name`` (string)
 
 User-facing name of the service.
 
--  ``filters`` (object)
+- ``filters`` (object)
 
-Describes the filtering performed by the endpoint group. The filter used
-must be an ``endpoint`` property, such as ``interface``, ``service_id``,
-``region_id`` and ``enabled``. Note that if using ``interface`` as a
-filter, the only available values are ``public``, ``internal`` and
-``admin``.
+  Describes the filtering performed by the endpoint group. The filter used must
+  be an ``endpoint`` property, such as ``interface``, ``service_id``,
+  ``region_id`` and ``enabled``. Note that if using ``interface`` as a filter,
+  the only available values are ``public``, ``internal`` and ``admin``.
 
 Optional attributes:
 
--  ``description`` (string)
+- ``description`` (string)
 
-User-facing description of the service.
+  User-facing description of the service.
 
 Create Endpoint Group Filter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -341,9 +337,8 @@ Update Endpoint Group
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/ext/OS-EP-FILTER/1.0/rel/endpoint_group``
 
-The request block is the same as the one for create endpoint group,
-except that only the attributes that are being updated need to be
-included.
+The request block is the same as the one for create endpoint group, except that
+only the attributes that are being updated need to be included.
 
 Request:
 

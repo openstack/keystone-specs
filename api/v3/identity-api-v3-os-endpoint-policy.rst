@@ -1,22 +1,22 @@
 OpenStack Identity API v3 OS-ENDPOINT-POLICY Extension
 ======================================================
 
-This extension provides associations between service endpoints and
-policies that are already stored in the Identity server and referenced
-by policy ID. Such associations enable an endpoint to request the
-appropriate policy for itself. Three types of association are supported:
+This extension provides associations between service endpoints and policies
+that are already stored in the Identity server and referenced by policy ID.
+Such associations enable an endpoint to request the appropriate policy for
+itself. Three types of association are supported:
 
--  A policy associated to a specific endpoint
--  A policy associated to any endpoint of a given service type in a
-   given region
--  A policy associated to any endpoint of a given service type
+- A policy associated to a specific endpoint
 
-When an endpoint requests the appropriate policy for itself, the
-extension will look for an association *in the order given above* (which
-is essentially in order from most specific to least specific) and select
-the first one it finds. For region associations, any parent regions will
-also be examined in ascending order. No combination of polices will
-occur.
+- A policy associated to any endpoint of a given service type in a given region
+
+- A policy associated to any endpoint of a given service type
+
+When an endpoint requests the appropriate policy for itself, the extension will
+look for an association *in the order given above* (which is essentially in
+order from most specific to least specific) and select the first one it finds.
+For region associations, any parent regions will also be examined in ascending
+order. No combination of polices will occur.
 
 Policy-Endpoint Associations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -29,9 +29,8 @@ Create association with endpoint
     PUT /policies/{policy_id}/OS-ENDPOINT-POLICY/endpoints/{endpoint_id}
 
 Creates an association between the policy and the endpoint. If another
-association already existed for the specified endpoint, this will
-replace that association. Any body supplied with this API will be
-ignored.
+association already existed for the specified endpoint, this will replace that
+association. Any body supplied with this API will be ignored.
 
 Response:
 
@@ -46,8 +45,8 @@ Check association with endpoint
 
     GET /policies/{policy_id}/OS-ENDPOINT-POLICY/endpoints/{endpoint_id}
 
-Verifies the existence of an association between a policy and an
-endpoint. A HEAD version of this API is also supported.
+Verifies the existence of an association between a policy and an endpoint. A
+HEAD version of this API is also supported.
 
 Response:
 
@@ -78,8 +77,8 @@ Create association with service
     PUT /policies/{policy_id}/OS-ENDPOINT-POLICY/services/{service_id}
 
 Creates an association between the policy and the service. If another
-association already existed for the specified service, this will replace
-that association. Any body supplied with this API will be ignored.
+association already existed for the specified service, this will replace that
+association. Any body supplied with this API will be ignored.
 
 Response:
 
@@ -94,8 +93,8 @@ Check association with service
 
     GET /policies/{policy_id}/OS-ENDPOINT-POLICY/services/{service_id}
 
-Verifies the existence of an association between a policy and a service.
-A HEAD version of this API is also supported.
+Verifies the existence of an association between a policy and a service. A HEAD
+version of this API is also supported.
 
 Response:
 
@@ -125,10 +124,10 @@ Create association with service in a region
 
     PUT /policies/{policy_id}/OS-ENDPOINT-POLICY/services/{service_id}/regions/{region_id}
 
-Creates an association between the policy and the service in the given
-region. If another association already existed for the specified service
-and region, this will replace that association. Any body supplied with
-this API will be ignored.
+Creates an association between the policy and the service in the given region.
+If another association already existed for the specified service and region,
+this will replace that association. Any body supplied with this API will be
+ignored.
 
 Response:
 
@@ -143,8 +142,8 @@ Check association with service in a region
 
     GET /policies/{policy_id}/OS-ENDPOINT-POLICY/services/{service_id}/regions/{region_id}
 
-Verifies the existence of an association between a policy and a service
-in the given region. A HEAD version of this API is also supported.
+Verifies the existence of an association between a policy and a service in the
+given region. A HEAD version of this API is also supported.
 
 Response:
 
@@ -159,8 +158,7 @@ Delete association with service in a region
 
     DELETE /policies/{policy_id}/OS-ENDPOINT-POLICY/services/{service_id}/regions/{region_id}
 
-Deletes an association between the policy and the service in the given
-region.
+Deletes an association between the policy and the service in the given region.
 
 Response:
 
@@ -175,8 +173,8 @@ List effective endpoint associations for policy
 
     GET /policies/{policy_id}/OS-ENDPOINT-POLICY/endpoints
 
-Returns all the endpoints that are currently associated with a specific
-policy via any of the association methods.
+Returns all the endpoints that are currently associated with a specific policy
+via any of the association methods.
 
 Response:
 
@@ -221,11 +219,11 @@ Get effective policy associated with endpoint
 
     GET /endpoints/{endpoint_id}/OS-ENDPOINT-POLICY/policy
 
-Returns the policy that is currently associated with the given endpoint,
-by working through the ordered sequence of methods of association. The
-first association that is found will be returned. If the region of the
-endpoint has a parent, then region associations will be examined up the
-region tree in ascending order.
+Returns the policy that is currently associated with the given endpoint, by
+working through the ordered sequence of methods of association. The first
+association that is found will be returned. If the region of the endpoint has a
+parent, then region associations will be examined up the region tree in
+ascending order.
 
 Response:
 

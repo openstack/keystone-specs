@@ -2,8 +2,8 @@ OpenStack Identity API v3 OS-INHERIT Extension
 ==============================================
 
 Provide an ability for projects to inherit role assignments from their owning
-domain, or from projects higher in the hierarchy. This extension
-requires v3.4 of the Identity API.
+domain, or from projects higher in the hierarchy. This extension requires v3.4
+of the Identity API.
 
 What's New in Version 1.1
 -------------------------
@@ -14,7 +14,6 @@ API
 ---
 
 The following additional APIs are supported by this extension:
-
 
 Projects
 --------
@@ -236,9 +235,8 @@ Assign role to user on projects owned by a domain
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/ext/OS-INHERIT/1.0/rel/domain_user_role_inherited_to_projects``
 
-The inherited role is only applied to the owned projects (both existing
-and future projects), and will not appear as a role in a domain scoped
-token.
+The inherited role is only applied to the owned projects (both existing and
+future projects), and will not appear as a role in a domain scoped token.
 
 Response:
 
@@ -256,9 +254,8 @@ Assign role to group on projects owned by a domain
 Relationship:
 ``http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/domain_group_role_inherited_to_projects``
 
-The inherited role is only applied to the owned projects (both existing
-and future projects), and will not appear as a role in a domain scoped
-token.
+The inherited role is only applied to the owned projects (both existing and
+future projects), and will not appear as a role in a domain scoped token.
 
 Response:
 
@@ -276,8 +273,8 @@ List user's inherited project roles on a domain
 Relationship:
 ``http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/domain_user_roles_inherited_to_projects``
 
-The list only contains those role assignments to the domain that were
-specified as being inherited to projects within that domain.
+The list only contains those role assignments to the domain that were specified
+as being inherited to projects within that domain.
 
 Response:
 
@@ -320,8 +317,8 @@ List group's inherited project roles on domain
 Relationship:
 ``'http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/domain_group_roles_inherited_to_projects``
 
-The list only contains those role assignments to the domain that were
-specified as being inherited to projects within that domain.
+The list only contains those role assignments to the domain that were specified
+as being inherited to projects within that domain.
 
 Response:
 
@@ -433,8 +430,8 @@ List effective role assignments
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/rel/role_assignments``
 
-The scope section in the list response is extended to allow the
-representation of role assignments that are inherited to projects.
+The scope section in the list response is extended to allow the representation
+of role assignments that are inherited to projects.
 
 Response:
 
@@ -488,22 +485,21 @@ Response:
         }
     }
 
-An additional query filter ``scope.OS-INHERIT:inherited_to`` is
-supported to allow for filtering based on role assignments that are
-inherited. The only value of ``scope.OS-INHERIT:inherited_to`` that is
-currently supported is ``projects``, indicating that this role is
-inherited to all projects of the owning domain or parent project.
+An additional query filter ``scope.OS-INHERIT:inherited_to`` is supported to
+allow for filtering based on role assignments that are inherited. The only
+value of ``scope.OS-INHERIT:inherited_to`` that is currently supported is
+``projects``, indicating that this role is inherited to all projects of the
+owning domain or parent project.
 
-If the query\_string ``effective`` is specified then the list of
-effective assignments at the user, project and domain level allows for
-the effects of both group membership as well as inheritance from the
-parent domain or project (for role assignments that were made using OS-INHERIT
-assignment APIs). Since, like group membership, the effects of
-inheritance have already been allowed for, the role assignment entities
-themselves that specify the inheritance will not be returned in the
-collection.
+If the query string ``effective`` is specified then the list of effective
+assignments at the user, project and domain level allows for the effects of
+both group membership as well as inheritance from the parent domain or project
+(for role assignments that were made using OS-INHERIT assignment APIs). Since,
+like group membership, the effects of inheritance have already been allowed
+for, the role assignment entities themselves that specify the inheritance will
+not be returned in the collection.
 
-An example response for an API call with the query\_string ``effective``
+An example response for an API call with the query string ``effective``
 specified is given below:
 
 Response:
@@ -558,4 +554,3 @@ Response:
             "next": null
         }
     }
-

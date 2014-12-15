@@ -1,11 +1,11 @@
 OpenStack Identity API v3 OS-SIMPLE-CERT Extension
 ==================================================
 
-When using Public Key Infrastructure (PKI) tokens with the identity
-service, users must have access to the signing certificate and the
-certificate authority's (CA) certificate for the token issuer in order
-to validate tokens. This extension provides a simple means of retrieving
-these certificates from an identity service.
+When using Public Key Infrastructure (PKI) tokens with the identity service,
+users must have access to the signing certificate and the certificate
+authority's (CA) certificate for the token issuer in order to validate tokens.
+This extension provides a simple means of retrieving these certificates from an
+identity service.
 
 API Resources
 -------------
@@ -13,19 +13,18 @@ API Resources
 Certificates
 ------------
 
-The identity server uses X.509 certificates to cryptographically sign
-issued tokens. Certificates are a public resource and can be shared.
-Typically when validating a certificate we would only require the
-issuing certificate authority's certificate however PKI tokens are
-distributed without including the original signing certificate in the
-message so this must be retrievable as well.
+The identity server uses X.509 certificates to cryptographically sign issued
+tokens. Certificates are a public resource and can be shared. Typically when
+validating a certificate we would only require the issuing certificate
+authority's certificate however PKI tokens are distributed without including
+the original signing certificate in the message so this must be retrievable as
+well.
 
-Certificates are provided in the Private Enchanced Mail (PEM) file
-format. Certificates in PEM files can be represented with or without the
-certificate data (examples shown). The represented certificate is for
-informative purposes and the only required information is presented
-between the ``-----BEGIN CERTIFICATE-----`` and
-``-----END CERTIFICATE-----`` tags.
+Certificates are provided in the Private Enchanced Mail (PEM) file format.
+Certificates in PEM files can be represented with or without the certificate
+data (examples shown). The represented certificate is for informative purposes
+and the only required information is presented between the ``-----BEGIN
+CERTIFICATE-----`` and ``-----END CERTIFICATE-----`` tags.
 
 API
 ---
@@ -42,8 +41,8 @@ Relationship:
 
 Fetches the certificate chain used to authenticate signed tokens.
 
-It is possible that a chain of certificates (more than one) is returned.
-In this case the chain should be used when validating a token.
+It is possible that a chain of certificates (more than one) is returned. In
+this case the chain should be used when validating a token.
 
 ::
 
@@ -82,11 +81,11 @@ Retrieve signing certificates
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/ext/OS-SIMPLE-CERT/1.0/rel/certificates``
 
-Fetches the certificates containing the public key for the private key
-that has been used to sign tokens.
+Fetches the certificates containing the public key for the private key that has
+been used to sign tokens.
 
-In an environment with multiple token signers this call will return all
-valid certificates.
+In an environment with multiple token signers this call will return all valid
+certificates.
 
 ::
 
@@ -185,13 +184,13 @@ Certificates are successfully found and returned.
 403 Forbidden
 ^^^^^^^^^^^^^
 
-There are no certificates to be returned. This will typically indicate
-that keystone is using UUID tokens and therefore there are no
-certificates available.
+There are no certificates to be returned. This will typically indicate that
+keystone is using UUID tokens and therefore there are no certificates
+available.
 
 500 Internal Server Error
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-An Error was produced on the server. A typical example is that the
-server is configured to use PKI tokens but is misconfigured and the
-certificates were unable to be found.
+An Error was produced on the server. A typical example is that the server is
+configured to use PKI tokens but is misconfigured and the certificates were
+unable to be found.

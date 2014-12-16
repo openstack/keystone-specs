@@ -26,15 +26,6 @@ Each extension is identified by two unique identifiers, a namespace and
 an alias. Additionally an extension contains documentation links in
 various formats.
 
-**Example: List extensions: XML response**
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <extensions xmlns="http://docs.openstack.org/common/api/v1.0"
-                xmlns:atom="http://www.w3.org/2005/Atom"/>
-
-
 **Example: List extensions: JSON response**
 
 .. code:: javascript
@@ -148,26 +139,6 @@ identityFault (500), serviceUnavailable(503)
 
 This operation does not require a request body.
 
-**Example: Show extension details: XML response**
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <extension xmlns="http://docs.openstack.org/common/api/v1.0"
-        xmlns:atom="http://www.w3.org/2005/Atom"
-        name="User Metadata Extension"
-        namespace="http://docs.rackspacecloud.com/identity/api/ext/meta/v2.0"
-        alias="RS-META" updated="2011-01-12T11:22:33-06:00">
-        <description>Allows associating arbitrary metadata with a
-            user.</description>
-        <atom:link rel="describedby" type="application/pdf"
-            href="http://docs.rackspacecloud.com/identity/api/ext/identity-meta-20111201.pdf"/>
-        <atom:link rel="describedby" type="application/vnd.sun.wadl+xml"
-            href="http://docs.rackspacecloud.com/identity/api/ext/identity-meta.wadl"
-        />
-    </extension>
-
-
 **Example: Show extension details: JSON response**
 
 .. code:: javascript
@@ -189,12 +160,11 @@ This operation does not require a request body.
         }
     }
 
-Extensions can define new data types, parameters, actions, headers,
-states, and resources. In XML, additional elements and attributes might
-be defined. These elements must be defined in the extension's namespace.
-In JSON, the alias must be used. Extended headers are always
-prefixed with ``X-`` followed by the alias and a dash:
-(``X-RS-META-HEADER1``). Parameters must be prefixed with the extension
+Extensions can define new data types, parameters, actions, headers, states, and
+resources. New attributes must be defined in the extension's namespace by
+prefixing the attribute name with the alias. For example, "s3token:scope".
+Extended headers are always prefixed with ``X-`` followed by the alias and a
+dash: (``X-RS-META-HEADER1``).  Parameters must be prefixed with the extension
 alias followed by a colon.
 
 .. note::
@@ -202,19 +172,6 @@ alias followed by a colon.
     Applications should ignore response data that contains extension
     elements. Also, applications should also verify that an extension is
     available before submitting an extended request.
-
-**Example: Show user details: XML response**
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <user xmlns="http://docs.openstack.org/identity/api/v2.0" enabled="true"
-        email="john.smith@example.org" id="u1000" username="jqsmith">
-        <metadata xmlns="http://docs.rackspacecloud.com/identity/api/ext/meta/v2.0">
-            <meta key="MetaKey1">MetaValue1</meta>
-            <meta key="MetaKey2">MetaValue2</meta>
-        </metadata>
-    </user>
 
 **Example: Show user details: JSON response**
 

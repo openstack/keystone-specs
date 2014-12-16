@@ -8,10 +8,10 @@ target version identifier (for example,
 https://identity.api.openstack.org/ v2.0/). The MIME type versioning
 scheme uses HTTP content negotiation where the ``Accept`` or
 ``Content-Type`` headers contains a MIME type that includes the version
-ID as a parameter (application/vnd.openstack.identity+xml;version=1.1).
-A version MIME type is always linked to a base MIME type
-(application/xml or application/json). If conflicting versions are
-specified using both an HTTP header and a URI, the URI takes precedence.
+ID as a parameter (application/vnd.openstack.identity+json;version=1.1).
+A version MIME type is always linked to a base MIME type (application/json). If
+conflicting versions are specified using both an HTTP header and a URI, the URI
+takes precedence.
 
 **Example: Request with MIME type versioning**
 
@@ -19,7 +19,7 @@ specified using both an HTTP header and a URI, the URI takes precedence.
 
     GET /tenants HTTP/1.1
     Host: identity.api.openstack.org
-    Accept: application/vnd.openstack.identity+xml;version=1.1
+    Accept: application/vnd.openstack.identity+json;version=1.1
     X-Auth-Token: eaaafd18-0fed-4b3a-81b4-663c99ec1cbb
 
 
@@ -29,7 +29,7 @@ specified using both an HTTP header and a URI, the URI takes precedence.
 
     GET /v1.1/tenants HTTP/1.1
     Host: identity.api.openstack.org
-    Accept: application/xml
+    Accept: application/json
     X-Auth-Token: eaaafd18-0fed-4b3a-81b4-663c99ec1cbb
 
 
@@ -42,41 +42,6 @@ specified using both an HTTP header and a URI, the URI takes precedence.
 If a request is made without a version specified in the URI or through
 HTTP headers, a multiple-choices response (300) provides links and MIME
 types to available versions.
-
-**Example: Multiple choices: XML response**
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="utf-8"?>
-    <choices xmlns="http://docs.openstack.org/common/api/v1.0" xmlns:atom="http://www.w3.org/2005/Atom">
-        <version id="v1.0" status="DEPRECATED">
-            <media-types>
-                <media-type base="application/xml"
-                    type="application/vnd.openstack.identity+xml;version=1.0"/>
-                <media-type base="application/json"
-                    type="application/vnd.openstack.identity+json;version=1.0"/>
-            </media-types>
-            <atom:link rel="self" href="http://identity.api.openstack.org/v1.0"/>
-        </version>
-        <version id="v1.1" status="CURRENT">
-            <media-types>
-                <media-type base="application/xml"
-                    type="application/vnd.openstack.identity+xml;version=1.1"/>
-                <media-type base="application/json"
-                    type="application/vnd.openstack.identity+json;version=1.1"/>
-            </media-types>
-            <atom:link rel="self" href="http://identity.api.openstack.org/v1.1"/>
-        </version>
-        <version id="v2.0" status="BETA">
-            <media-types>
-                <media-type base="application/xml"
-                    type="application/vnd.openstack.identity+xml;version=2.0"/>
-                <media-type base="application/json"
-                    type="application/vnd.openstack.identity+json;version=2.0"/>
-            </media-types>
-            <atom:link rel="self" href="http://identity.api.openstack.org/v2.0"/>
-        </version>
-    </choices>
 
 **Example: Multiple choices: JSON response**
 
@@ -96,10 +61,6 @@ types to available versions.
                 "media-types": {
                     "values": [
                         {
-                            "base": "application/xml",
-                            "type": "application/vnd.openstack.identity+xml;version=1.0"
-                        },
-                        {
                             "base": "application/json",
                             "type": "application/vnd.openstack.identity+json;version=1.0"
                         }
@@ -118,10 +79,6 @@ types to available versions.
                 "media-types": {
                     "values": [
                         {
-                            "base": "application/xml",
-                            "type": "application/vnd.openstack.identity+xml;version=1.1"
-                        },
-                        {
                             "base": "application/json",
                             "type": "application/vnd.openstack.identity+json;version=1.1"
                         }
@@ -139,10 +96,6 @@ types to available versions.
                 ],
                 "media-types": {
                     "values": [
-                        {
-                            "base": "application/xml",
-                            "type": "application/vnd.openstack.identity+xml;version=2.0"
-                        },
                         {
                             "base": "application/json",
                             "type": "application/vnd.openstack.identity+json;version=2.0"
@@ -170,7 +123,7 @@ by performing a **GET** on the root URL (such as, with the version and
 everything to the right of it truncated) returned from the
 authentication system. Note that an Atom representation of the versions
 resources is supported when issuing a request with the ``Accept`` header
-containing application/atom+xml or by adding a .atom to the request URI.
+containing application/atom+json or by adding a .atom to the request URI.
 This enables standard Atom clients to track version changes.
 
 **Example: List versions: HTTP request**
@@ -188,37 +141,6 @@ Error response code(s): badRequest (400), identityFault (500),
 serviceUnavailable(503)
 
 This operation does not require a request body.
-
-**Example: List versions: XML response**
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-
-    <versions xmlns="http://docs.openstack.org/common/api/v1.0"
-              xmlns:atom="http://www.w3.org/2005/Atom">
-
-      <version id="v1.0" status="DEPRECATED"
-              updated="2009-10-09T11:30:00Z">
-         <atom:link rel="self"
-                    href="http://identity.api.openstack.org/v1.0/"/>
-      </version>
-
-      <version id="v1.1" status="CURRENT"
-              updated="2010-12-12T18:30:02.25Z">
-         <atom:link rel="self"
-                    href="http://identity.api.openstack.org/v1.1/"/>
-      </version>
-
-      <version id="v2.0" status="BETA"
-              updated="2011-05-27T20:22:02.25Z">
-         <atom:link rel="self"
-                    href="http://identity.api.openstack.org/v2.0/"/>
-      </version>
-
-    </versions>
-
-
 
 **Example: List versions: JSON response**
 
@@ -271,9 +193,9 @@ https://identity.api.openstack.org/v2.0/). Version request URLs should
 always end with a trailing slash (/). If the slash is omitted, the
 server might respond with a 302 redirection request. Format extensions
 might be placed after the slash (for example,
-https://identity.api.openstack.org/v2.0/.xml). Note that this is a
+https://identity.api.openstack.org/v2.0/.json). Note that this is a
 special case that does not hold true for other API requests. In general,
-requests such as /tenants.xml and /tenants/.xml are handled
+requests such as /tenants.json and /tenants/.json are handled
 equivalently.
 
 **Example: Get version details: HTTP request**
@@ -291,31 +213,6 @@ serviceUnavailable(503)
 
 This operation does not require a request body.
 
-**Example: Get version details: XML response**
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <version xmlns="http://docs.openstack.org/identity/api/v2.0"
-        status="stable" updated="2013-03-06T00:00:00Z" id="v2.0">
-        <media-types>
-            <media-type base="application/json"
-                type="application/vnd.openstack.identity-v2.0+json"/>
-            <media-type base="application/xml"
-                type="application/vnd.openstack.identity-v2.0+xml"/>
-        </media-types>
-        <links>
-            <link href="http://localhost:5000/v2.0/" rel="self"/>
-            <link
-                href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/"
-                type="text/html" rel="describedby"/>
-            <link
-                href="http://docs.openstack.org/api/openstack-identity-service/2.0/identity-dev-guide-2.0.pdf"
-                type="application/pdf" rel="describedby"/>
-        </links>
-    </version>
-
-
 **Example: Get version details: JSON response**
 
 .. code:: javascript
@@ -329,10 +226,6 @@ This operation does not require a request body.
                     "base": "application/json",
                     "type": "application/vnd.openstack.identity-v2.0+json"
                 },
-                {
-                    "base": "application/xml",
-                    "type": "application/vnd.openstack.identity-v2.0+xml"
-                }
             ],
             "id": "v2.0",
             "links": [

@@ -1757,6 +1757,11 @@ be issued without an explicit scope of authorization.
 *New in version 3.1* Additionally, if the user's default project is invalid, a
 token will be issued without an explicit scope of authorization.
 
+*New in version 3.4* A user may explicitly request an unscoped token by setting
+the "scope" value of the token request to the string "unscoped."  This will
+behave the same as a token request with no scope, where the user has no
+default project defined.
+
 Catalog Opt-Out
 ^^^^^^^^^^^^^^^
 
@@ -5054,4 +5059,3 @@ Response:
 ::
 
     Status: 204 No Content
-

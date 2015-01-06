@@ -6,17 +6,6 @@ When an error occurs, the system returns an HTTP error response code
 denoting the type of error. The system also returns additional
 information about the fault in the body of the response.
 
-**Example: Identity fault: XML response**
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <identityFault xmlns="http://docs.openstack.org/identity/api/v2.0" code="500">
-          <message>Fault</message>
-          <details>Error Details...</details>
-    </identityFault>
-
-
 **Example: Identity fault: JSON response**
 
 .. code:: javascript
@@ -38,18 +27,6 @@ optional and might contain useful information for tracking down an error
 The root element of the fault (for example, identityFault) might change
 depending on the type of error. The following is an example of an
 itemNotFound error.
-
-**Example: itemNotFound fault: XML response**
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <itemNotFound xmlns="http://docs.openstack.org/identity/api/v2.0"
-                  code="404">
-        <message>Item not found.</message>
-        <details>Error Details...</details>
-    </itemNotFound>
-
 
 **Example: itemNotFound fault: JSON response**
 
@@ -82,10 +59,3 @@ forbidden            403                                No
 itemNotFound         404                                No
 tenantConflict       409                                No
 ===================  =====================  ========================
-
-
-From an XML schema perspective, all API faults are extensions of the
-base identityFault fault type. When working with a system that binds XML
-to actual classes (such as JAXB), one should be capable of using
-identityFault as a catch-all if there's no interest in distinguishing
-between individual fault types.

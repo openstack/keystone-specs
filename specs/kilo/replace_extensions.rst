@@ -139,13 +139,20 @@ Implementation
 
 Assignee(s)
 -----------
-Primary assignee:
-    TBA
+* Morgan Fainberg (mdrnstm)
+* Steve Martinelli (stevemar)
+* Henry Nash (henry-nash)
+* Brant Knudson (bknudson)
+* Adam Young (ayoung)
 
 Work Items
 ----------
 
-TBA
+* Classify current extensions as either stable or experimental
+* Update JSON-Home base document to support inclusion of experimental
+* Update documentation to indicate expirimental and stable features
+* Add documentation to describe graduation process for experimental to stable
+* Add documentation to describe removal for non-graduating experimental
 
 Dependencies
 ============

@@ -827,10 +827,10 @@ Example entity:
             "domain_id": "1789d1",
             "enabled": true,
             "id": "263fd9",
-            "name": "project-x",
             "links": {
                 "self": "http://identity:35357/v3/projects/263fd9"
-            }
+            },
+            "name": "project-x",
             "parent_id": "183ab2"
         }
     }
@@ -3081,7 +3081,8 @@ Response:
                 "links": {
                     "self": "https://identity:35357/v3/projects/263fd9"
                 },
-                "name": "Dev Group A"
+                "name": "Dev Group A",
+                "parent_id": null
             },
             {
                 "domain_id": "1789d1",
@@ -3090,7 +3091,8 @@ Response:
                 "links": {
                     "self": "https://identity:35357/v3/projects/e56ad3"
                 },
-                "name": "Dev Group B"
+                "name": "Dev Group B",
+                "parent_id": null
             }
         ],
         "links": {
@@ -3142,9 +3144,9 @@ has two query parameters.
 
     GET /projects/{project_id}?parents_as_list
 
-The entire parent hierarchy will be included as a list in the response. This
-list will contain all projects found by traversing up the hierarchy to the
-top-level project.
+The parent hierarchy will be included as a list in the response. This list will
+contain the projects found by traversing up the hierarchy to the top-level
+project.
 
 Response:
 
@@ -3181,9 +3183,8 @@ Response:
 
     GET /projects/{project_id}?subtree_as_list
 
-The entire child hierarchy will be included in the response as a list in the
-response. This list will contain all projects found by traversing down the
-hierarchy.
+The child hierarchy will be included as a list in the response. This list will
+contain the projects found by traversing down the hierarchy.
 
 Response:
 

@@ -59,16 +59,16 @@ Optional attributes:
 
   Describes the identity provider.
 
-  If a value is not specified by the client, the service may default this value
-  to either an empty string or ``null``.
+  If a value is not specified by the client, the service will default this
+  value to ``null``.
 
 - ``enabled`` (boolean)
 
   Indicates whether this identity provider should accept federated
   authentication requests.
 
-  If a value is not specified by the client, the service may default this to
-  either ``true`` or ``false``.
+  If a value is not specified by the client, the service will default this to
+  ``false``.
 
 Protocols
 ~~~~~~~~~

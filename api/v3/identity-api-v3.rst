@@ -1098,15 +1098,13 @@ with ``auth`` objects in exchange for ``token`` objects.
 
 Required attributes:
 
-- ``expires_at`` (string, ISO 8601 extended format date time with
-   microseconds)
+- ``expires_at`` (string, ISO 8601 extended format date time with microseconds)
 
   Specifies the expiration time of the token. Once established, a token's
   expiration may not be changed. A token may be revoked ahead of expiration. If
   the value represents a time in the past, the token is invalid.
 
-- ``issued_at`` (string, ISO 8601 extended format date time with
-   microseconds)
+- ``issued_at`` (string, ISO 8601 extended format date time with microseconds)
 
   Specifies the time at which the token was issued.
 

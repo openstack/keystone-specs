@@ -177,6 +177,44 @@ Required attributes:
     <http://docs.python.org/2/library/re.html>`__ search against the remote
     attribute ``type``.
 
+Service Providers
+~~~~~~~~~~~~~~~~~
+
+::
+
+    /OS-FEDERATION/service_providers
+
+A service provider is a third party service that is trusted by the Identity
+Service.
+
+Required attributes:
+
+- ``auth_url`` (string)
+
+Specifies the protected URL where unscoped tokens can be retrieved once the
+user is authenticated.
+
+- ``sp_url`` (string)
+
+Specifies the URL at the remote peer where assertion should be sent.
+
+Optional attributes:
+
+- ``description`` (string)
+
+Describes the service provider
+
+If a value is not specified by the client, the service may default this value
+to ``null``.
+
+- ``enabled`` (boolean)
+
+Indicates whether bursting into this service provider is enabled by cloud
+administrators. If set to ``false`` the SP will not appear in the catalog and
+requests to generate an assertion will result in a 403 error.
+If a value is not specified by the client, the service will default this to
+``false``.
+
 Identity Provider API
 ---------------------
 
@@ -814,6 +852,188 @@ Response:
 
     Status: 204 No Content
 
+Service Provider API
+~~~~~~~~~~~~~~~~~~~~
+
+Register a Service Provider
+---------------------------
+
+::
+
+    PUT /OS-FEDERATION/service_providers/{sp_id}
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/ext/OS-FEDERATION/1.0/rel/service_provider``
+
+
+Request:
+
+::
+
+    {
+        "service_provider": {
+            "auth_url": "https://example.com:5000/v3/OS-FEDERATION/identity_providers/acme/protocols/saml2/auth",
+            "description": "Remote Service Provider",
+            "enabled": true,
+            "sp_url": "https://example.com:5000/Shibboleth.sso/SAML2/ECP"
+        }
+    }
+
+Response:
+
+::
+
+    Status 201 Created
+
+    {
+        "service_provider": {
+            "auth_url": "https://example.com:5000/v3/OS-FEDERATION/identity_providers/acme/protocols/saml2/auth",
+            "description": "Remote Service Provider",
+            "enabled": true,
+            "id": "ACME",
+            "links": {
+                "self": "https://identity:35357/v3/OS-FEDERATION/service_providers/ACME"
+            }
+            "sp_url": "https://example.com:5000/Shibboleth.sso/SAML2/ECP",
+
+        }
+    }
+
+Listing Service Providers
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    GET /OS-FEDERATION/service_providers
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/ext/OS-FEDERATION/1.0/rel/service_providers``
+
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "links": {
+            "next": null,
+            "previous": null,
+            "self": "http://identity:35357/v3/OS-FEDERATION/service_providers"
+        },
+        "service_providers": [
+            {
+                "auth_url": "https://example.com:5000/v3/OS-FEDERATION/identity_providers/acme/protocols/saml2/auth",
+                "description": "Stores ACME identities",
+                "enabled": true,
+                "id": "ACME",
+                "links": {
+                    "self": "http://identity:35357/v3/OS-FEDERATION/service_providers/ACME"
+                },
+                "sp_url": "https://example.com:5000/Shibboleth.sso/SAML2/ECP"
+            },
+            {
+                "auth_url": "https://other.example.com:5000/v3/OS-FEDERATION/identity_providers/acme/protocols/saml2/auth",
+                "description": "Stores contractor identities",
+                "enabled": false,
+                "id": "ACME-contractors",
+                "links": {
+                    "self": "http://identity:35357/v3/OS-FEDERATION/service_providers/ACME-contractors"
+                },
+                "sp_url": "https://other.example.com:5000/Shibboleth.sso/SAML2/ECP"
+            }
+        ]
+    }
+
+Get Service Provider
+~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    GET /OS-FEDERATION/service_providers/{sp_id}
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/ext/OS-FEDERATION/1.0/rel/service_provider``
+
+Response:
+
+::
+
+    Status 200 OK
+
+    {
+        "service_provider": {
+            "auth_url": "https://example.com:5000/v3/OS-FEDERATION/identity_providers/acme/protocols/saml2/auth",
+            "description": "Remote Service Provider",
+            "enabled": true,
+            "id": "ACME",
+            "links": {
+                "self": "https://identity:35357/v3/OS-FEDERATION/service_providers/ACME"
+            },
+            "sp_url": "https://example.com:5000/Shibboleth.sso/SAML2/ECP"
+        }
+    }
+
+Delete Service Provider
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    DELETE /OS-FEDERATION/service_providers/{sp_id}
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/ext/OS-FEDERATION/1.0/rel/service_provider``
+
+
+Response:
+
+::
+
+    Status: 204 No Content
+
+Update Service Provider
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    PATCH /OS-FEDERATION/service_providers/{sp_id}
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/ext/OS-FEDERATION/1.0/rel/service_provider``
+
+Request:
+
+::
+
+    {
+        "service_provider": {
+            "auth_url": "https://new.example.com:5000/v3/OS-FEDERATION/identity_providers/protocol/saml2/auth",
+            "enabled": true,
+            "sp_auth": "https://new.example.com:5000/Shibboleth.sso/SAML2/ECP"
+        }
+    }
+
+Response:
+
+::
+
+    Status 200 OK
+
+    {
+        "service_provider": {
+            "auth_url": "https://new.example.com:5000/v3/OS-FEDERATION/identity_providers/protocol/saml2/auth",
+            "description": "Remote Service Provider",
+            "enabled": true,
+            "id": "ACME",
+            "links": {
+                "self": "https://identity:35357/v3/OS-FEDERATION/service_providers/ACME"
+            },
+            "sp_url": "https://new.example.com:5000/Shibboleth.sso/SAML2/ECP"
+        }
+    }
+
+
 Listing projects and domains
 ----------------------------
 
@@ -1027,6 +1247,103 @@ This is an example that is similar to the previous, but displays how multiple
 
 Authenticating
 --------------
+
+Request a local token with Service Catalog extended with ``service_providers``.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+    POST /v3/auth/tokens?service_providers
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/rel/auth_tokens``
+
+A user may request a scoped token with an extended Service Catalog that lists
+remote Service Providers.
+
+
+::
+
+    Headers: X-Subject-Token
+
+    X-Subject-Token: e80b74
+
+    {
+        "token": {
+            "catalog": [
+                {
+                    "endpoints": [
+                        {
+                            "id": "39dc322ce86c4111b4f06c2eeae0841b",
+                            "interface": "public",
+                            "region": "RegionOne",
+                            "url": "http://localhost:5000"
+                        },
+                        {
+                            "id": "ec642f27474842e78bf059f6c48f4e99",
+                            "interface": "internal",
+                            "region": "RegionOne",
+                            "url": "http://localhost:5000"
+                        },
+                        {
+                            "id": "c609fc430175452290b62a4242e8a7e8",
+                            "interface": "admin",
+                            "region": "RegionOne",
+                            "url": "http://localhost:35357"
+                        }
+                    ],
+                    "id": "4363ae44bdf34a3981fde3b823cb9aa2",
+                    "type": "identity",
+                    "name": "keystone"
+                },
+                {
+
+                    "service_providers": [
+                        {
+                            "auth_url": "https://example.com:5000/v3/OS-FEDERATION/identity_providers/acme/protocols/saml2/auth",
+                            "id": "ACME",
+                            "sp_url": "https://example.com:5000/Shibboleth.sso/SAML2/ECP"
+                        },
+                        {
+                            "auth_url": "https://other.example.com:5000/v3/OS-FEDERATION/identity_providers/acme/protocols/saml2/auth",
+                            "id": "ACME-contractors",
+                            "sp_url": "https://other.example.com:5000/Shibboleth.sso/SAML2/ECP"
+                        }
+                    ]
+                }
+            ],
+            "expires_at": "2013-02-27T18:30:59.999999Z",
+            "issued_at": "2013-02-27T16:30:59.999999Z",
+            "methods": [
+                "password"
+            ],
+            "project": {
+                "domain": {
+                    "id": "1789d1",
+                    "name": "example.com"
+                },
+                "id": "263fd9",
+                "name": "project-x"
+            },
+            "roles": [
+                {
+                    "id": "76e72a",
+                    "name": "admin"
+                },
+                {
+                    "id": "f4f392",
+                    "name": "member"
+                }
+            ],
+            "user": {
+                "domain": {
+                    "id": "1789d1",
+                    "name": "example.com"
+                },
+                "id": "0ca8f6",
+                "name": "Joe"
+            }
+        }
+    }
 
 Request an unscoped OS-FEDERATION token
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

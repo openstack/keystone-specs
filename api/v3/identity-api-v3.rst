@@ -3114,9 +3114,13 @@ Relationship:
 
 *New in version 3.4*
 
+- ``parents_as_list`` (key-only, no value expected)
+
 - ``subtree_as_list`` (key-only, no value expected)
 
-- ``parents_as_list`` (key-only, no value expected)
+- ``parents_as_ids`` (key-only, no value expected)
+
+- ``subtree_as_ids`` (key-only, no value expected)
 
 Response:
 
@@ -3229,7 +3233,7 @@ Response:
                     "project": {
                         "domain_id": "1789d1",
                         "enabled": true,
-                        "id": "b76xq8",
+                        "id": "b76eq8",
                         "links": {
                             "self": "identity:35357/v3/projects/b76xq8"
                         },
@@ -3241,14 +3245,78 @@ Response:
         }
     }
 
-Note that the query parameters are not mutually exclusive. The API accept both
-parameters at the same time:
+::
+
+    GET /projects/{project_id}?parents_as_ids
+
+The entire parent hierarchy will be included as nested dictionaries in the
+response. It will contain all projects ids found by traversing up the hierarchy
+to the top-level project.
+
+Response:
+
+::
+
+    {
+        "project": {
+            "domain_id": "1789d1",
+            "enabled": true,
+            "id": "263fd9",
+            "links": {
+                "self": "http://identity:35357/v3/projects/263fd9"
+            },
+            "name": "Dev Group A",
+            "parent_id": "183ab2",
+            "parents": {
+                "183ab2": {
+                    "f53a4e": null
+                }
+            }
+        }
+    }
+
+
+::
+
+    GET /projects/{project_id}?subtree_as_ids
+
+The entire child hierarchy will be included as nested dictionaries in the
+response. It will contain all the projects ids found by traversing down the
+hierarchy.
+
+Response:
+
+::
+
+    {
+        "project": {
+            "domain_id": "1789d1",
+            "enabled": true,
+            "id": "263fd9",
+            "links": {
+                "self": "http://identity:35357/v3/projects/263fd9"
+            },
+            "name": "Dev Group A",
+            "parent_id": "183ab2",
+            "subtree": {
+                "9n1jhb": null,
+                "4b6aa1": {
+                    "b76eq8": null
+                }
+            }
+        }
+    }
+
+Note that the subtree and parents query parameters are not mutually
+exclusive. The same is not true for similar query params such as
+``parents_as_list`` and ``parents_as_ids``, which can't be included at the same
+time. If included, the server will fail with a ``400 Bad Request`` error.
 
 ::
 
     GET /projects/{project_id}?parents_as_list&subtree_as_list
 
-Both the parent and child hierarchies will be included in the response.
+Both the parents and subtree lists will be included in the response.
 
 Response:
 
@@ -3316,6 +3384,40 @@ Response:
                     }
                 }
             ]
+        }
+    }
+
+::
+
+    GET /projects/{project_id}?parents_as_ids&subtree_as_ids
+
+Both the parents and subtree hierarchies will be included in the response.
+
+Response:
+
+::
+
+    {
+        "project": {
+            "domain_id": "1789d1",
+            "enabled": true,
+            "id": "263fd9",
+            "links": {
+                "self": "http://identity:35357/v3/projects/263fd9"
+            },
+            "name": "Dev Group A",
+            "parent_id": "183ab2",
+            "parents": {
+                "183ab2": {
+                    "f53a4e": null
+                }
+            },
+            "subtree": {
+                "9n1jhb": null,
+                "4b6aa1": {
+                    "b76eq8": null
+                }
+            }
         }
     }
 

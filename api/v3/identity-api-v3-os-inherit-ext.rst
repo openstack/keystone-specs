@@ -454,7 +454,7 @@ Response:
                     "domain": {
                         "id": "--domain-id--"
                     },
-                    "OS-INHERIT:inherited_to": ["projects"]
+                    "OS-INHERIT:inherited_to": "projects"
                 },
                 "user": {
                     "id": "--user-id--"

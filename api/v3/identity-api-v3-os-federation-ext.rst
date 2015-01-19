@@ -70,6 +70,12 @@ Optional attributes:
   If a value is not specified by the client, the service will default this to
   ``false``.
 
+- ``remote_ids`` (list)
+
+  Valid remote IdP entity values from Identity Providers. If a value is not
+  specified by the client, the list will be empty.
+
+
 Protocols
 ~~~~~~~~~
 
@@ -235,6 +241,7 @@ Request:
     {
         "identity_provider": {
             "description": "Stores ACME identities.",
+            "remote_ids": ["acme_id_1", "acme_id_2"],
             "enabled": true
         }
     }
@@ -248,6 +255,7 @@ Response:
     {
         "identity_provider": {
             "description": "Stores ACME identities",
+            "remote_ids": ["acme_id_1", "acme_id_2"],
             "enabled": true,
             "id": "ACME",
             "links": {
@@ -277,6 +285,7 @@ Response:
         "identity_providers": [
             {
                 "description": "Stores ACME identities",
+                "remote_ids": ["acme_id_1", "acme_id_2"],
                 "enabled": true,
                 "id": "ACME",
                 "links": {
@@ -286,6 +295,7 @@ Response:
             },
             {
                 "description": "Stores contractor identities",
+                "remote_ids": ["sore_id_1", "store_id_2"],
                 "enabled": false,
                 "id": "ACME-contractors",
                 "links": {
@@ -320,6 +330,7 @@ Response:
     {
         "identity_provider": {
             "description": "Stores ACME identities",
+            "remote_ids": ["acme_id_1", "acme_id_2"],
             "enabled": false,
             "id": "ACME",
             "links": {
@@ -364,6 +375,7 @@ Request:
 
     {
         "identity_provider": {
+            "remote_ids": ["beta_id_1", "beta_id_2"],
             "enabled": true
         }
     }
@@ -377,6 +389,7 @@ Response:
     {
         "identity_provider": {
             "description": "Beta dev idp",
+            "remote_ids": ["beta_id_1", "beta_id_2"],
             "enabled": true,
             "id": "ACME",
             "links": {

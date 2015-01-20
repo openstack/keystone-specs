@@ -17,6 +17,8 @@ What's New in Version 3.5
   project to behave as a domain.
 - Addition of the ``is_domain`` field to project scoped token response that
   represents whether a project is acting as a domain.
+- Enable or disable a subtree in the project hierarchy.
+- Delete a subtree in the project hierarchy.
 
 What's New in Version 3.4
 -------------------------
@@ -3841,11 +3843,63 @@ Response:
 - The update of the parent_id is not allowed and will fail with a ``403
   Forbidden``
 
-- Disabling a project that has enabled projects in its subtree will fail with a
-  ``403 Forbidden``
+- Disabling a project that has enabled projects in its subtree using this API
+  will fail with a ``403 Forbidden``. See the ``Enable or disable subtree``
+  section for the appropriate API for this action.
 
 - Enabling a project that has disabled parents will fail with a ``403
   Forbidden``
+
+Enable or disable subtree
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    PATCH /projects/{project_id}/cascade
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/rel/project``
+
+*New in version 3.5*
+
+This request has a cascade effect: enables or disables a whole subtree in the
+project hierarchy. Once the target project is enabled or disabled, all projects
+below it in the hierarchy are **effectively** enabled or disabled.
+
+Request:
+
+::
+
+    {
+        "project": {
+            "enabled": false
+        }
+    }
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "project": {
+            "description": "Project space for Build Group",
+            "domain_id": "1789d1",
+            "enabled": false,
+            "id": "d52e32",
+            "links": {
+                "self": "https://identity:35357/v3/projects/d52e32"
+            },
+            "name": "Build Group",
+            "parent_id": "7fa612"
+        }
+    }
+
+- Only the ``enabled`` attribute is accepted. Including other attributes
+  besides ``enabled`` will fail with a ``400 Bad Request``
+- Triggering the action against a project that has any children with the
+  ``is_domain`` flag enabled will fail with a ``403 Forbidden``
 
 Delete project
 ^^^^^^^^^^^^^^
@@ -3864,7 +3918,31 @@ Relationship:
 *New in version 3.4*
 
 - The deletion of a project that is not a leaf in the project hierarchy (does
-  not have children) will fail with a ``403 Forbidden``.
+  not have children) using this API will fail with a ``403 Forbidden``. See
+  the ``Delete subtree`` section for the appropriate API for this action.
+
+Delete subtree
+^^^^^^^^^^^^^^
+
+::
+
+    DELETE /projects/{project_id}/cascade
+
+*New in version 3.5*
+
+This request has a cascade effect: deletes the target project itself **and**
+its subtree (all projects below it in the hierarchy). It is mandatory to
+disable the subtree first.
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/rel/project``
+
+::
+
+    Status: 204 No Content
+
+- Triggering the action against a project that has any children with the
+  ``is_domain`` flag enabled will fail with a ``403 Forbidden``
 
 Users
 ~~~~~

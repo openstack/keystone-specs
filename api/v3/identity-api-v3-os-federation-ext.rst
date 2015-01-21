@@ -418,11 +418,11 @@ Response:
      {
         "protocol": {
             "id": "saml2",
-            "mapping_id": "xyz234",
             "links": {
                 "identity_provider": "http://identity:35357/v3/OS-FEDERATION/identity_providers/ACME",
                 "self": "http://identity:35357/v3/OS-FEDERATION/identity_providers/ACME/protocols/saml2"
-            }
+            },
+            "mapping_id": "xyz234"
         }
     }
 
@@ -479,11 +479,11 @@ Response:
      {
         "protocol": {
             "id": "saml2",
-            "mapping_id": "xyz234",
             "links": {
                 "identity_provider": "http://identity:35357/v3/OS-FEDERATION/identity_providers/ACME",
                 "self": "http://identity:35357/v3/OS-FEDERATION/identity_providers/ACME/protocols/saml2"
-            }
+            },
+            "mapping_id": "xyz234"
         }
     }
 
@@ -516,11 +516,11 @@ Response:
      {
         "protocol": {
             "id": "saml2",
-            "mapping_id": "xyz234",
             "links": {
                 "identity_provider": "http://identity:35357/v3/OS-FEDERATION/identity_providers/ACME",
                 "self": "http://identity:35357/v3/OS-FEDERATION/identity_providers/ACME/protocols/saml2"
-            }
+            },
+            "mapping_id": "xyz234"
         }
     }
 
@@ -598,10 +598,10 @@ Response:
 
     {
         "mapping": {
+            "id": "ACME",
             "links": {
                 "self": "http://identity:35357/v3/OS-FEDERATION/mappings/ACME"
             },
-            "id": "ACME",
             "rules": [
                 {
                     "local": [

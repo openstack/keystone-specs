@@ -15,6 +15,10 @@ What's New in Version 3.4
 - Addition of ``parent_id`` optional attribute to projects. This enables the
   construction of a hierarchy of projects.
 - Addition of domain specific configuration management for a domain entity.
+- Removal of ``url`` optional attribute for ``regions``. This attribute was
+  only used for the experimental phase of keystone-to-keystone federation and
+  has been superseded by making service provider entries have its own entry in
+  the service catalog.
 
 What's New in Version 3.3
 -------------------------
@@ -944,10 +948,6 @@ Optional attributes:
   If the region is hierarchically a child of another region, this field shall
   be set to the id of the parent region.
 
-- ``url`` (string)
-
-  *New in version 3.3* A URL field for the deployer to associate with a region.
-
 Example entity:
 
 ::
@@ -959,8 +959,7 @@ Example entity:
             "links": {
               "self": "https://identity:35357/v3/regions/us-east-2"
             },
-            "parent_region_id": "us-east",
-            "url": "http://example.com/auth"
+            "parent_region_id": "us-east"
         }
     }
 
@@ -2305,8 +2304,7 @@ Response:
                     "self": "https://identity:35357/v3/regions/us-east",
                     "child_regions": "https://identity:35357/v3/regions?parent_region_id=us-east"
                 },
-                "parent_region_id": "us-east-coast",
-                "url": "http://example.com/auth"
+                "parent_region_id": "us-east-coast"
             },
             ...
         ],
@@ -2341,8 +2339,7 @@ Response:
                 "self": "https://identity:35357/v3/regions/us-southwest",
                 "child_regions": "http://identity:35357/v3/regions?parent_region_id=us-southwest"
             },
-            "parent_region_id": "us-west-coast",
-            "url": "http://example.com/auth"
+            "parent_region_id": "us-west-coast"
         }
     }
 
@@ -2363,8 +2360,7 @@ Request:
     {
         "region": {
             "description": "US West Subregion 1",
-            "parent_region_id": "829551",
-            "url": "http://example.com/auth"
+            "parent_region_id": "829551"
         }
     }
 
@@ -2382,8 +2378,7 @@ Response:
                 "self": "https://identity:35357/v3/regions/8ebd7f",
                 "child_regions": "https://identity:35357/v3/regions?parent_region_id=8ebd7f"
             },
-            "parent_region_id": "829551",
-            "url": "http://example.com/auth"
+            "parent_region_id": "829551"
         }
     }
 
@@ -2410,8 +2405,7 @@ Request:
     {
         "region": {
             "description": "US Southwest Subregion 1",
-            "parent_region_id": "us-south",
-            "url": "http://example.com/auth"
+            "parent_region_id": "us-south"
         }
     }
 
@@ -2429,8 +2423,7 @@ Response:
                 "self": "https://identity:35357/v3/regions/us-southwest-1",
                 "child_regions": "https://identity:35357/v3/regions?parent_region_id=us-southwest-1"
             },
-            "parent_region_id": "us-south",
-            "url": "http://example.com/auth"
+            "parent_region_id": "us-south"
         }
     }
 
@@ -2463,8 +2456,7 @@ Request:
     {
         "region": {
             "description": "US Southwest Subregion",
-            "parent_region_id": "us-southwest",
-            "url": "http://example.com/auth"
+            "parent_region_id": "us-southwest"
         }
     }
 
@@ -2482,8 +2474,7 @@ Response:
                 "self": "https://identity:35357/v3/regions/us-southwest-1",
                 "child_regions": "https://identity:35357/v3/regions?parent_region_id=us-southwest-1"
             },
-            "parent_region_id": "us-southwest",
-            "url": "http://example.com/auth"
+            "parent_region_id": "us-southwest"
         }
     }
 

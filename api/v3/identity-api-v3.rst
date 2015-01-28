@@ -12,6 +12,8 @@ policy engine rule sets.
 What's New in Version 3.4
 -------------------------
 
+- For tokenless authorization, the scope information may be set in the
+  request headers.
 - Addition of ``parent_id`` optional attribute to projects. This enables the
   construction of a hierarchy of projects.
 - Addition of domain specific configuration management for a domain entity.
@@ -159,6 +161,25 @@ Headers
 
   This header is used to convey the subject of the request for token-related
   operations.
+
+*New in version 3.4*
+
+- ``X-Project-Id``
+- ``X-Project-Name``
+- ``X-Project-Domain-Id``
+- ``X-Project-Domain-Name``
+
+  For tokenless authorization, these headers are used to convey the project
+  scope information. To scope to a project, caller must provide either
+  ``X-Project-Id`` or combination of ``X-Project-Name`` and
+  ``X-Project-Domain-Id`` or ``X-Project-Domain-Name``.
+
+- ``X-Domain-Id``
+- ``X-Domain-Name``
+
+  For tokenless authorization, these headers are used to convey the domain
+  scope information. To scope to a domain, caller must provide either
+  ``X-Domain-Id`` or ``X-Domain-Name``.
 
 Required Attributes
 ~~~~~~~~~~~~~~~~~~~

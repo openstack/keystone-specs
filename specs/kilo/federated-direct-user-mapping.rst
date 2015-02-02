@@ -24,15 +24,28 @@ Many cloud providers want to use cloud federation so the authentication is
 handled by the first class Identity Provider, but the user exists in the
 Identity backend.
 
+This problem is manifested in many ways, firstly when an ephemeral user obtains
+a token, the user section of the token does not have a 'domain' portion. This,
+breaks the API contract we established when obtaining tokens. Currently,
+consuming projects work around this issue by checking to see if 'OS-FEDERATION'
+is present in the token.
+
 Proposed Change
 ===============
 
 Part of the change is adding a concept of a default federated domain. That is,
 all the ephemeral users (not present in the backend) will be stored in a
-default federated domain. The domain's name will be hardcoded and will be named
+default federated domain. The domain's name will be immutable and will be named
 ``Federated``.
+
+Even though there are many users from many IdPs being placed in the default
+``Federated`` domain, there is no collision between user ids and names, since
+the users do not exist in Keystone, and domains are a Keystone concept.
+The user's token will provide information about the Identity Provider that was
+used to authenticate.
+
 Mapping rules should be changed - cloud administrators should be able to
-specify the domain the user belongs to. If such attribute is not specified
+specify the domain the user belongs to. If such an attribute is not specified
 explicitly, this will mean the user is meant to be ephemeral and automatically
 belongs to federated domain. If the domain is not present in the backend,
 server will respond with appropriate error code.  If the  domain attribute is
@@ -88,7 +101,9 @@ issued:
 
 
 The proper way to distinguish whether the user is ephemeral or not is by
-checking by membership in the federated domain.
+checking by membership in the federated domain. If no domain information is
+provided, then it is assumed that the user is ephemeral and will use the
+default federated domain.
 
 Proposed change also solves the issue of an inconsistent token being returned,
 (where the user didn't have a domain) and there should be less special handling

@@ -135,6 +135,30 @@ Required attributes:
    tries to directly map ``REMOTE_USER`` environment variable. If this variable
    is also unavailable the server returns an HTTP 401 Unauthorized error.
 
+   If the ``user`` has domain specified, the user is treated as existing in the
+   backend, hence the server will fetch user details (id, name, roles, groups).
+
+   If, however, the user does not exist in the backend, the server will
+   respond with an appropriate HTTP error code.
+
+   If no domain is specified in the local rule, user is deemed ephemeral
+   and becomes a member of service domain named ``Federated``.
+
+   An example of user object mapping to an existing user:
+
+   ::
+
+       {
+            "user": {
+                "name": "username"
+                "domain": {
+                    "name": "domain_name"
+                }
+            }
+       }
+
+
+
    For attribute type and value mapping, identify the local resource type,
    attribute, and value:
 
@@ -1368,8 +1392,11 @@ Request an unscoped OS-FEDERATION token
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/ext/OS-FEDERATION/1.0/rel/identity_provider_protocol_auth``
 
-A federated user may request an unscoped token, which can be used to get a
-scoped token.
+A federated ephemeral user may request an unscoped token, which can be used to
+get a scoped token.
+
+If the user is mapped directly (mapped to an existing user), a standard,
+unscoped token will be issued.
 
 Due to the fact that this part of authentication is strictly connected with the
 SAML2 authentication workflow, a client should not send any data, as the
@@ -1395,6 +1422,9 @@ Example of an OS-FEDERATION token:
                 "saml2"
             ],
             "user": {
+                "domain": {
+                    "name": "Federated"
+                },
                 "id": "username%40example.com",
                 "name": "username@example.com",
                 "OS-FEDERATION": {
@@ -1511,6 +1541,9 @@ Example of an OS-FEDERATION token:
                 }
             ],
             "user": {
+                "domain": {
+                    "name": "Federated"
+                },
                 "id": "username%40example.com",
                 "name": "username@example.com",
                 "OS-FEDERATION": {

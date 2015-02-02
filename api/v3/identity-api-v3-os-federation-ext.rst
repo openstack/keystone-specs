@@ -1560,8 +1560,8 @@ used in the request.
 
 Request Parameters:
 
-To generate a SAML assertion, a user must provides a scoped token ID and region
-ID in the request body.
+To generate a SAML assertion, a user must provides a scoped token ID and
+Service Provider ID in the request body.
 
 Example request:
 
@@ -1578,15 +1578,18 @@ Example request:
                 }
             },
             "scope": {
-                "region": {
-                    "id": "--region_id--"
+                "service_provider": {
+                    "id": "--sp_id--"
                 }
             }
         }
     }
 
 The response will be a full SAML assertion. Note that for readability the
-certificate has been truncated.
+certificate has been truncated. Server will also set two HTTP headers:
+``X-sp-url`` and ``X-auth-url``. The former is the URL where assertion should
+be sent, whereas the latter remote URL where token will be issued once the
+client is finally authenticated.
 
 Response:
 
@@ -1594,6 +1597,8 @@ Response:
 
     Headers:
         Content-Type: text/xml
+        X-sp-url: http://beta.example.com/Shibboleth.sso/POST/ECP
+        X-auth-url: http://beta.example.com:5000/v3/OS-FEDERATION/identity_providers/beta/protocols/auth
 
     <?xml version="1.0" encoding="UTF-8"?>
     <samlp:Response ID="_257f9d9e9fa14962c0803903a6ccad931245264310738"

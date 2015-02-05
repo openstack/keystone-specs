@@ -108,12 +108,6 @@ To run all of the shared tests (unlikely that you want to do this):
 
   tox -e functional
 
-To run all of the shared config tests:
-
-.. code::
-
-  tox -e functional -- keystone.tests.functional.shared
-
 To run all of the federation config tests:
 
 .. code::

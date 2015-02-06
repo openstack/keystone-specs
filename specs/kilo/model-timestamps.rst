@@ -16,15 +16,16 @@ Although we can get a detailed auditing information via CADF audit event
 records, we may need a simple way to determine when these resources were
 created and when they were last modified.
 
-We don't want to make one spec that fixes all models. So, this spec will only
-implement timestamp for assignment models: Project, Domain, Role.
+We don't want to make one specification that fixes all models. So, this
+specification will only implement timestamps for assignment models: Project,
+Domain, Role.
 
-Because ldap assignment backend will be deprecated in next cycle and be removed
-in the future, we only implement this in sql backend.
+Because LDAP assignment backend will be deprecated in next cycle and be removed
+in the future, we only implement this in SQL backend.
 
-According to the reseller spec[2], the Domains and projects will become one
-resource type, so this spec only implements timestamp for Project and Role.
-
+According to the `Reseller specification`_, the Domains and Projects will
+become one resource type, so this specification only implements timestamp for
+Project and Role.
 
 Problem Description
 ===================
@@ -39,9 +40,9 @@ Problem Description
 Proposed Change
 ===============
 
-Actually, oslo.db has provided a TimestampMixin[1] object for timestamp models.
-The only thing we need to do is to make Project, Role inherit from
-TimestampMixin and then add a db migration script.
+Actually, `oslo.db`_ has provided a `TimestampMixin`_ object for timestamp
+models. The only thing we need to do is to make Project, Role inherit from
+`TimestampMixin`_ and then add a database migration script.
 
 
 Alternatives
@@ -93,11 +94,11 @@ w-wanghong (wanghong <w.wanghong@huawei.com>)
 Work Items
 ----------
 
-* Update Project, Role model to inherit TimestampMixin
+* Update Project, Role model to inherit `TimestampMixin`_
 
 * Ensure timestamps are filtered before data is serialized to JSON
 
-* Write db migration script
+* Write a database migration script
 
 * Add tests
 
@@ -105,7 +106,7 @@ Work Items
 Dependencies
 ============
 
-None
+`oslo.db`_, but it is already a dependency.
 
 Documentation Impact
 ====================
@@ -116,8 +117,10 @@ Update the Projects and Roles sections of documentation.
 References
 ==========
 
-[1] ` oslo_db TimestampMixin
-<https://github.com/openstack/oslo.db/blob/master/oslo_db/sqlalchemy/models.py#L115>`_
+* `oslo.db`_
+* `TimestampMixin`_
+* `Reseller specification`_
 
-[2] ` reseller spec
-<https://review.openstack.org/#/c/139824>`_
+.. _oslo.db: http://docs.openstack.org/developer/oslo.db/
+.. _TimestampMixin: https://github.com/openstack/oslo.db/blob/master/oslo_db/sqlalchemy/models.py#L115
+.. _Reseller specification: http://specs.openstack.org/openstack/keystone-specs/specs/kilo/reseller.html

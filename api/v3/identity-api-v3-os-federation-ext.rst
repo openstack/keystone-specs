@@ -1285,10 +1285,11 @@ This is an example that is similar to the previous, but displays how multiple
 Authenticating
 --------------
 
-Request a local token with Service Catalog extended with ``service_providers``.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Request a local token with Service Catalog extended with service providers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
+
     POST /v3/auth/tokens?service_providers
 
 Relationship:

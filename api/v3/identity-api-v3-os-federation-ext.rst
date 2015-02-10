@@ -890,10 +890,10 @@ Response:
     Status: 204 No Content
 
 Service Provider API
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 Register a Service Provider
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 

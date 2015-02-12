@@ -1383,6 +1383,75 @@ remote Service Providers.
         }
     }
 
+Get service catalog extended with service providers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    GET /auth/catalog?service_providers
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/rel/auth_catalog``
+
+A user may request the service catalog for a token that also lists remote
+service providers, even if the token does not contain a catalog itself (for
+example, if it was generated using ``?nocatalog``, or without
+``?service_providers``).
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "catalog": [
+            {
+                "endpoints": [
+                    {
+                        "id": "39dc322ce86c4111b4f06c2eeae0841b",
+                        "interface": "public",
+                        "region": "RegionOne",
+                        "url": "http://localhost:5000"
+                    },
+                    {
+                        "id": "ec642f27474842e78bf059f6c48f4e99",
+                        "interface": "internal",
+                        "region": "RegionOne",
+                        "url": "http://localhost:5000"
+                    },
+                    {
+                        "id": "c609fc430175452290b62a4242e8a7e8",
+                        "interface": "admin",
+                        "region": "RegionOne",
+                        "url": "http://localhost:35357"
+                    }
+                ],
+                "id": "4363ae44bdf34a3981fde3b823cb9aa2",
+                "type": "identity",
+                "name": "keystone",
+                "service_providers": [
+                    {
+                        "auth_url": "https://example.com:5000/v3/OS-FEDERATION/identity_providers/acme/protocols/saml2/auth",
+                        "id": "ACME",
+                        "sp_url": "https://example.com:5000/Shibboleth.sso/SAML2/ECP"
+                    },
+                    {
+                        "auth_url": "https://other.example.com:5000/v3/OS-FEDERATION/identity_providers/acme/protocols/saml2/auth",
+                        "id": "ACME-contractors",
+                        "sp_url": "https://other.example.com:5000/Shibboleth.sso/SAML2/ECP"
+                    }
+                ]
+            }
+        ],
+        "links": {
+            "self": "https://identity:35357/v3/catalog",
+            "previous": null,
+            "next": null
+        }
+    }
+
+
 Request an unscoped OS-FEDERATION token
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

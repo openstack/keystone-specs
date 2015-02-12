@@ -1635,6 +1635,7 @@ Web Single Sign On authentication
 *New in version 1.2*
 
 ::
+
     GET /auth/OS-FEDERATION/websso/{protocol}?origin=https%3A//horizon.example.com
 
 For Web Single Sign On authentication, users are expected to enter another

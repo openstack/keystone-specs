@@ -44,16 +44,13 @@ Kilo approved specs:
 
    specs/kilo/*
 
-.. NOTE(dhellmann): Uncomment this section after there is at least one
-   non-template spec for keystoneclient.
+Keystone client approved specs:
 
-   Keystone client approved specs:
+.. toctree::
+   :glob:
+   :maxdepth: 1
 
-   .. toctree::
-      :glob:
-      :maxdepth: 1
-
-      specs/keystoneclient/*
+   specs/keystoneclient/*
 
 
 Keystone middleware approved specs:

@@ -701,7 +701,6 @@ Example entity:
         "user": {
             "default_project_id": "263fd9",
             "domain_id": "1789d1",
-            "email": "joe@example.com",
             "enabled": true,
             "id": "0ca8f6",
             "links": {
@@ -1186,7 +1185,6 @@ Example token with ``audit_ids`` attribute (first element is the token's
                     "id": "1789d1",
                     "name": "example.com"
                 }
-                "email": "joe@example.com",
                 "id": "0ca8f6",
                 "name": "Joe"
             }
@@ -1334,7 +1332,6 @@ Example entity:
                     "id": "1789d1",
                     "name": "example.com"
                 },
-                "email": "joe@example.com",
                 "id": "0ca8f6",
                 "name": "Joe"
             }
@@ -3788,7 +3785,6 @@ Response:
                 "default_project_id": "263fd9",
                 "description": "Admin user",
                 "domain_id": "1789d1",
-                "email": "admin@example.com",
                 "enabled": true,
                 "id": "0ca8f6",
                 "links": {
@@ -3800,7 +3796,6 @@ Response:
                 "default_project_id": "263fd9",
                 "description": "John Smith's user",
                 "domain_id": "1789d1",
-                "email": "jsmith@example.com",
                 "enabled": true,
                 "id": "9fe1d3",
                 "links": {
@@ -3837,7 +3832,6 @@ Response:
             "default_project_id": "263fd9",
             "description": "John Smith's user",
             "domain_id": "1789d1",
-            "email": "jsmith@example.com",
             "enabled": true,
             "id": "9fe1d3",
             "links": {
@@ -3964,7 +3958,6 @@ Request:
             "default_project_id": "263fd9",
             "description": "Jim Doe's user",
             "domain_id": "1789d1",
-            "email": "jdoe@example.com",
             "enabled": true,
             "name": "James Doe",
             "password": "secretsecret"
@@ -3982,7 +3975,6 @@ Response:
             "default_project_id": "263fd9",
             "description": "Jim Doe's user",
             "domain_id": "1789d1",
-            "email": "jdoe@example.com",
             "enabled": true,
             "id": "ff4e51",
             "links": {
@@ -4018,7 +4010,6 @@ Response:
             "default_project_id": "263fd9",
             "description": "James Doe's user",
             "domain_id": "1789d1",
-            "email": "jamesdoe@example.com",
             "enabled": true,
             "id": "ff4e51",
             "links": {
@@ -4227,7 +4218,6 @@ Response:
                 "default_project_id": "--default-project-id--",
                 "description": "a user",
                 "domain_id": "--domain-id--",
-                "email": "...",
                 "enabled": true,
                 "id": "--user-id--",
                 "links": {
@@ -4239,7 +4229,6 @@ Response:
                 "default_project_id": "--default-project-id--",
                 "description": "another user",
                 "domain_id": "--domain-id--",
-                "email": "...",
                 "enabled": true,
                 "id": "--user-id--",
                 "links": {

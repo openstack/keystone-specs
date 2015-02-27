@@ -1830,7 +1830,15 @@ Notice that token ID is not part of the token data. Rather, it is conveyed in
 the ``X-Subject-Token`` header.
 
 A token scoped to a ``project`` will also have a service ``catalog``, along
-with the user's roles applicable to the ``project``. Example response:
+with the user's roles applicable to the ``project``.
+
+Providing there are enabled ``SAML2`` service providers, a token will be
+populated with a list of such service providers, accessible in the dictionary
+with a key ``service_providers``.
+More description on service provider objects can be found `here
+<https://github.com/openstack/keystone-specs/blob/master/api/v3/identity-api-v3-os-federation-ext.rst#service-providers>`__
+
+Example response:
 
 ::
 
@@ -1888,6 +1896,18 @@ with the user's roles applicable to the ``project``. Example response:
                 {
                     "id": "f4f392",
                     "name": "member"
+                }
+            ],
+            "service_providers": [
+                {
+                    "auth_url":"https://example.com:5000/v3/OS-FEDERATION/identity_providers/acme/protocols/saml2/auth",
+                    "id": "ACME",
+                    "sp_url": "https://example.com:5000/Shibboleth.sso/SAML2/ECP"
+                },
+                {
+                    "auth_url":"https://other.example.com:5000/v3/OS-FEDERATION/identity_providers/acme/protocols/saml2/auth",
+                    "id": "ACME-contractors",
+                    "sp_url": "https://other.example.com:5000/Shibboleth.sso/SAML2/ECP"
                 }
             ],
             "user": {

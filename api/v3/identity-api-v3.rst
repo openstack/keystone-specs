@@ -3156,7 +3156,7 @@ Response:
     }
 
 Domain specific configuration options can also be created, updated and deleted
-using the POST, PATCH and DELETE HTTP commands. When updating, it is only
+using the PUT, PATCH and DELETE HTTP commands. When updating, it is only
 necessary to include those options that are being updated.
 
 ::
@@ -3230,7 +3230,7 @@ Response:
         }
     }
 
-In the above example, if the ``url`` option did not yet exist then an HTTP POST
+In the above example, if the ``url`` option did not yet exist then an HTTP PUT
 command would be required.
 
 The Keystone API will not return options that are considered sensitive,

@@ -21,6 +21,8 @@ What's New in Version 3.4
   only used for the experimental phase of keystone-to-keystone federation and
   has been superseded by making service provider entries have its own entry in
   the service catalog.
+- The JSON Home support now will indicate the status of resource if it is not
+  stable and current.
 
 What's New in Version 3.3
 -------------------------
@@ -1386,6 +1388,46 @@ that version of the identity API, but also the resources for the extensions.
 Each of the resources in the Core API below specify the "relationship" for the
 resource. A client application can look up the resource path or path template
 for a resource by looking for that resource in the JSON Home document.
+
+*New in version 3.4*
+
+By default all core resources defined by the v3 API should be considered as
+stable and current. However, the JSON Home response document will indicate any
+variance to this in the ``status`` property of the ``hints`` property of a
+given resource.
+
+Example resource response::
+
+    {
+          "resources": {
+              "http://docs.openstack.org/api/openstack-identity/3/rel/domain_config" : {
+                  "href-template": "/domains/{domain_id}/config",
+                  "href-vars": {
+                      "domain_id": "http://docs.openstack.org/api/openstack-identity/3/param/domain_id"
+                  },
+                  "hints": {
+                      "status": "experimental"
+                }
+            }
+        }
+    }
+
+Supported values of ``status`` are ``deprecated``, ``experimental`` and
+``stable`` (which is the default). These values
+have the following meanings:
+
+- ``deprecated``: The resource has been marked as deprecated and will be
+  removed in a future release. Clients using such a resource should
+  plan to migrate to more current resources as soon as possible.
+
+- ``experimental``: The resource is valid and can be used but is still
+  maturing. While every attempt will be made to maintain the resource as is
+  ahead of being marked as stable, it is possible that changes may need to
+  be made.
+
+- ``stable``: The resource is stable and current. This is the default, and
+  the lack of a hints property, or a status property within that, can be taken
+  as an indication that this resource is stable.
 
 Core API
 --------
@@ -3081,6 +3123,8 @@ Response:
 
 Domain configuration management
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+*New in version 3.4 (experimental)*
 
 Keystone optionally supports the ability to manage domain specific
 configuration options via the API.

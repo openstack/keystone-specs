@@ -3167,6 +3167,9 @@ It is also possible to read specific groups or options.
 
     GET /domains/{domain_id}/config/ldap
 
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/rel/domain_config_group``
+
 Response:
 
 ::
@@ -3185,6 +3188,9 @@ An individual option may also be requested.
 ::
 
     GET /domains/{domain_id}/config/ldap/url
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/rel/domain_config_option``
 
 Response:
 

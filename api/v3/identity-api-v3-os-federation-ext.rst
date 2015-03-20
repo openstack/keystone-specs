@@ -245,6 +245,14 @@ requests to generate an assertion will result in a 403 error.
 If a value is not specified by the client, the service will default this to
 ``false``.
 
+- ``relay_state_prefix`` (string)
+
+Indicates the relay state prefix, used in the SAML ECP messages, by the Service
+Provider.
+
+If a value is not specified by the client, the service will default this value
+to ``ss:mem:``.
+
 Identity Provider API
 ---------------------
 
@@ -930,9 +938,9 @@ Response:
             "id": "ACME",
             "links": {
                 "self": "https://identity:35357/v3/OS-FEDERATION/service_providers/ACME"
-            }
-            "sp_url": "https://example.com:5000/Shibboleth.sso/SAML2/ECP",
-
+            },
+            "relay_state_prefix": "ss:mem:",
+            "sp_url": "https://example.com:5000/Shibboleth.sso/SAML2/ECP"
         }
     }
 
@@ -968,6 +976,7 @@ Response:
                 "links": {
                     "self": "http://identity:35357/v3/OS-FEDERATION/service_providers/ACME"
                 },
+                "relay_state_prefix": "ss:mem:",
                 "sp_url": "https://example.com:5000/Shibboleth.sso/SAML2/ECP"
             },
             {
@@ -978,6 +987,7 @@ Response:
                 "links": {
                     "self": "http://identity:35357/v3/OS-FEDERATION/service_providers/ACME-contractors"
                 },
+                "relay_state_prefix": "ss:mem:",
                 "sp_url": "https://other.example.com:5000/Shibboleth.sso/SAML2/ECP"
             }
         ]
@@ -1008,6 +1018,7 @@ Response:
             "links": {
                 "self": "https://identity:35357/v3/OS-FEDERATION/service_providers/ACME"
             },
+            "relay_state_prefix": "ss:mem:",
             "sp_url": "https://example.com:5000/Shibboleth.sso/SAML2/ECP"
         }
     }
@@ -1047,6 +1058,7 @@ Request:
         "service_provider": {
             "auth_url": "https://new.example.com:5000/v3/OS-FEDERATION/identity_providers/protocol/saml2/auth",
             "enabled": true,
+            "relay_state_prefix": "ss:temp:",
             "sp_auth": "https://new.example.com:5000/Shibboleth.sso/SAML2/ECP"
         }
     }
@@ -1066,6 +1078,7 @@ Response:
             "links": {
                 "self": "https://identity:35357/v3/OS-FEDERATION/service_providers/ACME"
             },
+            "relay_state_prefix": "ss:temp:",
             "sp_url": "https://new.example.com:5000/Shibboleth.sso/SAML2/ECP"
         }
     }

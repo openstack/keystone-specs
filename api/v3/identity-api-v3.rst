@@ -3344,6 +3344,8 @@ Optional query parameters:
 
 - ``name`` (string)
 
+- ``parent_id`` (string) *New in version 3.4*
+
 Response:
 
 ::

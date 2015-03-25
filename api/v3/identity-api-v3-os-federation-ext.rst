@@ -1627,6 +1627,133 @@ Response:
 For more information about how a SAML assertion is structured, refer to the
 `specification <http://saml.xml.org/saml-specifications>`__.
 
+Generate a SAML ECP assertion
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    POST /auth/OS-FEDERATION/saml2/ecp
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/ext/OS-FEDERATION/1.0/rel/saml2/ecp``
+
+A user may generate a SAML assertion document to work with the
+*Enhanced Client or Proxy* (ECP) profile based on the scoped token that is
+used in the request.
+
+Request Parameters:
+
+To generate a SAML ECP assertion, a user must provides a scoped token ID and
+Service Provider ID in the request body.
+
+Example request:
+
+::
+
+    {
+        "auth": {
+            "identity": {
+                "methods": [
+                    "token"
+                ],
+                "token": {
+                    "id": "--token_id--"
+                }
+            },
+            "scope": {
+                "service_provider": {
+                    "id": "--sp_id--"
+                }
+            }
+        }
+    }
+
+The response will be a full SAML ECP assertion. Note that for readability the
+certificate has been truncated. Server will also set two HTTP headers:
+``X-sp-url`` and ``X-auth-url``. The former is the URL where assertion should
+be sent, whereas the latter remote URL where token will be issued once the
+client is finally authenticated.
+
+::
+
+    Headers:
+        Content-Type: text/xml
+        X-sp-url: http://beta.example.com/Shibboleth.sso/POST/ECP
+        X-auth-url: http://beta.example.com:5000/v3/OS-FEDERATION/identity_providers/beta/protocols/auth
+
+    <?xml version='1.0' encoding='UTF-8'?>
+    <ns0:Envelope
+        xmlns:ns0="http://schemas.xmlsoap.org/soap/envelope/"
+        xmlns:ns1="urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp"
+        xmlns:ns2="urn:oasis:names:tc:SAML:2.0:protocol"
+        xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+        xmlns:xmldsig="http://www.w3.org/2000/09/xmldsig#"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns0:Header>
+            <ns1:RelayState ns0:actor="http://schemas.xmlsoap.org/soap/actor/next" ns0:mustUnderstand="1">ss:mem:1ddfe8b0f58341a5a840d2e8717b0737</ns1:RelayState>
+        </ns0:Header>
+        <ns0:Body>
+            <ns2:Response Destination="http://beta.example.com/Shibboleth.sso/POST/ECP" ID="8c21de08d2f2435c9acf13e72c982846" IssueInstant="2015-03-25T14:43:21Z" Version="2.0">
+                <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">http://keystone.idp/v3/OS-FEDERATION/saml2/idp</saml:Issuer>
+                <ns2:Status>
+                    <ns2:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success" />
+                </ns2:Status>
+                <saml:Assertion ID="a5f02efb0bff4044b294b4583c7dfc5d" IssueInstant="2015-03-25T14:43:21Z" Version="2.0">
+                    <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">http://keystone.idp/v3/OS-FEDERATION/saml2/idp</saml:Issuer>
+                    <xmldsig:Signature>
+                        <xmldsig:SignedInfo>
+                            <xmldsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                            <xmldsig:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+                            <xmldsig:Reference URI="#a5f02efb0bff4044b294b4583c7dfc5d">
+                                <xmldsig:Transforms>
+                                    <xmldsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+                                    <xmldsig:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                                </xmldsig:Transforms>
+                                <xmldsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+                                <xmldsig:DigestValue>0KH2CxdkfzU+6eiRhTC+mbObUKI=</xmldsig:DigestValue>
+                            </xmldsig:Reference>
+                        </xmldsig:SignedInfo>
+                        <xmldsig:SignatureValue>m2jh5gDvX/1k+4uKtbb08CHp2b9UWsLwjtMijs9C9gZV2dIJKiF9SJBWE4C79qT4
+    uktgeB0RQiFrgxOGfpp1gyQunmNyZcipcetOk4PebH4/z+po/59w8oGp89fPfdRj
+    WhWA0fWP32Pr5eslRQjbHnSRTFMp3ycBZHsCCsTWdhyiWC6aERsspHeeGjkzxRAZ
+    HxJ8oLMj/TWBJ2iaUDUT6cxa1svmtumoC3GPPOreuGELXTL5MtKotTVqYN6lZP8B
+    Ueaji11oRI1HE9XMuPu0iYlSo1i3JyejciSFgplgdHsebpM29PMo8oz2TCybY39p
+    kmuD4y9XX3lRBcpJRxku7w==</xmldsig:SignatureValue>
+                        <xmldsig:KeyInfo>
+                            <xmldsig:X509Data>
+                                <xmldsig:X509Certificate>...</xmldsig:X509Certificate>
+                            </xmldsig:X509Data>
+                        </xmldsig:KeyInfo>
+                    </xmldsig:Signature>
+                    <saml:Subject>
+                        <saml:NameID>admin</saml:NameID>
+                        <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+                            <saml:SubjectConfirmationData NotOnOrAfter="2015-03-25T15:43:21.172385Z" Recipient="http://beta.example.com/Shibboleth.sso/POST/ECP" />
+                        </saml:SubjectConfirmation>
+                    </saml:Subject>
+                    <saml:AuthnStatement AuthnInstant="2015-03-25T14:43:21Z" SessionIndex="9790eb729858456f8a33b7a11f0a637e" SessionNotOnOrAfter="2015-03-25T15:43:21.172385Z">
+                        <saml:AuthnContext>
+                            <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:Password</saml:AuthnContextClassRef>
+                            <saml:AuthenticatingAuthority>http://keystone.idp/v3/OS-FEDERATION/saml2/idp</saml:AuthenticatingAuthority>
+                        </saml:AuthnContext>
+                    </saml:AuthnStatement>
+                    <saml:AttributeStatement>
+                        <saml:Attribute Name="openstack_user" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+                            <saml:AttributeValue xsi:type="xs:string">admin</saml:AttributeValue>
+                        </saml:Attribute>
+                        <saml:Attribute Name="openstack_roles" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+                            <saml:AttributeValue xsi:type="xs:string">admin</saml:AttributeValue>
+                        </saml:Attribute>
+                        <saml:Attribute Name="openstack_project" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+                            <saml:AttributeValue xsi:type="xs:string">admin</saml:AttributeValue>
+                        </saml:Attribute>
+                    </saml:AttributeStatement>
+                </saml:Assertion>
+            </ns2:Response>
+        </ns0:Body>
+    </ns0:Envelope>
+
+
 Retrieve Metadata properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

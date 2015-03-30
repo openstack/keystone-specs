@@ -247,8 +247,8 @@ If a value is not specified by the client, the service will default this to
 
 - ``relay_state_prefix`` (string)
 
-Indicates the relay state prefix, used in the SAML ECP messages, by the Service
-Provider.
+Indicates the relay state prefix, used in the ECP wrapped SAML messages, by the
+Service Provider.
 
 If a value is not specified by the client, the service will default this value
 to ``ss:mem:``.
@@ -1640,8 +1640,8 @@ Response:
 For more information about how a SAML assertion is structured, refer to the
 `specification <http://saml.xml.org/saml-specifications>`__.
 
-Generate a SAML ECP assertion
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Generate an ECP wrapped SAML assertion
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
@@ -1656,8 +1656,8 @@ used in the request.
 
 Request Parameters:
 
-To generate a SAML ECP assertion, a user must provides a scoped token ID and
-Service Provider ID in the request body.
+To generate an ECP wrapped SAML assertion, a user must provides a scoped token
+ID and Service Provider ID in the request body.
 
 Example request:
 
@@ -1681,8 +1681,8 @@ Example request:
         }
     }
 
-The response will be a full SAML ECP assertion. Note that for readability the
-certificate has been truncated. Server will also set two HTTP headers:
+The response will be an ECP wrapped SAML assertion. Note that for readability
+the certificate has been truncated. Server will also set two HTTP headers:
 ``X-sp-url`` and ``X-auth-url``. The former is the URL where assertion should
 be sent, whereas the latter remote URL where token will be issued once the
 client is finally authenticated.

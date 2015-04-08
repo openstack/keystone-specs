@@ -450,7 +450,7 @@ List Endpoint Groups Associated with Project
 
 ::
 
-    GET /OS-EP-FILTER/endpoint_groups/projects/{project_id}
+    GET /OS-EP-FILTER/projects/{project_id}/endpoint_groups
 
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/ext/OS-EP-FILTER/1.0/rel/project_endpoint_groups``

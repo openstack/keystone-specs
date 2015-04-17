@@ -14,46 +14,73 @@ Problem Description
 In Keystone, we have the ability to filter endpoints in the service catalog.
 However, at run-time we do not enforce that a target service endpoint actually
 exists in the service catalog. This means that a user with a valid token can
-access any service endpoint. Of course, additional security layers such as
-roles based access control will limit the damage.
+access any service endpoint.
 
-Nevertheless, in a holistic security environment, offering the ability to
-provide layered security such as endpoint enforcement is important. Especially
-in the case of global roles whereby an adminstrator of one service by default
-has administrator access to all services in a vanilla Openstack installation.
+Of course, additional security layers such as roles based access control will
+limit the scope of this insecurity but nevertheless, in a holistic security
+environment, offering the ability to provide layered security such as endpoint
+enforcement is important.  This is particularly true in the case of global
+roles such as an adminstrator of one service in a vanilla Openstack
+installation who by default will have administrator access to all services.
 
 Proposed Change
 ===============
 
-The proposed solution is to create an optional endpoint enforcement check
-within auth_token that will verify a specific endpoint is contained in the
-service catalog associated with a given token. If the target endpoint is not
-contained in the service catalog then the request will be rejected. The target
-service endpoint will be configurable as a middleware parameter together with
-an option to enable or disable endpoint filtering which will be disabled by
-default.
+The proposed solution is to add the endpoint constraint enforcement capability
+to the existing `auth_token` middleware. Endpoint constraint enforcement will
+be based on a given global rule in the service's (Oslo) policy file
+matching the endpoint IDs passed in the token. The given rule, if
+exists, will be matched against the endpoints found request token's
+service catalog. If there's at least one match, user is allowed to access the
+endpoint. Otherwise, an endpoint access denied exception will be thrown. Since
+endpoint constraint enforcement is part of token validation logic, an endpoint
+access denied exception is the same as `InvalidToken` exception. Therefore, the
+existing logic for handling `InvalidToken` exception remains unchanged. For
+example, if the `delay_auth_decision` is set to True, request will still be
+propagated down the pipeline despite the endpoint validation failure.
 
-The `auth_token` middleware will have 3 new options. To enable hard enforcement
-the configuration will need to include the endpoint's `service_id`, the
-`endpoint_id`, and the boolean `enforce_endpoint_in_authz`. If either
-`service_id` or `endpoint_id` are missing the `enforce_endpoint_in_authz`
-will be implicity false.
+The `auth_token` middleware will have two new options.
+
+    `enforce_global_target`	- enable global rule enforcement. Default is
+                                  False.
+    `global_target_name`	- name of the global target in the policy file
+                                  to enforce. Default is `global`.
+
+
+For example, your policy file should contain something like this::
+
+    {
+        ...
+        "endpoint_binding": "token.catalog.endpoints.id=%{CONF.endpoint_id}s",
+        "global": "rule:endpoint_binding",
+        ...
+    }
+
+Policy configuration comes from the service's global configuration file.
+For example::
+
+    [oslo_policy]
+    policy_file = policy.json
+
+If `enforce_global_target` is set to False, endpoint constraint will not
+be enforced.
+
+If `enforce_global_target` is set to True and global target is not found in
+service's policy file, a `ConfigurationError` exception will be raised.
+
+If `endpoint_globa_target` is enabled and service catalog is not found in
+token data, middleware will attempt to fetch to service catalog from Keystone
+before performing the enforcement.
+
 
 Alternatives
 ------------
 
-Two alternatives:
+An existing Keystone spec called ``Token Constraints`` talks about adding
+endpoint enforcement via token constraints. Our proposal focuses on endpoint
+enforcement via the service catalog. The advantage with our approach is
+that the change is small and restricted to the Keystone middleware layer.
 
-* An existing Keystone spec called ``Token Constraints`` talks about adding
-  endpoint enforcement via token constraints. Our proposal focuses on endpoint
-  enforcement via the service catalog. The advantage with this approach is
-  that the change is small and restricted to the Keystone middleware layer.
-
-* An alternative implementation is to create a new middleware component that
-  is positioned after auth_token in the pipeline which will perform the
-  endpoint enforcement logic. The disadvantage with this implementation
-  approach is that we create a new middleware component that needs configured
-  and we duplicate logic that exists in auth_token.
 
 Security Impact
 ---------------
@@ -74,15 +101,19 @@ Performance Impact
 ------------------
 
 None - endpoint enforcement will be turned off by default. If enabled then
-we search the service catalog for a given endpoint which will have a neglible
-impact on performance.
+the service catalog will be processed to establish compliance with the
+configuration.  No additional calls to keystone will be necessary so
+Impact on performance will be neglible.
 
 Other Deployer Impact
 ---------------------
 
-If enabled, deployers need to configure auth_token to turn on endpoint
-enforcement and define the target service endpoint to be matched. We assume
-the Service Catalog is filtered.
+The new `endpoint_binding` middleware filter is specified in the pipeline by
+default.  To enable and activate the filter the deployer must define a new
+rule in their policy.json with a target name that matches that configured for
+`endpoint_binding`. If the deployer has customized the deployed paste.ini or
+otherwise is not utilizing the default paste.ini for a given project, the new
+middleware filter will need to be added to the paste.ini pipeline.
 
 Developer Impact
 ----------------
@@ -96,19 +127,20 @@ Assignee(s)
 -----------
 
 Primary assignee:
-  bobt
+  kennedda (David C Kennedy)
 
 Other contributors:
-  None
+  gyee (Guang Yee)
 
 Work Items
 ----------
 
-* Add endpoint enforcement logic in auth_token
+* Add `endpoint_binding` filter
 
 * Update ``keystonemiddleware`` with new enforcement configuration options
 
-* Add enforcement logic to ``keystonemiddleware`` consuming the config options
+* Add enforcement logic to `endpoint_binding` filter consuming the config
+  options
 
 Dependencies
 ============

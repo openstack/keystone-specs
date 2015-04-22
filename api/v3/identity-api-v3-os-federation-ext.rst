@@ -1369,11 +1369,6 @@ A federated user may request a scoped token, by using the unscoped token. A
 project or domain may be specified by either id or name. An id is sufficient to
 uniquely identify a project or domain.
 
-Request Parameters:
-
-To authenticate with the OS-FEDERATION extension, ``saml2`` must be specified
-as an authentication method, and the unscoped token specified in the id field.
-
 Example request:
 
 ::

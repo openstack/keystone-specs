@@ -36,14 +36,6 @@ Project Documentation:
    README <readme>
    Specification Template <specs/template>
 
-Kilo approved specs:
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
-   specs/kilo/*
-
 Liberty approved specs:
 
 .. toctree::

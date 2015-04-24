@@ -4,6 +4,14 @@
 Previously Implemented Identity Program Specifications
 ======================================================
 
+Kilo implemented specs:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/kilo/*
+
 Juno implemented specs:
 
 .. toctree::

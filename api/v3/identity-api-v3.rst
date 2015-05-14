@@ -20,6 +20,7 @@ What's New in Version 3.6
 - Enable or disable a subtree in the project hierarchy.
 - Delete a subtree in the project hierarchy.
 - Additional identifier for tokens scoped to the designated ``admin project``.
+- Addition of ``domain_id`` filter to list user projects
 
 What's New in Version 3.5
 -------------------------
@@ -4131,6 +4132,8 @@ Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/rel/user_projects``
 
 Optional query parameters:
+
+- ``domain_id`` (string) *New in version 3.6*
 
 - ``enabled`` (key-only, no value expected)
 

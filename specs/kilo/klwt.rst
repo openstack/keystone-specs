@@ -8,7 +8,7 @@
 Keystone Lightweight Tokens - KLWT
 ==================================
 
-`bp klw-tokens <https://blueprints.launchpad.net/keystone/+spec/ae-tokens>`_
+`bp klw-tokens <https://blueprints.launchpad.net/keystone/+spec/klw-tokens>`_
 
 KLWT tokens provide a way to represent a token, allowing for tokens to be
 non-persistent. KLWT tokens provide integrity and confidentiality, when

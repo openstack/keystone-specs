@@ -96,15 +96,15 @@ Assignee(s)
 -----------
 
 Primary assignee:
-  TBD
-  Keystone Drivers
 
-
+  * gyee (Guang Yee)
+  * ajayaa (Ajaya Agrawal)
+  * rushiagr (Rushi Agrawal)
 
 Work Items
 ----------
 
-* Evaluate and develop the stable KSDI for the following subsystems:
+  * Evaluate and develop the stable KSDI for the following subsystems:
 
   * Catalog
 

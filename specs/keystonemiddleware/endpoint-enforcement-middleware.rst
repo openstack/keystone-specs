@@ -20,7 +20,7 @@ Of course, additional security layers such as roles based access control will
 limit the scope of this insecurity but nevertheless, in a holistic security
 environment, offering the ability to provide layered security such as endpoint
 enforcement is important.  This is particularly true in the case of global
-roles such as an adminstrator of one service in a vanilla Openstack
+roles such as an administrator of one service in a vanilla OpenStack
 installation who by default will have administrator access to all services.
 
 Proposed Change
@@ -68,7 +68,7 @@ be enforced.
 If `enforce_global_target` is set to True and global target is not found in
 service's policy file, a `ConfigurationError` exception will be raised.
 
-If `endpoint_globa_target` is enabled and service catalog is not found in
+If `endpoint_global_target` is enabled and service catalog is not found in
 token data, middleware will attempt to fetch to service catalog from Keystone
 before performing the enforcement.
 
@@ -100,7 +100,7 @@ None
 Performance Impact
 ------------------
 
-None - endpoint enforcement will be turned off by default. If enabled then
+None - global target enforcement will be turned off by default. If enabled then
 the service catalog will be processed to establish compliance with the
 configuration.  No additional calls to keystone will be necessary so
 Impact on performance will be neglible.
@@ -108,12 +108,9 @@ Impact on performance will be neglible.
 Other Deployer Impact
 ---------------------
 
-The new `endpoint_binding` middleware filter is specified in the pipeline by
-default.  To enable and activate the filter the deployer must define a new
-rule in their policy.json with a target name that matches that configured for
-`endpoint_binding`. If the deployer has customized the deployed paste.ini or
-otherwise is not utilizing the default paste.ini for a given project, the new
-middleware filter will need to be added to the paste.ini pipeline.
+To enable and activate the global target enforcement the deployer must define
+a new rule in their policy.json with a target name that matches that
+configured for `global_target_name`.
 
 Developer Impact
 ----------------
@@ -135,11 +132,11 @@ Other contributors:
 Work Items
 ----------
 
-* Add `endpoint_binding` filter
+* Add the global target enforcement capability to `auth_token` filter
 
 * Update ``keystonemiddleware`` with new enforcement configuration options
 
-* Add enforcement logic to `endpoint_binding` filter consuming the config
+* Add enforcement logic to `auth_token` filter consuming the config
   options
 
 Dependencies
@@ -151,7 +148,7 @@ Documentation Impact
 ====================
 
 Update ``keystonemiddleware`` docs to include how to enable and configure
-endpoint enforcement.
+endpoint enforcement via global target.
 
 References
 ==========

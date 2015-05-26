@@ -23,6 +23,7 @@ What's New in Version 3.6
 - Addition of ``domain_id`` filter to list user projects
 - One Role can imply another via role_inference rules.
 - Enhance list role assignment to optionally provide names of entities.
+- The defaults for domain-specific configuration options can be retrieved.
 
 What's New in Version 3.5
 -------------------------
@@ -3243,7 +3244,91 @@ Domain configuration management
 *New in version 3.4 (experimental)*
 
 Keystone optionally supports the ability to manage domain specific
-configuration options via the API.
+configuration options via the API, allowing configuration options to be
+overriden for a given domain. In addition, *New in version 3.6 (experimental)*,
+the default configuration options can also be retrieved.
+
+Domain specific configuration options are structured within their group
+objects. Currently only the ``identity`` and ``ldap`` groups are supported, and
+these can be used to override the default configuration settings for the
+storage of users and groups by the identity server. Attempting to read or
+override configuration options for groups other than ``identity`` and ``ldap``
+will result in an HTTP 403 Forbidden.
+
+The default configuration settings for the options that can be overridden
+can be retrieved.
+
+::
+
+    GET /domains/config/default
+
+Relationship::
+``http://docs.openstack.org/api/openstack-identity/3/rel/domain_config_default``
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "config": {
+            "identity": {
+                "driver": "ldap"
+            },
+            "ldap": {
+                "url": "ldap://localhost",
+                "user": "",
+                "suffix": "cn=example,cn=com".
+                ....
+            }
+        }
+    }
+
+It is possible to read the default configuration settings for a specific group
+or option.
+
+::
+
+    GET /domains/config/ldap/default
+
+Relationship::
+``http://docs.openstack.org/api/openstack-identity/3/rel/domain_config_default``
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "ldap": {
+            "url": "ldap://localhost",
+            "user": "",
+            "suffix": "cn=example,cn=com".
+            ....
+        }
+    }
+
+::
+
+    GET /domains/config/identity/driver/default
+
+Relationship::
+``http://docs.openstack.org/api/openstack-identity/3/rel/domain_config_default``
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "driver": "ldap"
+    }
+
+A similar form of URL can be used to retrieve the values of those options that
+have been overriden for a domain by the API.
 
 ::
 
@@ -3270,14 +3355,7 @@ Response:
         }
     }
 
-Domain specific configuration options are structured within their group
-objects. Currently only the ``identity`` and ``ldap`` groups are supported, and
-these will be used to override the default configuration settings for the
-storage of users and groups by the identity server. Attempting to set
-configuration options for groups other than ``identity`` and ``ldap`` will
-result in an HTTP 403 Forbidden.
-
-It is also possible to read specific groups or options.
+The values of a specific group that has been overridden can also be read.
 
 ::
 

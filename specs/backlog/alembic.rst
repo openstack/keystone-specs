@@ -30,14 +30,6 @@ All new migrations will use Alembic.
 Alembic migrations will run after sqlachemy-migrate migrations on upgrade
 and vice versa on downgrade. oslo.db's migration_cli utilities will be used.
 
-A new ``db`` command for ``keystone-manage`` will appear with a set of
-subcommands: ``upgrade``, ``downgrade``, ``revision``, ``version`` and
-``stamp``. ``db_sync`` and ``db_version`` commands will be deprecated.
-A warning message will be printed if they are used. ``db_version`` will become
-an alias for ``db version``. ``db_sync`` will become an alias for
-``db upgrade`` for compability with existing practices and tools such as
-``openstack-db``.
-
 In two releases, we should be able to collapse the last of the
 sqlalchemy-migrate based migrations into a base Alembic based migration.
 
@@ -64,9 +56,7 @@ None
 Other Deployer Impact
 ---------------------
 
-Downgrades with deprecated ``db_sync`` will not be supported.
-Deployers should run ``db upgrade`` and ``db downgrade`` instead of
-``db_sync``.
+None
 
 Developer Impact
 ----------------
@@ -108,13 +98,6 @@ Documentation Impact
 ====================
 
 * Describe how to create migrations with Alembic
-
-* Add a description of new commands
-
-* Add deprecation warnings to description of ``db_sync`` and ``db_version``
-
-* Change ``db_sync`` to ``db upgrade`` and ``db downgrade`` everywhere in the
-  docs
 
 References
 ==========

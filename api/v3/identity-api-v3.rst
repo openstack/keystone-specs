@@ -9,6 +9,11 @@ The Identity API also provides endpoint discovery through a service catalog,
 identity management, project management, and a centralized repository for
 policy engine rule sets.
 
+What's New in Version 3.5
+-------------------------
+
+- Listing role assignments for a tree of projects.
+
 What's New in Version 3.4
 -------------------------
 
@@ -5130,6 +5135,8 @@ Optional query parameters:
 
 - ``effective`` (key only, no value expected)
 
+- ``include_subtree`` (boolean, defaults to false) *New in version 3.5*
+
 Get a list of role assignments.
 
 If no query parameters are specified, then this API will return a list of all
@@ -5191,6 +5198,14 @@ involving the specified user.
 
 ``GET /role_assignments?scope.project.id={project_id}`` would list all role
 assignments involving the specified project.
+
+*New in version 3.5* It is also possible to list all role assignments within
+a tree of projects:
+``GET /role_assignments?scope.project.id={project_id}?include_subtree=true``
+would list all role assignments involving the specified project and all
+sub-projects. ``include_subtree=true`` can only be specified in conjunction
+with ``scope.project.id``, specifiying it without this will result in an
+HTTP 400 Bad Request being returned.
 
 Each role assignment entity in the collection contains a link to the assignment
 that gave rise to this entity.

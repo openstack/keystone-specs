@@ -1339,7 +1339,7 @@ Example of an OS-FEDERATION token:
             ],
             "user": {
                 "domain": {
-                    "name": "Federated"
+                    "id": "Federated"
                 },
                 "id": "username%40example.com",
                 "name": "username@example.com",
@@ -1453,7 +1453,7 @@ Example of an OS-FEDERATION token:
             ],
             "user": {
                 "domain": {
-                    "name": "Federated"
+                    "id": "Federated"
                 },
                 "id": "username%40example.com",
                 "name": "username@example.com",

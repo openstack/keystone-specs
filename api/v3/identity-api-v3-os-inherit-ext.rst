@@ -206,8 +206,8 @@ Response:
 
     Status: 204 No Content
 
-Revoke an inherited project role from group on domain
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Revoke an inherited project role from group on project
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 

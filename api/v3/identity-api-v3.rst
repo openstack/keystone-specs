@@ -789,6 +789,7 @@ Optional attributes:
 - ``project_id`` (string)
 
   References a project which limits the scope the credential applies to.
+  This attribute is **mandatory** if the credential type is ``ec2``.
 
 Example entity:
 

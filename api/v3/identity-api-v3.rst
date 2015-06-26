@@ -13,6 +13,10 @@ What's New in Version 3.5
 -------------------------
 
 - Listing role assignments for a tree of projects.
+- Addition of ``ìs_domain`` optional attribute to projects. This enables a
+  project to behave as a domain.
+- Addition of the ``is_domain`` field to project scoped token response that
+  represents whether a project is acting as a domain.
 
 What's New in Version 3.4
 -------------------------
@@ -825,7 +829,8 @@ Required attributes:
 
 - ``name`` (string)
 
-  Unique project name, within the owning domain.
+  Unique project name, within the owning domain. Note that it is possible for a
+  project to have the same name as its domain.
 
 Optional attributes:
 
@@ -851,6 +856,15 @@ Optional attributes:
   project are immediately invalidated. Re-enabling a project does not re-enable
   pre-existing tokens.
 
+- ``is_domain`` (boolean) *New in version 3.5*
+
+  Represents if the project has the domain feature. If this flag is set to
+  **true**, the project also acts as a domain, providing a name space in which
+  users, groups and other projects can be created. If the flag is set to
+  **false**, then this is a regular project, which can only contain resources.
+  If not provided, ``is_domain`` defaults to **false**. This flag is
+  immutable - can't be updated after the project is created.
+
 Example entity:
 
 ::
@@ -864,7 +878,8 @@ Example entity:
                 "self": "http://identity:35357/v3/projects/263fd9"
             },
             "name": "project-x",
-            "parent_id": "183ab2"
+            "parent_id": "183ab2",
+            "is_domain": true
         }
     }
 
@@ -1704,7 +1719,19 @@ sufficient to uniquely identify a ``project``. Example request:
 
 If a ``project`` is specified by ``name``, then the ``domain`` of the
 ``project`` must also be specified in order to uniquely identify the
-``project``. Example request:
+``project``. Since it is possible for a project to have the same name as its
+owning domain, the following rules are applied in determining scope:
+
+- If the project name is truly unique, the token will be scoped to the
+  project.
+- If there is a name clash between a project acting as a domain and a regular
+  project within that domain, the token will be scoped to the regular project.
+- If, in such a clashing situation, the user wants a project scoped token
+  to the project acting as the domain, then it is necessary to either specify
+  scope using the project ``id`` or rename either the project acting as a
+  domain or the regular project first.
+
+Example request:
 
 ::
 
@@ -1883,6 +1910,9 @@ key ``service_providers``.
 Additional information about service providers can be found `here
 <http://specs.openstack.org/openstack/keystone-specs/api/v3/identity-api-v3-os-federation-ext.html#service-providers>`__
 
+*New in version 3.5* Project scoped tokens return an additional boolean field
+called ``is_domain`` that represents whether a project acts as a domain.
+
 Example response:
 
 ::
@@ -1933,6 +1963,7 @@ Example response:
                 "id": "263fd9",
                 "name": "project-x"
             },
+            "is_domain": false,
             "roles": [
                 {
                     "id": "76e72a",
@@ -3125,6 +3156,11 @@ Response:
 ::
 
     Status: 204 No Content
+
+*New in version 3.5*
+
+- The deletion of a non-leaf domain in a domain hierarchy tree is prohibited
+  and will fail with a ``400 Bad Request``
 
 
 Domain configuration management

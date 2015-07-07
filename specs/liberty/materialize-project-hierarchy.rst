@@ -18,7 +18,7 @@ children of the node in a single request operation.
 Problem Description
 ===================
 
-Given the project hierarchy as follows:
+Given the project hierarchy as follows::
 
     +------------------------+
     |           A            |

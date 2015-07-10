@@ -843,27 +843,69 @@ resources in OpenStack should be owned by a specific project ("projects" were
 also formerly known as "tenants"). A project itself must be owned by a specific
 domain.
 
+*New in version 3.6*, projects may, in addition to acting as containers for
+OpenStack resources, act as a domain (by setting the attribute ``is_domain`` to
+``true``), in which case it provides a namespace in which users, groups and
+other projects can be created. In fact, a domain created using the
+``POST /domains`` API will actually be represented as a project with
+``is_domain`` set to ``true`` with no parent (``parent_id`` is ``null``).
+Projects that are acting as a domain created via the ``POST /projects`` API
+must also be specified with no parent (i.e. if ``parent_id`` is included it
+must be ``null``). Issuing a create project request for a project acting as a
+domain with a ``parent_id`` that is not null will cause an HTTP
+``400 Bad Request`` to be returned.
+
+Given this, all projects are considered part of a project hierarchy. Projects
+created in a domain prior to version 3.6 are represented as a two-level
+hierarchy, with a project that has ``is_domain`` set to ``true`` as the root
+and all other projects referencing the root as their parent.
+
+A project acting as a domain can potentially also act as a container for
+OpenStack resources, although this depends on whether the policy rule for the
+relevant resource creation allows this.
+
 Required attributes:
 
 - ``name`` (string)
 
-  Unique project name, within the owning domain. Note that it is possible for a
-  project to have the same name as its domain.
+  Unique project name, within the owning domain. A project name for a project
+  acting as a domain must be unique across all domains.
 
 Optional attributes:
 
-- ``domain_id`` (string)
+- ``is_domain`` (boolean) *New in version 3.6*
 
-  References the domain which owns the project; if a domain is not specified by
-  the client, the Identity service implementation will default it to the domain
-  to which the client's token is scoped.
+  Represents if the project is acting as a domain. If this flag is set to
+  ``true``, the project also acts as a domain, providing a namespace in which
+  users, groups and other projects can be created. If the flag is set to
+  ``false``, then this is a regular project, which can only contain resources.
+  If not provided on project creation, ``is_domain`` defaults to ``false``.
+  This flag is immutable and can't be updated after the project is created.
 
 - ``parent_id`` (string) *New in version 3.4*
 
-  References the parent project; if a parent project is not specified by the
-  client, the Identity service will consider the project to be a top-level
-  project (without any parents). All projects within a hierarchy must be owned
-  by the same domain.
+  References the parent project. If specified on project creation, this places
+  the project within a hierarchy and implicitly defines the owning domain,
+  which will be the closest ancestor in the hierarchy acting as a domain.
+  If a parent project is not specified and ``is_domain`` is ``false``, then the
+  project will use its owning domain as its parent. If a parent project is not
+  specified and ``is_domain`` is ``true``, then the project is acting as a
+  top level domain with no parents and ``parent_id`` will be set to ``null``.
+  ``parent_id`` is immutable, and can't be updated after the project is
+  created - hence a project cannot be moved within the hierarchy.
+
+- ``domain_id`` (string)
+
+  References the domain which owns the project. For projects not acting as a
+  domain, this will be the closest ancestor in the hierarchy to be acting as
+  a domain. Projects acting as a domain have no ancestors, and the domain_id
+  will be set to ``null``. On project creation, if neither ``domain_id`` or
+  ``parent_id`` is specified by the client, the Identity service implementation
+  will default to the domain to which the client's token is scoped. If one or
+  other of ``domain_id`` and ``parent_id`` is specified, then this will define
+  the domain of the project. If both ``domain_id`` and ``parent_id`` are
+  specified, and they do not indicate the same domain, an HTTP
+  ``400 Bad Request`` will be returned.
 
 - ``description`` (string)
 
@@ -873,15 +915,6 @@ Optional attributes:
   this project. Additionally, all pre-existing tokens authorized for the
   project are immediately invalidated. Re-enabling a project does not re-enable
   pre-existing tokens.
-
-- ``is_domain`` (boolean) *New in version 3.6*
-
-  Represents if the project has the domain feature. If this flag is set to
-  **true**, the project also acts as a domain, providing a name space in which
-  users, groups and other projects can be created. If the flag is set to
-  **false**, then this is a regular project, which can only contain resources.
-  If not provided, ``is_domain`` defaults to **false**. This flag is
-  immutable - can't be updated after the project is created.
 
 Example entity:
 
@@ -908,6 +941,10 @@ Domains represent collections of users, groups and projects. Each is owned by
 exactly one domain. Users, however, can be associated with multiple projects by
 granting roles to the user on a project (including projects owned by other
 domains).
+
+Starting with version 3.6, domains created using the ``POST /domains`` API will
+actually be represented as a project with ``is_domain`` set to ``true`` with no
+parent.
 
 Each domain defines a namespace in which certain API-visible name attributes
 exist, which affects whether those names need to be globally unique or simply

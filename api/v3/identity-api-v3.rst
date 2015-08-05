@@ -19,6 +19,7 @@ What's New in Version 3.5
   represents whether a project is acting as a domain.
 - Enable or disable a subtree in the project hierarchy.
 - Delete a subtree in the project hierarchy.
+- Addition of ``type`` optional attribute to list credentials.
 
 What's New in Version 3.4
 -------------------------
@@ -4597,6 +4598,7 @@ Relationship:
 Optional query parameters:
 
 - ``user_id`` (string)
+- ``type`` (string) *New in version 3.5*
 
 Response:
 

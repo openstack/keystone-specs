@@ -1459,7 +1459,11 @@ Example of an OS-FEDERATION token:
                 "name": "username@example.com",
                 "OS-FEDERATION": {
                     "identity_provider": "ACME",
-                    "protocol": "SAML"
+                    "protocol": "SAML",
+                    "groups": [
+                        {"id": "abc123"},
+                        {"id": "bcd234"}
+                    ]
                 }
             },
             "issued_at": "2014-08-06T12:43:43.367288Z"

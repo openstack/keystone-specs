@@ -3863,9 +3863,8 @@ Relationship:
 
 *New in version 3.5*
 
-This request has a cascade effect: enables or disables a whole subtree in the
-project hierarchy. Once the target project is enabled or disabled, all projects
-below it in the hierarchy are **effectively** enabled or disabled.
+This request has a cascade effect: enables or disables the project itself and
+its whole subtree.
 
 Request:
 
@@ -3899,8 +3898,8 @@ Response:
 
 - Only the ``enabled`` attribute is accepted. Including other attributes
   besides ``enabled`` will fail with a ``400 Bad Request``
-- Triggering the action against a project that has any children with the
-  ``is_domain`` flag enabled will fail with a ``403 Forbidden``
+- Triggering the action against a project that has any children that acts
+  as a domain (``is_domain`` flag enabled) will fail with a ``403 Forbidden``
 
 Delete project
 ^^^^^^^^^^^^^^
@@ -3933,7 +3932,7 @@ Delete subtree
 
 This request has a cascade effect: deletes the target project itself **and**
 its subtree (all projects below it in the hierarchy). It is mandatory to
-disable the subtree first.
+disable the affected projects first.
 
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/rel/project``
@@ -3942,8 +3941,9 @@ Relationship:
 
     Status: 204 No Content
 
-- Triggering the action against a project that has any children with the
-  ``is_domain`` flag enabled will fail with a ``403 Forbidden``
+- Triggering the action against a project that has any children that are
+  acting as a domain (``is_domain`` flag enabled) will fail with a
+  ``403 Forbidden``
 
 Users
 ~~~~~

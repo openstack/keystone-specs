@@ -20,6 +20,7 @@ What's New in Version 3.5
 - Enable or disable a subtree in the project hierarchy.
 - Delete a subtree in the project hierarchy.
 - Addition of ``type`` optional attribute to list credentials.
+- Addition of ``region_id`` optional attribute to list endpoints.
 
 What's New in Version 3.4
 -------------------------
@@ -2812,6 +2813,8 @@ Optional query parameters:
 - ``interface`` (string)
 
 - ``service_id`` (string)
+
+- ``region_id`` (string) *New in version 3.5*
 
 Response:
 

@@ -40,6 +40,14 @@ stable as of September 4th, 2014.
 - Deprecate list projects and domains in favour of core functionality available
   in Identity API v3.3.
 
+What's New in Version 1.3
+-------------------------
+
+Corresponding to Identity API v3.5 release.
+
+- Add Identity Provider specific websso routes.
+
+
 API Resources
 -------------
 
@@ -1484,6 +1492,19 @@ URL endpoint. Upon successful authentication, instead of issuing a standard
 unscoped token, Keystone will issue JavaScript code that redirects the web
 browser to the originating Horizon. An unscoped federated token will be
 included in the form being sent.
+
+
+*New in version 1.3*
+
+::
+
+    GET /auth/OS-FEDERATION/identity_providers/{idp_id}/protocol/{protocol_id}/websso?origin=https%3A//horizon.example.com
+
+
+In contrast to the above route, this route begins a Web Single Sign On request
+that is specific to the supplied Identity Provider and Protocol. Keystone will
+issue JavaScript that handles redirections in the same way as the other route.
+An unscoped federated token will be included in the form being sent.
 
 Generating Assertions
 ---------------------

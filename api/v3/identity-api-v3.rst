@@ -13,7 +13,7 @@ What's New in Version 3.5
 -------------------------
 
 - Listing role assignments for a tree of projects.
-- Addition of ``ìs_domain`` optional attribute to projects. This enables a
+- Addition of ``is_domain`` optional attribute to projects. This enables a
   project to behave as a domain.
 - Addition of the ``is_domain`` field to project scoped token response that
   represents whether a project is acting as a domain.

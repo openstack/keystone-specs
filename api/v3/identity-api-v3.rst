@@ -26,6 +26,7 @@ What's New in Version 3.6
 - The defaults for domain-specific configuration options can be retrieved.
 - Assignments can be specified as inherited, causing the assignment to be
   placed on any sub-projects.
+- Support for domain specific roles.
 
 What's New in Version 3.5
 -------------------------
@@ -963,11 +964,25 @@ Roles: ``/v3/roles/``
 Roles entities are named identifiers used to map a collection of actions from a
 user to either a specific project or across an entire domain.
 
+*New in version 3.6* A role can be a global policy role (i.e. it will appear in
+a policy file in one of the services) or a domain specific role. A domain
+specific role can be used to build role inference rules that better model the
+sets of policy roles that need to be assigned for users or groups of a
+particular domain. Domain specific roles never actually appear in policy files,
+they are expanded into their implied global policy roles at token
+generation/validation time.
+
 Additional required attributes:
 
 - ``name`` (string)
 
-  Globally unique name of the role.
+  Globally (or domain-wide) unique name of the role.
+
+Optional attributes:
+
+- ``domain_id`` (string) *New in version 3.6*
+
+  This attribute is immutable.
 
 Example entity:
 
@@ -975,6 +990,7 @@ Example entity:
 
     {
         "role": {
+            "domain_id": null,
             "id": "76e72a",
             "links": {
                 "self": "http://identity:35357/v3/roles/76e72a"
@@ -4925,11 +4941,41 @@ Response:
 
     {
         "role": {
+            "domain_id": null,
             "id": "--role-id--",
             "links": {
                 "self": "http://identity:35357/v3/roles/--role-id--"
             },
             "name": "a role name"
+        }
+    }
+
+To create a domain specific role, the request block and response would look
+like:
+
+::
+
+    {
+        "role": {
+            "domain_id": "--domain-id--",
+            "name": "my specific domain role"
+        }
+    }
+
+Response:
+
+::
+
+    Status: 201 Created
+
+    {
+        "role": {
+            "domain_id": "--domain-id--",
+            "id": "--role-id--",
+            "links": {
+                "self": "http://identity:35357/v3/roles/--role-id--"
+            },
+            "name": "my specific domain role"
         }
     }
 
@@ -4947,6 +4993,11 @@ Optional query parameters:
 
 - ``name`` (string)
 
+- ``domain_id`` (string, defaults to null) *New in version 3.6*
+
+  Since this defaults to null, listing roles without specifying ``domain_id``
+  in the query string will result in a collection containing only global roles.
+
 Response:
 
 ::
@@ -4956,6 +5007,7 @@ Response:
     {
         "roles": [
             {
+                "domain_id": null,
                 "id": "--role-id--",
                 "links": {
                     "self": "http://identity:35357/v3/roles/--role-id--"
@@ -4963,6 +5015,7 @@ Response:
                 "name": "a role name"
             },
             {
+                "domain_id": null,
                 "id": "--role-id--",
                 "links": {
                     "self": "http://identity:35357/v3/roles/--role-id--"
@@ -4995,11 +5048,12 @@ Response:
 
     {
         "role": {
+            "domain_id": "--domain-id--",
             "id": "--role-id--",
             "links": {
                 "self": "http://identity:35357/v3/roles/--role-id--"
             },
-            "name": "a role name"
+            "name": "a domain specific role"
         }
     }
 
@@ -5024,11 +5078,12 @@ Response:
 
     {
         "role": {
+            "domain_id": null,
             "id": "--role-id--",
             "links": {
                 "self": "http://identity:35357/v3/roles/--role-id--"
             },
-            "name": "a role name"
+            "name": "a global policy role name"
         }
     }
 

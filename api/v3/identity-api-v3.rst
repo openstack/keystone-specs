@@ -9,7 +9,7 @@ The Identity API also provides endpoint discovery through a service catalog,
 identity management, project management, and a centralized repository for
 policy engine rule sets.
 
-What's New in Version 3.5
+What's New in Version 3.6
 -------------------------
 
 - Listing role assignments for a tree of projects.
@@ -19,6 +19,10 @@ What's New in Version 3.5
   represents whether a project is acting as a domain.
 - Enable or disable a subtree in the project hierarchy.
 - Delete a subtree in the project hierarchy.
+
+What's New in Version 3.5
+-------------------------
+
 - Addition of ``type`` optional attribute to list credentials.
 - Addition of ``region_id`` optional attribute to list endpoints.
 
@@ -860,7 +864,7 @@ Optional attributes:
   project are immediately invalidated. Re-enabling a project does not re-enable
   pre-existing tokens.
 
-- ``is_domain`` (boolean) *New in version 3.5*
+- ``is_domain`` (boolean) *New in version 3.6*
 
   Represents if the project has the domain feature. If this flag is set to
   **true**, the project also acts as a domain, providing a name space in which
@@ -1914,7 +1918,7 @@ key ``service_providers``.
 Additional information about service providers can be found `here
 <http://specs.openstack.org/openstack/keystone-specs/api/v3/identity-api-v3-os-federation-ext.html#service-providers>`__
 
-*New in version 3.5* Project scoped tokens return an additional boolean field
+*New in version 3.6* Project scoped tokens return an additional boolean field
 called ``is_domain`` that represents whether a project acts as a domain.
 
 Example response:
@@ -3163,7 +3167,7 @@ Response:
 
     Status: 204 No Content
 
-*New in version 3.5*
+*New in version 3.6*
 
 - The deletion of a non-leaf domain in a domain hierarchy tree is prohibited
   and will fail with a ``400 Bad Request``
@@ -3864,7 +3868,7 @@ Enable or disable subtree
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/rel/project``
 
-*New in version 3.5*
+*New in version 3.6*
 
 This request has a cascade effect: enables or disables the project itself and
 its whole subtree.
@@ -3931,7 +3935,7 @@ Delete subtree
 
     DELETE /projects/{project_id}/cascade
 
-*New in version 3.5*
+*New in version 3.6*
 
 This request has a cascade effect: deletes the target project itself **and**
 its subtree (all projects below it in the hierarchy). It is mandatory to
@@ -5254,7 +5258,7 @@ Optional query parameters:
 
 - ``effective`` (key only, no value expected)
 
-- ``include_subtree`` (boolean, defaults to false) *New in version 3.5*
+- ``include_subtree`` (boolean, defaults to false) *New in version 3.6*
 
 Get a list of role assignments.
 
@@ -5318,7 +5322,7 @@ involving the specified user.
 ``GET /role_assignments?scope.project.id={project_id}`` would list all role
 assignments involving the specified project.
 
-*New in version 3.5* It is also possible to list all role assignments within
+*New in version 3.6* It is also possible to list all role assignments within
 a tree of projects:
 ``GET /role_assignments?scope.project.id={project_id}?include_subtree=true``
 would list all role assignments involving the specified project and all

@@ -13,8 +13,8 @@ What's New in Version 3.6
 -------------------------
 
 - Listing role assignments for a tree of projects.
-- Addition of ``is_domain`` optional attribute to projects. This enables a
-  project to behave as a domain.
+- Setting the project ``is_domain`` attribute enables a project to behave as
+  a domain.
 - Addition of the ``is_domain`` field to project scoped token response that
   represents whether a project is acting as a domain.
 - Enable or disable a subtree in the project hierarchy.
@@ -25,6 +25,8 @@ What's New in Version 3.5
 
 - Addition of ``type`` optional attribute to list credentials.
 - Addition of ``region_id`` optional attribute to list endpoints.
+- Addition of ``is_domain`` optional attribute to projects. Setting this
+  currently has no effect, it is reserved for future use.
 
 What's New in Version 3.4
 -------------------------

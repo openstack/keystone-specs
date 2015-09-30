@@ -1694,13 +1694,18 @@ combination with request to change authorization scope.
 Scope: ``scope``
 ^^^^^^^^^^^^^^^^
 
-An authorization scope, including either a ``project`` or ``domain``, can be
-optionally specified as part of the request. If both a ``domain`` and a
-``project`` are specified, an HTTP 400 Bad Request will be returned, as a token
-cannot be simultaneously scoped to both a ``project`` and ``domain``.
+An authorization scope, including either a ``project``, ``domain``, or
+``unscoped``, can be optionally specified as part of the request. If both a
+``domain`` and a ``project`` are specified, an HTTP 400 Bad Request will be
+returned, as a token cannot be simultaneously scoped to both a ``project`` and
+``domain``.
+
+Project Scope
+'''''''''''''
 
 A ``project`` may be specified by either ``id`` or ``name``. An ``id`` is
-sufficient to uniquely identify a ``project``. Example request:
+sufficient to uniquely identify a ``project`` across a deployment. Example
+request:
 
 ::
 
@@ -1796,6 +1801,9 @@ Alternatively, a ``domain`` ``name`` may be used to uniquely identify the
         }
     }
 
+Domain Scope
+''''''''''''
+
 A ``domain`` scope may be specified by either the domain's ``id`` or ``name``
 with equivalent results. Example request specifying a domain by ``id``:
 
@@ -1847,11 +1855,66 @@ Example request specifying a domain by ``name``:
         }
     }
 
-If neither a ``project`` nor a ``domain`` is provided for ``scope``, and the
-authenticating ``user`` has a defined default project (the user's
-``default_project_id`` attribute), then this will be treated as the preferred
-authorization scope. If there is no default project defined, then a token will
-be issued without an explicit scope of authorization.
+The catalog returned from a domain-scoped request will contain all endpoints of
+a project-scoped catalog, excluding ones that require a project ID as part of
+their URL.
+
+Unscoped
+''''''''
+
+Unscoped token request bodies may, or may not, contain a ``scope``. If an
+unscoped token request contains ``scope`` and it is set to ``unscoped``, it is
+considered an explicit unscoped token request. Which will return an unscoped
+response without any authorization.
+
+::
+
+    {
+        "auth": {
+            "identity": {
+                "methods": [
+                    "password"
+                ],
+                "password": {
+                    "user": {
+                        "id": "0ca8f6",
+                        "password": "secretsecret"
+                    }
+                }
+            },
+            "scope": "unscoped"
+        }
+    }
+
+A request that does not explicitly set ``scope`` to ``unscoped`` may return a
+project-scoped token if the user making the request has a role assigned to its
+``default_project_id``. Thus, it is recommended to set the
+authorization``scope`` to ``unscoped`` if the intent is to receive an unscoped
+token. The following request body would return a project-scoped response, if
+user ``0ca8f6`` had a role assignment on their default project.
+
+::
+
+    {
+        "auth": {
+            "identity": {
+                "methods": [
+                    "password"
+                ],
+                "password": {
+                    "user": {
+                        "id": "0ca8f6",
+                        "password": "secretsecret"
+                    }
+                }
+            }
+        }
+    }
+
+
+If there is no default project defined, then a token will be issued without an
+explicit scope of authorization. Which is the same behavior as asking for an
+explicit unscoped token.
 
 *New in version 3.1* Additionally, if the user's default project is invalid, a
 token will be issued without an explicit scope of authorization.

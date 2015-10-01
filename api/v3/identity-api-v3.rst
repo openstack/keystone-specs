@@ -1704,23 +1704,16 @@ Project Scope
 '''''''''''''
 
 A ``project`` may be specified by either ``id`` or ``name``. An ``id`` is
-sufficient to uniquely identify a ``project`` across a deployment. Example
-request:
+sufficient to uniquely identify a ``project``. The contents of the ``identity``
+section are orthogonal to the scope as it contains identity attributes for
+authenticating the user, and nothing to do with authorization. Example request:
 
 ::
 
     {
         "auth": {
             "identity": {
-                "methods": [
-                    "password"
-                ],
-                "password": {
-                    "user": {
-                        "id": "0ca8f6",
-                        "password": "secretsecret"
-                    }
-                }
+                ...
             },
             "scope": {
                 "project": {
@@ -1751,15 +1744,7 @@ Example request:
     {
         "auth": {
             "identity": {
-                "methods": [
-                    "password"
-                ],
-                "password": {
-                    "user": {
-                        "id": "0ca8f6",
-                        "password": "secretsecret"
-                    }
-                }
+                ...
             },
             "scope": {
                 "project": {
@@ -1780,15 +1765,7 @@ Alternatively, a ``domain`` ``name`` may be used to uniquely identify the
     {
         "auth": {
             "identity": {
-                "methods": [
-                    "password"
-                ],
-                "password": {
-                    "user": {
-                        "id": "0ca8f6",
-                        "password": "secretsecret"
-                    }
-                }
+                ...
             },
             "scope": {
                 "project": {
@@ -1812,15 +1789,7 @@ with equivalent results. Example request specifying a domain by ``id``:
     {
         "auth": {
             "identity": {
-                "methods": [
-                    "password"
-                ],
-                "password": {
-                    "user": {
-                        "id": "0ca8f6",
-                        "password": "secretsecret"
-                    }
-                }
+                ...
             },
             "scope": {
                 "domain": {
@@ -1837,15 +1806,7 @@ Example request specifying a domain by ``name``:
     {
         "auth": {
             "identity": {
-                "methods": [
-                    "password"
-                ],
-                "password": {
-                    "user": {
-                        "id": "0ca8f6",
-                        "password": "secretsecret"
-                    }
-                }
+                ...
             },
             "scope": {
                 "domain": {
@@ -1855,32 +1816,23 @@ Example request specifying a domain by ``name``:
         }
     }
 
-The catalog returned from a domain-scoped request will contain all endpoints of
-a project-scoped catalog, excluding ones that require a project ID as part of
-their URL.
+The catalog returned for a domain-scoped request can contain different services
+and endpoints from a project ID depending on the deployment.
 
 Unscoped
 ''''''''
 
-Unscoped token request bodies may, or may not, contain a ``scope``. If an
-unscoped token request contains ``scope`` and it is set to ``unscoped``, it is
-considered an explicit unscoped token request. Which will return an unscoped
-response without any authorization.
+A token request may, or may not, contain ``scope``. If an unscoped token
+request contains ``scope`` and it is set to ``unscoped``, it is considered an
+explicit unscoped token request. Which will return an unscoped response without
+any authorization.
 
 ::
 
     {
         "auth": {
             "identity": {
-                "methods": [
-                    "password"
-                ],
-                "password": {
-                    "user": {
-                        "id": "0ca8f6",
-                        "password": "secretsecret"
-                    }
-                }
+                ...
             },
             "scope": "unscoped"
         }
@@ -1888,33 +1840,25 @@ response without any authorization.
 
 A request that does not explicitly set ``scope`` to ``unscoped`` may return a
 project-scoped token if the user making the request has a role assigned to its
-``default_project_id``. Thus, it is recommended to set the
-authorization``scope`` to ``unscoped`` if the intent is to receive an unscoped
-token. The following request body would return a project-scoped response, if
-user ``0ca8f6`` had a role assignment on their default project.
+default project. Thus, it is recommended to set the authorization ``scope`` to
+``unscoped`` if the intent is to receive an unscoped token. The following
+request body would return a project-scoped response, if user ``0ca8f6`` had a
+role assignment on their default project.
 
 ::
 
     {
         "auth": {
             "identity": {
-                "methods": [
-                    "password"
-                ],
-                "password": {
-                    "user": {
-                        "id": "0ca8f6",
-                        "password": "secretsecret"
-                    }
-                }
+                ...
             }
         }
     }
 
 
-If there is no default project defined, then a token will be issued without an
-explicit scope of authorization. Which is the same behavior as asking for an
-explicit unscoped token.
+If there is no default project defined, or the user's default project has been
+disabled or deleted, an unscoped token will be issued. Which is the same
+behavior as asking for an explicit unscoped token.
 
 *New in version 3.1* Additionally, if the user's default project is invalid, a
 token will be issued without an explicit scope of authorization.

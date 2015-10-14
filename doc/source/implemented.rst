@@ -4,6 +4,14 @@
 Previously Implemented Identity Program Specifications
 ======================================================
 
+Liberty implemented specs:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/liberty/*
+
 Kilo implemented specs:
 
 .. toctree::

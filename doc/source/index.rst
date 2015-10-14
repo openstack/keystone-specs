@@ -36,13 +36,13 @@ Project Documentation:
    README <readme>
    Specification Template <specs/template>
 
-Liberty approved specs:
+Mitaka approved specs:
 
 .. toctree::
    :glob:
    :maxdepth: 1
 
-   specs/liberty/*
+   specs/mitaka/*
 
 Keystone client approved specs:
 

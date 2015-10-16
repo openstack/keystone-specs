@@ -3547,6 +3547,12 @@ The parent hierarchy will be included as a list in the response. This list will
 contain the projects found by traversing up the hierarchy to the top-level
 project.
 
+.. Note:: Server responses may vary depending on the level of authorization the
+   user has against the projects in the hierarchy. The server may return an
+   empty list if the user does not have any role assignments on the projects in
+   the hierarchy, or only return projects that the user has role assignments
+   on.
+
 Response:
 
 ::
@@ -3584,6 +3590,12 @@ Response:
 
 The child hierarchy will be included as a list in the response. This list will
 contain the projects found by traversing down the hierarchy.
+
+.. Note:: Server responses may vary depending on the level of authorization the
+   user has against the projects in the hierarchy. The server may return an
+   empty list if the user does not have any role assignments on the projects in
+   the hierarchy, or only return projects that the user has role assignments
+   on.
 
 Response:
 
@@ -3648,6 +3660,10 @@ The entire parent hierarchy will be included as nested dictionaries in the
 response. It will contain all projects ids found by traversing up the hierarchy
 to the top-level project.
 
+.. Note:: The server may return ids of all projects in the hierarchy without
+   requiring the user to have role assignments on any projects in the
+   hierarchy.
+
 Response:
 
 ::
@@ -3678,6 +3694,10 @@ Response:
 The entire child hierarchy will be included as nested dictionaries in the
 response. It will contain all the projects ids found by traversing down the
 hierarchy.
+
+.. Note:: The server may return ids of all projects in the hierarchy without
+   requiring the user to have role assignments on any projects in the
+   hierarchy.
 
 Response:
 

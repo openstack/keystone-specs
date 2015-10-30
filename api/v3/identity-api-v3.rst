@@ -22,6 +22,7 @@ What's New in Version 3.6
 - Additional identifier for tokens scoped to the designated ``admin project``.
 - Addition of ``domain_id`` filter to list user projects
 - One Role can imply another via role_inference rules.
+- Enhance list role assignment to optionally provide names of entities.
 
 What's New in Version 3.5
 -------------------------
@@ -5565,6 +5566,8 @@ Optional query parameters:
 
 - ``include_subtree`` (boolean, defaults to false) *New in version 3.6*
 
+- ``include_names`` (boolean, defaults to false) *New in version 3.6*
+
 Get a list of role assignments.
 
 If no query parameters are specified, then this API will return a list of all
@@ -5713,6 +5716,80 @@ Response:
 The entity ``links`` section of a response using the ``effective`` query
 parameter also contains, for entities that are included by virtue of group
 membership, a url that can be used to access the membership of the group.
+
+If the query parameter ``include_names`` is specified, rather than simply
+returning the entity IDs in the role assignments, the collection will
+additionally include the names of the entities. For example:
+
+``GET /role_assignments?user.id={user_id}&effective&include_names=true``
+would return:
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "role_assignments": [
+            {
+                "links": {
+                    "assignment": "http://identity:35357/v3/domains/--domain-id--/users/--user-id--/roles/--role-id--"
+                },
+                "role": {
+                    "id": "--role-id--",
+                    "name": "--role-name--"
+                },
+                "scope": {
+                    "domain": {
+                        "id": "--domain-id--",
+                        "name": "--domain-name--"
+                    }
+                },
+                "user": {
+                    "domain": {
+                        "id": "--domain-id--",
+                        "name": "--domain-name--"
+                    },
+                    "id": "--user-id--",
+                    "name": "--user-name--"
+                }
+            },
+            {
+                "links": {
+                    "assignment": "http://identity:35357/v3/projects/--project-id--/groups/--group-id--/roles/--role-id--",
+                    "membership": "http://identity:35357/v3/groups/--group-id--/users/--user-id--"
+                },
+                "role": {
+                    "id": "--role-id--",
+                    "name": "--role-name--"
+                },
+                "scope": {
+                    "project": {
+                        "domain": {
+                            "id": "--domain-id--",
+                            "name": "--domain-name--"
+                        }
+                        "id": "--project-id--",
+                        "name": "--project-name--"
+                    }
+                },
+                "user": {
+                    "domain": {
+                        "id": "--domain-id--",
+                        "name": "--domain-name--"
+                    },
+                    "id": "--user-id--",
+                    "name": "--user-name--"
+                }
+            }
+        ],
+        "links": {
+            "self": "http://identity:35357/v3/role_assignments?effective&include_names=true",
+            "previous": null,
+            "next": null
+        }
+    }
 
 Policies
 ~~~~~~~~

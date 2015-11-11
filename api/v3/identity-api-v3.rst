@@ -1205,9 +1205,9 @@ Example token with ``audit_ids`` attribute (first element is the token's
 
     {
         "token": {
+            "audit_ids": ["VcxU2JYqT8OzfUVvrjEITQ", "qNUTIJntTzO1-XUk5STybw"],
             "expires_at": "2013-02-27T18:30:59.999999Z",
             "issued_at": "2013-02-27T16:30:59.999999Z",
-            "audit_ids": ["VcxU2JYqT8OzfUVvrjEITQ", "qNUTIJntTzO1-XUk5STybw"],
             "methods": [
                 "password"
             ],
@@ -1897,6 +1897,7 @@ identify the user. Example response:
 
     {
         "token": {
+            "audit_ids": ["VcxU2JYqT8OzfUVvrjEITQ", "qNUTIJntTzO1-XUk5STybw"],
             "expires_at": "2013-02-27T18:30:59.999999Z",
             "issued_at": "2013-02-27T16:30:59.999999Z",
             "methods": [
@@ -1938,6 +1939,7 @@ Example response:
 
     {
         "token": {
+            "audit_ids": ["VcxU2JYqT8OzfUVvrjEITQ", "qNUTIJntTzO1-XUk5STybw"],
             "catalog": [
                 {
                     "endpoints": [
@@ -1966,6 +1968,7 @@ Example response:
                 }
             ],
             "expires_at": "2013-02-27T18:30:59.999999Z",
+            "is_domain": false,
             "issued_at": "2013-02-27T16:30:59.999999Z",
             "methods": [
                 "password"
@@ -1978,7 +1981,6 @@ Example response:
                 "id": "263fd9",
                 "name": "project-x"
             },
-            "is_domain": false,
             "roles": [
                 {
                     "id": "76e72a",
@@ -2023,6 +2025,7 @@ the user's roles applicable to the ``domain``. Example response:
 
     {
         "token": {
+            "audit_ids": ["VcxU2JYqT8OzfUVvrjEITQ", "qNUTIJntTzO1-XUk5STybw"],
             "catalog": [
                 {
                     "endpoints": [
@@ -2050,15 +2053,15 @@ the user's roles applicable to the ``domain``. Example response:
                     "name": "keystone"
                 }
             ],
+            "domain": {
+                "id": "1789d1",
+                "name": "example.com"
+            },
             "expires_at": "2013-02-27T18:30:59.999999Z",
             "issued_at": "2013-02-27T16:30:59.999999Z",
             "methods": [
                 "password"
             ],
-            "domain": {
-                "id": "1789d1",
-                "name": "example.com"
-            },
             "roles": [
                 {
                     "id": "76e72a",

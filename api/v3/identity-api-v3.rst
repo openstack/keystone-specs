@@ -19,6 +19,7 @@ What's New in Version 3.6
   represents whether a project is acting as a domain.
 - Enable or disable a subtree in the project hierarchy.
 - Delete a subtree in the project hierarchy.
+- Additional identifier for tokens scoped to the designated ``admin project``.
 
 What's New in Version 3.5
 -------------------------
@@ -1253,6 +1254,54 @@ Optional attributes:
   project-level resource.
 
   Includes the full resource description of a domain.
+
+- ``is_admin_project`` (boolean) *New in version 3.6*
+
+  A deployment can and should indicate that a specific project has elevated
+  priviledges.  Tokens scoped to this project, called the `admin` project can
+  then be identified as being associated with this project.  For deployments
+  using this mechanism, policy rules can then check the value of this field
+  to allow the bearer of such a token access to priviledged operations, for
+  example those that are not project specific or are deployment-wide.
+
+  Example project scoped token with ``is_admin_project`` attribute:
+
+::
+
+    {
+        "token": {
+            "audit_ids": ["VcxU2JYqT8OzfUVvrjEITQ", "qNUTIJntTzO1-XUk5STybw"],
+            "expires_at": "2023-02-27T18:30:59.999999Z",
+            "is_admin_project": true
+            "is_domain": false,
+            "issued_at": "2023-02-27T16:30:59.999999Z",
+            "methods": [
+                "password"
+            ],
+            "project": {
+                "domain": {
+                  "id": "b3652a",
+                  "name": "domain_name1"
+                },
+                "id": "78eed8",
+                "name": "project_name1"
+            },
+            "roles": [
+                {
+                    "id": "76e72a",
+                    "name": "admin"
+                }
+            ],
+            "user": {
+                "domain": {
+                    "id": "1789d1",
+                    "name": "example.com"
+                }
+                "id": "0ca8f6",
+                "name": "Joe"
+            }
+        }
+    }
 
 - ``catalog`` (list of object)
 

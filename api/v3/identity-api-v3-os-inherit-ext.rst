@@ -26,7 +26,7 @@ Assign role to user on projects in a subtree
   PUT /OS-INHERIT/projects/{project_id}/users/{user_id}/roles/{role_id}/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/api/openstack-identity/3/ext/OS-INHERIT/1.0/rel/project_user_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#assignRoleToUser``
 
 The inherited role assignment is anchored to a project and applied to its
 subtree in the projects hierarchy (both existing and future projects).
@@ -49,7 +49,7 @@ Assign role to group on projects in a subtree
   PUT /OS-INHERIT/projects/{project_id}/groups/{group_id}/roles/{role_id}/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/project_group_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#assignRoleToGroup``
 
 The inherited role assignment is anchored to a project and applied to its
 subtree in the projects hierarchy (both existing and future projects).
@@ -72,7 +72,7 @@ List user's inherited project roles on project
   GET /OS-INHERIT/projects/{project_id}/users/{user_id}/roles/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/project_user_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#listRolesForUser``
 
 The list only contains those roles assigned to this project that were specified
 as being inherited to its subtree.
@@ -116,7 +116,7 @@ List group's inherited project roles on project
   GET /OS-INHERIT/projects/{project_id)/groups/{group_id}/roles/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/project_group_roles_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#listRolesForGroup``
 
 The list only contains those roles assigned to this project that were specified
 as being inherited to its subtree.
@@ -163,7 +163,7 @@ on a project.
   HEAD /OS-INHERIT/projects/{project_id)/users/{user_id}/roles/{role_id}/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/api/openstack-identity/3/ext/OS-INHERIT/1.0/rel/project_user_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#checkRoleForUser``
 
 Response:
 
@@ -182,7 +182,7 @@ on a project.
   HEAD /OS-INHERIT/projects/{project_id)/groups/{group_id}/roles/{role_id}/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/project_group_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#checkRoleForGroup``
 
 Response:
 
@@ -198,7 +198,7 @@ Revoke an inherited project role from user on project
   DELETE /OS-INHERIT/projects/{project_id)/users/{user_id}/roles/{role_id}/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/api/openstack-identity/3/ext/OS-INHERIT/1.0/rel/project_user_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#revokeRoleFromUser``
 
 Response:
 
@@ -214,7 +214,7 @@ Revoke an inherited project role from group on project
   DELETE /OS-INHERIT/projects/{project_id)/groups/{group_id}/roles/{role_id}/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/project_group_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#revokeRoleFromGroup``
 
 Response:
 
@@ -233,7 +233,7 @@ Assign role to user on projects owned by a domain
     PUT /OS-INHERIT/domains/{domain_id}/users/{user_id}/roles/{role_id}/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/api/openstack-identity/3/ext/OS-INHERIT/1.0/rel/domain_user_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#assignRoleToUser-domain``
 
 The inherited role is only applied to the owned projects (both existing and
 future projects), and will not appear as a role in a domain scoped token.
@@ -252,7 +252,7 @@ Assign role to group on projects owned by a domain
     PUT /OS-INHERIT/domains/{domain_id}/groups/{group_id}/roles/{role_id}/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/domain_group_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#assignRoleToGroup-domain``
 
 The inherited role is only applied to the owned projects (both existing and
 future projects), and will not appear as a role in a domain scoped token.
@@ -271,7 +271,7 @@ List user's inherited project roles on a domain
     GET /OS-INHERIT/domains/{domain_id}/users/{user_id}/roles/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/domain_user_roles_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#listRolesForUser-domain``
 
 The list only contains those role assignments to the domain that were specified
 as being inherited to projects within that domain.
@@ -315,7 +315,7 @@ List group's inherited project roles on domain
     GET /OS-INHERIT/domains/{domain_id}/groups/{group_id}/roles/inherited_to_projects
 
 Relationship:
-``'http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/domain_group_roles_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#listRolesForGroup-domain``
 
 The list only contains those role assignments to the domain that were specified
 as being inherited to projects within that domain.
@@ -359,7 +359,7 @@ Check if user has an inherited project role on domain
     HEAD /OS-INHERIT/domains/{domain_id}/users/{user_id}/roles/{role_id}/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/api/openstack-identity/3/ext/OS-INHERIT/1.0/rel/domain_user_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#checkRoleForGroup-domain``
 
 Response:
 
@@ -375,7 +375,7 @@ Check if group has an inherited project role on domain
     HEAD /OS-INHERIT/domains/{domain_id}/groups/{group_id}/roles/{role_id}/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/domain_group_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#checkRoleForGroup-domain``
 
 Response:
 
@@ -391,7 +391,7 @@ Revoke an inherited project role from user on domain
     DELETE /OS-INHERIT/domains/{domain_id}/users/{user_id}/roles/{role_id}/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/api/openstack-identity/3/ext/OS-INHERIT/1.0/rel/domain_user_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#revokeRoleFromUser-domain``
 
 Response:
 
@@ -407,7 +407,7 @@ Revoke an inherited project role from group on domain
     DELETE /OS-INHERIT/domains/{domain_id}/groups/{group_id}/roles/{role_id}/inherited_to_projects
 
 Relationship:
-``http://docs.openstack.org/identity/rel/v3/ext/OS-INHERIT/1.0/domain_group_role_inherited_to_projects``
+``http://developer.openstack.org/api-ref-identity-v3-ext.html#revokeRoleFromGroup-domain``
 
 Response:
 

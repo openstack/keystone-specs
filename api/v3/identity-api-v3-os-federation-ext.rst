@@ -166,7 +166,6 @@ Required attributes:
        }
 
 
-
    For attribute type and value mapping, identify the local resource type,
    attribute, and value:
 
@@ -180,6 +179,15 @@ Required attributes:
 
    This assigns authorization attributes, by way of role assignments on the
    specified group, to ephemeral users.
+
+   ::
+
+       {
+           "group_ids": "{0}"
+       }
+
+   It is also possible to map multiple groups by providing a list of group ids.
+   Those group ids can also be white/blacklisted.
 
 - ``remote`` (list of objects)
 
@@ -1302,6 +1310,44 @@ This is an example that is similar to the previous, but displays how multiple
             }
         ]
     }
+
+Map identities to multiple groups without domain reference
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This example shows how to map a user to multiple groups (without domain
+reference) using the ``group_ids`` attribute. Those group ids can also be
+white/blacklisted.
+
+::
+
+    {
+        "rules": [
+            {
+                "local": [
+                    {
+                        "user": {
+                            "name": "{0}"
+                        }
+                    },
+                    {
+                        "group_ids": "{1}"
+                    }
+                ],
+                "remote": [
+                    {
+                        "type": "UserName"
+                    },
+                    {
+                        "type": "group_ids",
+                        "whitelist": [
+                            "abc123;def456"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+
 
 Authenticating
 --------------

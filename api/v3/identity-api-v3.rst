@@ -4974,7 +4974,7 @@ Create role inference rule
 
 ::
 
-    PUT /implied_roles/{prior_role_id}/implies/{implied_role_id}
+    PUT /prior_role/{prior_role_id}/implies/{implied_role_id}
 
 Relationship:
 ``http://developer.openstack.org/api-ref-identity-v3.html#createRoleInference``
@@ -5012,7 +5012,7 @@ List implied roles for role
 
 ::
 
-    GET /implied_roles/{prior_role_id}
+    GET /prior_role/{prior_role_id}/implies
 
 Relationship:
 ``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
@@ -5050,7 +5050,7 @@ Response:
             ]
         },
         "links" : {
-            "self":     "self": "http://identity:35357/v3/implied_roles/--prior-role-id--"
+            "self":     "self": "http://identity:35357/v3/prior_role/--prior-role-id--"
         }
     }
 
@@ -5061,7 +5061,7 @@ List all role inference rules
 
 ::
 
-    GET /implied_roles/
+    GET /role_inferences/
 
 Relationship:
 ``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
@@ -5133,7 +5133,7 @@ Get role inference rule
 
 ::
 
-    GET /implied_roles/{prior_role_id}/implies/{implied_role_id}
+    GET /prior_role/{prior_role_id}/implies/{implied_role_id}
 
 Relationship:
 ``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
@@ -5159,7 +5159,7 @@ Response:
                 "name": "implied role name"
            }
            "links": {
-               "self": "http://identity:35357/v3/Implied_roles/--prior-role-id--/implies/--implied-role-id--"
+               "self": "http://identity:35357/v3/prior_role/--prior-role-id--/implies/--implied-role-id--"
            },
         }
     }
@@ -5170,7 +5170,7 @@ Delete role inference rule
 
 ::
 
-    DELETE /implied_roles/{prior_role_id}/implies/{implied_role_id}
+    DELETE /prior_role/{prior_role_id}/implies/{implied_role_id}
 
 Relationship:
 ``http://developer.openstack.org/api-ref-identity-v3.html#deleteRoleInference``

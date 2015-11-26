@@ -24,6 +24,8 @@ What's New in Version 3.6
 - One Role can imply another via role_inference rules.
 - Enhance list role assignment to optionally provide names of entities.
 - The defaults for domain-specific configuration options can be retrieved.
+- Assignments can be specified as inherited, causing the assignment to be
+  placed on any sub-projects.
 
 What's New in Version 3.5
 -------------------------
@@ -5296,6 +5298,44 @@ Response:
 
     Status: 204 No Content
 
+Grant role to user on projects owned by a domain *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    PUT /OS-INHERIT/domains/{domain_id}/users/{user_id}/roles/{role_id}/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#assignRoleToUser-domain``
+
+The inherited role is only applied to the owned projects (both existing and
+future projects), and will not appear as a role in a domain scoped token.
+
+Response:
+
+::
+
+    Status: 204 No Content
+
+Grant role to group on projects owned by a domain *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    PUT /OS-INHERIT/domains/{domain_id}/groups/{group_id}/roles/{role_id}/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#assignRoleToGroup-domain``
+
+The inherited role is only applied to the owned projects (both existing and
+future projects), and will not appear as a role in a domain scoped token.
+
+Response:
+
+::
+
+    Status: 204 No Content
+
 List user's roles on domain
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -5376,6 +5416,94 @@ Response:
         }
     }
 
+List user's inherited project roles on a domain *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    GET /OS-INHERIT/domains/{domain_id}/users/{user_id}/roles/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#listRolesForUser-domain``
+
+The list only contains those role assignments to the domain that were specified
+as being inherited to projects within that domain.
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "roles": [
+            {
+                "id": "--role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--role-id--"
+                },
+                "name": "--role-name--",
+            },
+            {
+                "id": "--role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--role-id--"
+                },
+                "name": "--role-name--"
+            }
+        ],
+        "links": {
+            "self": "http://identity:35357/v3/OS-INHERIT/domains/--domain_id--/
+                     users/--user_id--/roles/inherited_to_projects",
+            "previous": null,
+            "next": null
+        }
+    }
+
+List group's inherited project roles on domain *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    GET /OS-INHERIT/domains/{domain_id}/groups/{group_id}/roles/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#listRolesForGroup-domain``
+
+The list only contains those role assignments to the domain that were specified
+as being inherited to projects within that domain.
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "roles": [
+            {
+                "id": "--role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--role-id--"
+                },
+                "name": "--role-name--",
+            },
+            {
+                "id": "--role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--role-id--"
+                },
+                "name": "--role-name--"
+            }
+        ],
+        "links": {
+            "self": "http://identity:35357/v3/OS-INHERIT/domains/--domain_id--/
+                     groups/--group_id--/roles/inherited_to_projects",
+            "previous": null,
+            "next": null
+        }
+    }
+
 Check if user has role on domain
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -5401,6 +5529,38 @@ Check if group has role on domain
 
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/rel/domain_group_role``
+
+Response:
+
+::
+
+    Status: 204 No Content
+
+Check if user has an inherited project role on domain *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    HEAD /OS-INHERIT/domains/{domain_id}/users/{user_id}/roles/{role_id}/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#checkRoleForGroup-domain``
+
+Response:
+
+::
+
+    Status: 204 No Content
+
+Check if group has an inherited project role on domain *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    HEAD /OS-INHERIT/domains/{domain_id}/groups/{group_id}/roles/{role_id}/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#checkRoleForGroup-domain``
 
 Response:
 
@@ -5440,6 +5600,38 @@ Response:
 
     Status: 204 No Content
 
+Revoke an inherited project role from user on domain *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    DELETE /OS-INHERIT/domains/{domain_id}/users/{user_id}/roles/{role_id}/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#revokeRoleFromUser-domain``
+
+Response:
+
+::
+
+    Status: 204 No Content
+
+Revoke an inherited project role from group on domain *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    DELETE /OS-INHERIT/domains/{domain_id}/groups/{group_id}/roles/{role_id}/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#revokeRoleFromGroup-domain``
+
+Response:
+
+::
+
+    Status: 204 No Content
+
 Grant role to user on project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -5465,6 +5657,52 @@ Grant role to group on project
 
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/rel/project_group_role``
+
+Response:
+
+::
+
+    Status: 204 No Content
+
+Grant role to user on projects in a subtree *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+  PUT /OS-INHERIT/projects/{project_id}/users/{user_id}/roles/{role_id}/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#assignRoleToUser``
+
+The inherited role assignment is anchored to a project and applied to its
+subtree in the projects hierarchy (both existing and future projects).
+
+* Note: It is possible for a user to have both a regular (non-inherited) and an
+  inherited role assignment on the same project.
+* Note: The request doesn't require a body, which will be ignored if provided.
+
+Response:
+
+::
+
+    Status: 204 No Content
+
+Grant role to group on projects in a subtree *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+  PUT /OS-INHERIT/projects/{project_id}/groups/{group_id}/roles/{role_id}/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#assignRoleToGroup``
+
+The inherited role assignment is anchored to a project and applied to its
+subtree in the projects hierarchy (both existing and future projects).
+
+* Note: It is possible for a group to have both a regular (non-inherited) and
+  an inherited role assignment on the same project.
+* Note: The request doesn't require a body, which will be ignored if provided.
 
 Response:
 
@@ -5552,6 +5790,94 @@ Response:
         }
     }
 
+List user's inherited project roles on project *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+  GET /OS-INHERIT/projects/{project_id}/users/{user_id}/roles/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#listRolesForUser``
+
+The list only contains those roles assigned to this project that were specified
+as being inherited to its subtree.
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "roles": [
+            {
+                "id": "--role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--role-id--"
+                },
+                "name": "--role-name--",
+            },
+            {
+                "id": "--role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--role-id--"
+                },
+                "name": "--role-name--"
+            }
+        ],
+        "links": {
+            "self": "http://identity:35357/v3/OS-INHERIT/projects/--project_id--/
+                     users/--user_id--/roles/inherited_to_projects",
+            "previous": null,
+            "next": null
+        }
+    }
+
+List group's inherited project roles on project *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+  GET /OS-INHERIT/projects/{project_id)/groups/{group_id}/roles/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#listRolesForGroup``
+
+The list only contains those roles assigned to this project that were specified
+as being inherited to its subtree.
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "roles": [
+            {
+                "id": "--role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--role-id--"
+                },
+                "name": "--role-name--",
+            },
+            {
+                "id": "--role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--role-id--"
+                },
+                "name": "--role-name--"
+            }
+        ],
+        "links": {
+            "self": "http://identity:35357/v3/OS-INHERIT/projects/--project_id--/
+                     groups/--group_id--/roles/inherited_to_projects",
+            "previous": null,
+            "next": null
+        }
+    }
+
 Check if user has role on project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -5583,6 +5909,44 @@ Response:
 ::
 
     Status: 204 No Content
+
+Check if user has an inherited project role on project *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Checks if a user has a role assignment with the inherited_to_projects flag
+on a project.
+
+::
+
+  HEAD /OS-INHERIT/projects/{project_id)/users/{user_id}/roles/{role_id}/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#checkRoleForUser``
+
+Response:
+
+::
+
+    Status: 200 OK
+
+Check if group has an inherited project role on project *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Checks if a group has a role assignment with the inherited_to_projects flag
+on a project.
+
+::
+
+  HEAD /OS-INHERIT/projects/{project_id)/groups/{group_id}/roles/{role_id}/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#checkRoleForGroup``
+
+Response:
+
+::
+
+    Status: 200 OK
 
 Revoke role from user on project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -5616,6 +5980,38 @@ Response:
 
     Status: 204 No Content
 
+Revoke an inherited project role from user on project *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+  DELETE /OS-INHERIT/projects/{project_id)/users/{user_id}/roles/{role_id}/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#revokeRoleFromUser``
+
+Response:
+
+::
+
+    Status: 204 No Content
+
+Revoke an inherited project role from group on project *New in version 3.6*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+  DELETE /OS-INHERIT/projects/{project_id)/groups/{group_id}/roles/{role_id}/inherited_to_projects
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#revokeRoleFromGroup``
+
+Response:
+
+::
+
+    Status: 204 No Content
+
 List effective role assignments
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -5633,6 +6029,8 @@ Optional query parameters:
 - ``group.id`` (string)
 
 - ``role.id`` (string)
+
+- ``scope.OS-INHERIT:inherited_to`` (string) *New in version 3.6*
 
 - ``scope.domain.id`` (string)
 
@@ -5719,15 +6117,79 @@ HTTP 400 Bad Request being returned.
 Each role assignment entity in the collection contains a link to the assignment
 that gave rise to this entity.
 
+The scope section in the list response is extended to allow the representation
+of role assignments that are inherited to projects.
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "role_assignments": [
+            {
+                "links": {
+                    "assignment": "http://identity:35357/v3/OS-INHERIT/
+                                   domains/--domain-id--/users/--user-id--/
+                                   roles/--role-id--/inherited_to_projects"
+                },
+                "role": {
+                    "id": "--role-id--"
+                },
+                "scope": {
+                    "domain": {
+                        "id": "--domain-id--"
+                    },
+                    "OS-INHERIT:inherited_to": "projects"
+                },
+                "user": {
+                    "id": "--user-id--"
+                }
+            },
+            {
+                "group": {
+                    "id": "--group-id--"
+                },
+                "links": {
+                    "assignment": "http://identity:35357/v3/projects/--project-id--/
+                                   groups/--group-id--/roles/--role-id--"
+                },
+                "role": {
+                    "id": "--role-id--"
+                },
+                "scope": {
+                    "project": {
+                        "id": "--project-id--"
+                    }
+                }
+            }
+        ],
+        "links": {
+            "self": "http://identity:35357/v3/role_assignments",
+            "previous": null,
+            "next": null
+        }
+    }
+
+The query filter ``scope.OS-INHERIT:inherited_to`` can be used to filter based
+on role assignments that are inherited. The only value of
+``scope.OS-INHERIT:inherited_to`` that is currently supported is ``projects``,
+indicating that this role is inherited to all projects of the owning domain or
+parent project.
+
 If the query parameter ``effective`` is specified, rather than simply returning
 a list of role assignments that have been made, the API returns a list of
 effective assignments at the user, project and domain level, having allowed for
-the effects of group membership and role inference rules.. Since the
-effects of group membership have already been allowed for, the group
-role assignment entities themselves will not be returned in the
-collection. This represents the effective roleassignments that would
-be included in a scoped token. The same set of query parameters can
-also be used in combination with the ``effective`` parameter.
+the effects of group membership, role inference rules as well as inheritance
+from the parent domain or project. Since the effects of group membership have
+already been allowed for, the group role assignment entities themselves will
+not be returned in the collection. Likewise, since the effects of inheritance
+have already been allowed for, the role assignment entities themselves that
+specify the inheritance will also not be returned in the collection. This
+represents the effective role assignments that would be included in a scoped
+token. The same set of query parameters can also be used in combination with
+the ``effective`` parameter.
 
 For example:
 
@@ -5770,6 +6232,24 @@ Response:
                 "links": {
                     "assignment": "http://identity:35357/v3/projects/--project-id--/groups/--group-id--/roles/--role-id--",
                     "membership": "http://identity:35357/v3/groups/--group-id--/users/--user-id--"
+                },
+                "role": {
+                    "id": "--role-id--"
+                },
+                "scope": {
+                    "project": {
+                        "id": "--project-id--"
+                    }
+                },
+                "user": {
+                    "id": "--user-id--"
+                }
+            },
+            {
+                "links": {
+                    "assignment": "http://identity:35357/v3/OS-INHERIT/
+                                   domains/--domain-id--/users/--user-id--/
+                                   roles/--role-id--/inherited_to_projects"
                 },
                 "role": {
                     "id": "--role-id--"

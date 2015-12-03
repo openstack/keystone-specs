@@ -64,8 +64,8 @@ Proposed Change
 ===============
 
 It is proposed that we lay the groundwork to move to url-safe naming for all
-projects and domains. A url-safe name is defined as one that only contains
-`unreserved` characters as defined in section 2.3 of
+projects and domains. A url-safe name is defined as one that does not contain
+any of the `reserved` characters as defined in section 2.2 of
 `rfc3986 <http://tools.ietf.org/html/rfc3986>_`.
 
 In particular, we would:
@@ -98,6 +98,15 @@ that feature was supported.
 
 To be clear, this proposal does not enable the actual use of hierarchical
 naming, rather it lays the groundwork for us to do so in the future.
+
+This proposal does not preclude the use of unicode for project and domain
+names (since all the `reserved` characters are coded the same in ascii and
+unicode). However, to utilize such an extended character set for auth or
+searching by name would require additional changes (for encoding and decoding)
+which is outside of the scope of this proposal. By allowing unicode within the
+strict naming option defined here, we allow customer using unicode to
+"go strict" as soon as they can (and hence avoiding a further road block to us
+being able to deprecate unsafe names).
 
 Alternatives
 ------------

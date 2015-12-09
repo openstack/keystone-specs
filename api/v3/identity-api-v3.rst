@@ -2998,7 +2998,7 @@ Response:
 
 ::
 
-    Status: 201 Created
+    Status: 200 OK
 
     {
         "endpoint": {

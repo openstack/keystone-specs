@@ -29,16 +29,13 @@ Juno implemented specs:
    specs/juno/*
 
 
-.. NOTE(stevemar): Uncomment this section after there is at least one
-   implemented spec for keystoneclient.
+Keystone client implemented specs:
 
-   Keystone client implemented specs:
+.. toctree::
+   :glob:
+   :maxdepth: 1
 
-   .. toctree::
-      :glob:
-      :maxdepth: 1
-
-      specs/keystoneclient/implemented/*
+   specs/keystoneclient/implemented/*
 
 Keystone middleware implemented specs:
 

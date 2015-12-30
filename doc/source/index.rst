@@ -46,11 +46,15 @@ Mitaka approved specs:
 
 Keystone client approved specs:
 
-.. toctree::
-   :glob:
-   :maxdepth: 1
+- None
 
-   specs/keystoneclient/*
+.. Uncomment this section when there is a spec in keystoneclient.
+
+   .. toctree::
+      :glob:
+      :maxdepth: 1
+
+      specs/keystoneclient/*
 
 
 Keystone middleware approved specs:

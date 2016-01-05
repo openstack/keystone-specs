@@ -55,7 +55,7 @@ Project-Endpoint Associations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If a valid X-Auth-Token token in not present in the HTTP header and/or the user
-does not have the right authorization a HTTP 401 Unauthorized is returned.
+does not have the right authorization an HTTP ``401 Unauthorized`` is returned.
 
 Create Association
 ^^^^^^^^^^^^^^^^^^

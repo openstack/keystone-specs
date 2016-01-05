@@ -570,31 +570,31 @@ HTTP Status Codes
 The Identity API uses a subset of the available HTTP status codes to
 communicate specific success and failure conditions to the client.
 
-200 OK
-^^^^^^
+``200 OK``
+^^^^^^^^^^
 
 This status code is returned in response to successful ``GET``, ``HEAD`` and
 ``PATCH`` operations.
 
-201 Created
-^^^^^^^^^^^
+``201 Created``
+^^^^^^^^^^^^^^^
 
 This status code is returned in response to successful ``POST`` operations.
 
-204 No Content
-^^^^^^^^^^^^^^
+``204 No Content``
+^^^^^^^^^^^^^^^^^^
 
 This status code is returned in response to successful ``HEAD``, ``PUT`` and
 ``DELETE`` operations.
 
-300 Multiple Choices
-^^^^^^^^^^^^^^^^^^^^
+``300 Multiple Choices``
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 This status code is returned by the root identity endpoint, with references to
 one or more Identity API versions (such as ``/v3/``).
 
-400 Bad Request
-^^^^^^^^^^^^^^^
+``400 Bad Request``
+^^^^^^^^^^^^^^^^^^^
 
 This status code is returned when the Identity service fails to parse the
 request as expected. This is most frequently returned when a required attribute
@@ -604,29 +604,29 @@ type.
 
 The client is assumed to be in error.
 
-401 Unauthorized
-^^^^^^^^^^^^^^^^
+``401 Unauthorized``
+^^^^^^^^^^^^^^^^^^^^
 
 This status code is returned when either authentication has not been performed,
 the provided X-Auth-Token is invalid or authentication credentials are invalid
 (including the user, project or domain having been disabled).
 
-403 Forbidden
-^^^^^^^^^^^^^
+``403 Forbidden``
+^^^^^^^^^^^^^^^^^
 
 This status code is returned when the request is successfully authenticated but
 not authorized to perform the requested action.
 
-404 Not Found
-^^^^^^^^^^^^^
+``404 Not Found``
+^^^^^^^^^^^^^^^^^
 
 This status code is returned in response to failed ``GET``, ``HEAD``, ``POST``,
 ``PUT``, ``PATCH`` and ``DELETE`` operations when a referenced entity cannot be
 found by ID. In the case of a ``POST`` request, the referenced entity may be in
 the request body as opposed to the resource path.
 
-409 Conflict
-^^^^^^^^^^^^
+``409 Conflict``
+^^^^^^^^^^^^^^^^
 
 This status code is returned in response to failed ``POST`` and ``PATCH``
 operations. For example, when a client attempts to update an entity's unique
@@ -640,14 +640,14 @@ request twice in a row will result in this status code.
 
 The client is assumed to be in error.
 
-500 Internal Server Error
-^^^^^^^^^^^^^^^^^^^^^^^^^
+``500 Internal Server Error``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This status code is returned when an unexpected error has occurred in the
 Identity service implementation.
 
-501 Not Implemented
-^^^^^^^^^^^^^^^^^^^
+``501 Not Implemented``
+^^^^^^^^^^^^^^^^^^^^^^^
 
 This status code is returned when the Identity service implementation is unable
 to fulfill the request because it is incapable of implementing the entire API
@@ -659,8 +659,8 @@ the necessary permission to create or modify the collection of users (which may
 be managed by a remote system); the implementation may therefore choose to
 return this status code to communicate this condition to the client.
 
-503 Service Unavailable
-^^^^^^^^^^^^^^^^^^^^^^^
+``503 Service Unavailable``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This status code is returned when the Identity service is unable to communicate
 with a backend service, or by a proxy in front of the Identity service unable
@@ -1806,7 +1806,7 @@ Scope: ``scope``
 
 An authorization scope, including either a ``project``, ``domain``, or
 ``unscoped``, can be optionally specified as part of the request. If both a
-``domain`` and a ``project`` are specified, an HTTP 400 Bad Request will be
+``domain`` and a ``project`` are specified, an HTTP ``400 Bad Request`` will be
 returned, as a token cannot be simultaneously scoped to both a ``project`` and
 ``domain``.
 
@@ -2196,8 +2196,9 @@ the user's roles applicable to the ``domain``. Example response:
 Authentication failures
 '''''''''''''''''''''''
 
-Several authentication errors are possible, including 403 Forbidden and 409
-Conflict, but here's an example of an HTTP 401 Unauthorized response:
+Several authentication errors are possible, including HTTP ``403 Forbidden``
+and HTTP ``409 Conflict``, but here's an example of an HTTP
+``401 Unauthorized`` response:
 
 ::
 
@@ -2234,8 +2235,8 @@ Optionally, the Identity service implementation may return an
     }
 
 For authentication processes which require multiple round trips, the Identity
-service implementation may return an HTTP 401 Not Authorized with additional
-information for the next authentication step.
+service implementation may return an HTTP ``401 Not Authorized`` with
+additional information for the next authentication step.
 
 For example:
 
@@ -2633,10 +2634,10 @@ Response:
     }
 
 - Adding a region with a parent\_region\_id that does not exist should fail
-  with a ``404 Not Found``
+  with an HTTP ``404 Not Found``
 
 - Adding a region with a parent\_region\_id that would form a circular
-  relationship should fail with a ``409 Conflict``
+  relationship should fail with an HTTP ``409 Conflict``
 
 Create region with specific ID
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2678,16 +2679,16 @@ Response:
     }
 
 - The {user\_defined\_region\_id} must be unique to the OpenStack deployment.
-  If not, a ``409 Conflict`` should be returned.
+  If not, an HTTP ``409 Conflict`` should be returned.
 
 - The {user\_defined\_region\_id} shall be urlencoded if the ID contains
   characters not permitted in a URI.
 
 - Adding a region with a parent\_region\_id that does not exist should fail
-  with a ``404 Not Found``
+  with an HTTP ``404 Not Found``
 
 - Adding a region with a parent\_region\_id that would form a circular
-  relationship should fail with a ``409 Conflict``
+  relationship should fail with an HTTP ``409 Conflict``
 
 Update region
 ^^^^^^^^^^^^^
@@ -2729,7 +2730,7 @@ Response:
     }
 
 - Updating a region with a parent\_region\_id that does not exist should fail
-  with a ``404 Not Found``
+  with an HTTP ``404 Not Found``
 
 Delete region
 ^^^^^^^^^^^^^
@@ -2741,7 +2742,8 @@ Delete region
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/rel/region``
 
-- Note: deleting a region with child regions should return a ``409 Conflict``
+- Note: deleting a region with child regions should return an HTTP
+  ``409 Conflict``
 
 Response:
 
@@ -3279,7 +3281,7 @@ entities.
 In order to minimize the risk of an inadvertent deletion of a domain and its
 entities, a domain must first be disabled (using the update domain API) before
 a successful delete domain API call can be made. Attempting to delete an
-enabled domain will result in an HTTP 403 Forbidden response.
+enabled domain will result in an HTTP ``403 Forbidden`` response.
 
 Response:
 
@@ -3290,7 +3292,7 @@ Response:
 *New in version 3.6*
 
 - The deletion of a non-leaf domain in a domain hierarchy tree is prohibited
-  and will fail with a ``400 Bad Request``
+  and will fail with an HTTP ``400 Bad Request``
 
 
 Domain configuration management
@@ -3308,7 +3310,7 @@ objects. Currently only the ``identity`` and ``ldap`` groups are supported, and
 these can be used to override the default configuration settings for the
 storage of users and groups by the identity server. Attempting to read or
 override configuration options for groups other than ``identity`` and ``ldap``
-will result in an HTTP 403 Forbidden.
+will result in an HTTP ``403 Forbidden``.
 
 The default configuration settings for the options that can be overridden
 can be retrieved.
@@ -3859,7 +3861,7 @@ Response:
 Note that the subtree and parents query parameters are not mutually
 exclusive. The same is not true for similar query params such as
 ``parents_as_list`` and ``parents_as_ids``, which can't be included at the same
-time. If included, the server will fail with a ``400 Bad Request`` error.
+time. If included, the server will fail with an HTTP ``400 Bad Request`` error.
 
 ::
 
@@ -4017,7 +4019,7 @@ Response:
 *New in version 3.4*
 
 - Adding a project with a parent_id pointing to a project that does not exist
-  fails with a ``404 Not Found``
+  fails with an HTTP ``404 Not Found``
 
 Update project
 ^^^^^^^^^^^^^^
@@ -4065,15 +4067,16 @@ Response:
 
 *New in version 3.4*
 
-- The update of the parent_id is not allowed and will fail with a ``403
-  Forbidden``
+- The update of the parent_id is not allowed and will fail with an HTTP
+  ``403 Forbidden``
 
 - Disabling a project that has enabled projects in its subtree using this API
-  will fail with a ``403 Forbidden``. See the ``Enable or disable subtree``
-  section for the appropriate API for this action.
+  will fail with an HTTP ``403 Forbidden``. See the
+  ``Enable or disable subtree`` section for the appropriate API for this
+  action.
 
-- Enabling a project that has disabled parents will fail with a ``403
-  Forbidden``
+- Enabling a project that has disabled parents will fail with an HTTP
+  ``403 Forbidden``
 
 Enable or disable subtree
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -4121,9 +4124,10 @@ Response:
     }
 
 - Only the ``enabled`` attribute is accepted. Including other attributes
-  besides ``enabled`` will fail with a ``400 Bad Request``
+  besides ``enabled`` will fail with an HTTP ``400 Bad Request``
 - Triggering the action against a project that has any children that acts
-  as a domain (``is_domain`` flag enabled) will fail with a ``403 Forbidden``
+  as a domain (``is_domain`` flag enabled) will fail with an HTTP
+  ``403 Forbidden``
 
 Delete project
 ^^^^^^^^^^^^^^
@@ -4142,8 +4146,8 @@ Relationship:
 *New in version 3.4*
 
 - The deletion of a project that is not a leaf in the project hierarchy (does
-  not have children) using this API will fail with a ``403 Forbidden``. See
-  the ``Delete subtree`` section for the appropriate API for this action.
+  not have children) using this API will fail with an HTTP ``403 Forbidden``.
+  See the ``Delete subtree`` section for the appropriate API for this action.
 
 Delete subtree
 ^^^^^^^^^^^^^^
@@ -4166,7 +4170,7 @@ Relationship:
     Status: 204 No Content
 
 - Triggering the action against a project that has any children that are
-  acting as a domain (``is_domain`` flag enabled) will fail with a
+  acting as a domain (``is_domain`` flag enabled) will fail with an HTTP
   ``403 Forbidden``
 
 Users
@@ -4415,8 +4419,9 @@ Relationship:
 
 The request block is the same as the one for create user, except that only the
 attributes that are being updated need to be included. Use this method attempt
-to update user password or enable/disable the user. This may return a HTTP 501
-Not Implemented if the back-end driver does not allow for the functionality.
+to update user password or enable/disable the user. This may return a HTTP
+``501 Not Implemented`` if the back-end driver does not allow for the
+functionality.
 
 Response:
 
@@ -4674,8 +4679,9 @@ Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/rel/group``
 
 The request block is the same as the one for create group, except that only the
-attributes that are being updated need to be included. This may return a HTTP
-501 Not Implemented if the back-end driver doesn't allow for the functionality.
+attributes that are being updated need to be included. This may return an HTTP
+``501 Not Implemented`` if the back-end driver doesn't allow for the
+functionality.
 
 Response:
 
@@ -6204,7 +6210,7 @@ a tree of projects:
 would list all role assignments involving the specified project and all
 sub-projects. ``include_subtree=true`` can only be specified in conjunction
 with ``scope.project.id``, specifiying it without this will result in an
-HTTP 400 Bad Request being returned.
+HTTP ``400 Bad Request`` being returned.
 
 Each role assignment entity in the collection contains a link to the assignment
 that gave rise to this entity.

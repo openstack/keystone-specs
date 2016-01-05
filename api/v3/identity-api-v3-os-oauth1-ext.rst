@@ -211,7 +211,7 @@ Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/ext/OS-OAUTH1/1.0/rel/consumer``
 
 Only a Consumer's ``description`` is mutable. Attempting to PATCH an immutable
-attribute should result in a HTTP 400 Bad Request.
+attribute should result in an HTTP ``400 Bad Request``.
 
 Request:
 

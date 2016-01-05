@@ -141,7 +141,7 @@ Required attributes:
 
    If the ``user`` attribute is missing when processing an assertion, server
    tries to directly map ``REMOTE_USER`` environment variable. If this variable
-   is also unavailable the server returns an HTTP 401 Unauthorized error.
+   is also unavailable the server returns an HTTP ``401 Unauthorized`` error.
 
    If the ``user`` has domain specified, the user is treated as existing in the
    backend, hence the server will fetch user details (id, name, roles, groups).

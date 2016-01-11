@@ -750,7 +750,7 @@ Response:
         "links": {
             "next": null,
             "previous": null,
-            "self": "http://identity:5000/v3/OS-FEDERATION/service_providers"
+            "self": "http://identity:5000/v3/OS-EP-FILTER/projects/abcd1234/service_providers"
         },
         "service_providers": [
             {
@@ -819,7 +819,7 @@ Response:
 
     {
         "links": {
-            "self": "http://identity:5000/v3/OS-EP-FILTER/endpoints/6fedc0/projects",
+            "self": "http://identity:5000/v3/OS-EP-FILTER/service_providers/6fedc0/projects",
             "previous": null,
             "next": null
         },

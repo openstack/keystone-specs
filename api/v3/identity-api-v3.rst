@@ -27,6 +27,8 @@ What's New in Version 3.6
 - Assignments can be specified as inherited, causing the assignment to be
   placed on any sub-projects.
 - Support for domain specific roles.
+- Support ``enabled`` and ``id`` as optional attributes to filter identity
+  providers when listing.
 
 What's New in Version 3.5
 -------------------------

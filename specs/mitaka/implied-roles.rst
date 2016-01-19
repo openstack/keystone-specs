@@ -100,8 +100,8 @@ both `swift_admin` and `cinder_admin`.
 
 If a user is assigned `all_admin`  in a project and requests a token for that
 project, the token will have all of the implied roles enumerated in it:
-`cinder_admin`,  `cinder_admin`, `neutron_admin`, `glance_admin`,
-`swift_admin`, `editor`, and `reader`.
+`cinder_admin`, `neutron_admin`, `glance_admin`, `swift_admin`, `editor`, and
+`reader`.
 
 Any form of admin is implicitly an `editor`. A `reader` can view standard
 data from any of the systems, but cannot affect any change.   The `editor`

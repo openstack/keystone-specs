@@ -5157,7 +5157,7 @@ Create role inference rule
 
 ::
 
-    PUT /prior_role/{prior_role_id}/implies/{implied_role_id}
+    PUT /roles/{prior_role_id}/implies/{implied_role_id}
 
 Relationship:
 ``http://developer.openstack.org/api-ref-identity-v3.html#createRoleInference``
@@ -5195,7 +5195,7 @@ List implied roles for role
 
 ::
 
-    GET /prior_role/{prior_role_id}/implies
+    GET /roles/{prior_role_id}/implies
 
 Relationship:
 ``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
@@ -5316,7 +5316,7 @@ Get role inference rule
 
 ::
 
-    GET /prior_role/{prior_role_id}/implies/{implied_role_id}
+    GET /roles/{prior_role_id}/implies/{implied_role_id}
 
 Relationship:
 ``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
@@ -5347,13 +5347,28 @@ Response:
         }
     }
 
+Confirm a role inference rule
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    HEAD /roles/{prior_role_id}/implies/{implied_role_id}
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
+
+Response:
+
+::
+
+    Status: 204 No Content
 
 Delete role inference rule
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
-    DELETE /prior_role/{prior_role_id}/implies/{implied_role_id}
+    DELETE /roles/{prior_role_id}/implies/{implied_role_id}
 
 Relationship:
 ``http://developer.openstack.org/api-ref-identity-v3.html#deleteRoleInference``

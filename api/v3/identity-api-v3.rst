@@ -866,6 +866,16 @@ A project acting as a domain can potentially also act as a container for
 OpenStack resources, although this depends on whether the policy rule for the
 relevant resource creation allows this.
 
+*New in version 3.6*, update and delete operations support a new ``cascade``
+query parameter. This option will execute the operation (update or delete)
+on the project and its entire subtree (all projects beneath the parent project
+in the heirarchy). In the case of a cascading update, only the ``enabled``
+attribute may be specified. Specifying other attributes will cause a
+``400 Bad Request``. In the case of a casading delete, all projects must be
+disabled before being deleted. In both cases, policy enforcement is made on
+each project of the subtree. If the token used does not have authorization
+to do the operation on any subproject, a ``403 Forbidden`` is returned.
+
 Required attributes:
 
 - ``name`` (string)
@@ -4036,6 +4046,17 @@ Relationship:
 The request block is the same as the one for create project, except that only
 the attributes that are being updated need to be included.
 
+Optional query parameters:
+
+*New in version 3.6*
+
+- cascade (boolean)
+
+Adding the ``cascade`` option will cause the update to be performed on the
+initial project and all its subprojects. Only the ``enabled`` attribute is
+supported. If other attributes are provided the call will fails with an HTTP
+``400 Bad Request``.
+
 Request:
 
 ::
@@ -4085,15 +4106,15 @@ Enable or disable subtree
 
 ::
 
-    PATCH /projects/{project_id}/cascade
+    PATCH /projects/{project_id}?cascade=True
 
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/rel/project``
 
 *New in version 3.6*
 
-This request has a cascade effect: enables or disables the project itself and
-its whole subtree.
+This request has a cascading effect. The initial project and all its
+subprojects will be enabled or disabled.
 
 Request:
 
@@ -4125,11 +4146,8 @@ Response:
         }
     }
 
-- Only the ``enabled`` attribute is accepted. Including other attributes
-  besides ``enabled`` will fail with an HTTP ``400 Bad Request``
-- Triggering the action against a project that has any children that acts
-  as a domain (``is_domain`` flag enabled) will fail with an HTTP
-  ``403 Forbidden``
+- Only the ``enabled`` attribute is accepted. Including any other attributes
+  will result in an HTTP ``400 Bad Request``
 
 Delete project
 ^^^^^^^^^^^^^^
@@ -4141,6 +4159,15 @@ Delete project
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/rel/project``
 
+Optional query parameters:
+
+*New in version 3.6*
+
+- cascade (boolean)
+
+Adding the ``cascade`` option will cause the delete to be performed on the
+initial project and all its subprojects.
+
 ::
 
     Status: 204 No Content
@@ -4149,20 +4176,20 @@ Relationship:
 
 - The deletion of a project that is not a leaf in the project hierarchy (does
   not have children) using this API will fail with an HTTP ``403 Forbidden``.
-  See the ``Delete subtree`` section for the appropriate API for this action.
+  See the ``cascade`` query parameter for the appropriate call for this action.
 
 Delete subtree
 ^^^^^^^^^^^^^^
 
 ::
 
-    DELETE /projects/{project_id}/cascade
+    DELETE /projects/{project_id}?cascade=True
 
 *New in version 3.6*
 
-This request has a cascade effect: deletes the target project itself **and**
-its subtree (all projects below it in the hierarchy). It is mandatory to
-disable the affected projects first.
+This request has a cascading effect. The initial project and all its
+subprojects will be deleted. It is required to diable all the projects
+before performing them delete.
 
 Relationship:
 ``http://docs.openstack.org/api/openstack-identity/3/rel/project``
@@ -4170,10 +4197,6 @@ Relationship:
 ::
 
     Status: 204 No Content
-
-- Triggering the action against a project that has any children that are
-  acting as a domain (``is_domain`` flag enabled) will fail with an HTTP
-  ``403 Forbidden``
 
 Users
 ~~~~~

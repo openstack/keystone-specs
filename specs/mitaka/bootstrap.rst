@@ -5,13 +5,13 @@
  http://creativecommons.org/licenses/by/3.0/legalcode
 
 ==================
-Bootrstrap via CLI
+Bootstrap via CLI
 ==================
 
 `bp bootstrap <https://blueprints.launchpad.net/keystone/+spec/bootstrap>`_
 
 Remove the ADMIN_TOKEN means of initializing a cluster with a CLI that has to
-be excuted on the same machine as the Keystone installation.
+be executed on the same machine as the Keystone installation.
 
 
 Problem Description

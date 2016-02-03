@@ -75,6 +75,16 @@ Untargeted Specifications
    specs/backlog/*
 
 
+Ongoing Specifications
+======================
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/ongoing/*
+
+
 Implemented Specifications
 ==========================
 

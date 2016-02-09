@@ -1389,7 +1389,7 @@ Example of an OS-FEDERATION token:
     {
         "token": {
             "methods": [
-                "saml2"
+                "mapped"
             ],
             "user": {
                 "domain": {

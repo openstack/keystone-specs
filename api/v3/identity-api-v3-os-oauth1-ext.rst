@@ -65,7 +65,7 @@ Optional attributes:
 
 - ``description`` (string)
 
-  Immutable attributes provided by the Identity service:
+Immutable attributes provided by the Identity service:
 
 - ``secret`` (string)
 

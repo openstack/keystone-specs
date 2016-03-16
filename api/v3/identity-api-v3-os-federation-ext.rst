@@ -1,9 +1,9 @@
-OpenStack Identity API v3 OS-FEDERATION Extension
-=================================================
+OpenStack Identity API v3 OS-FEDERATION
+=======================================
 
 Provide the ability for users to manage Identity Providers (IdPs) and establish
 a set of rules to map federation protocol attributes to Identity API
-attributes. This extension requires v3.0+ of the Identity API.
+attributes. Requires v3.0+ of the Identity API.
 
 What's New in Version 1.1
 -------------------------

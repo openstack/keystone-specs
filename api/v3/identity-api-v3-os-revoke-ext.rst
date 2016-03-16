@@ -1,10 +1,9 @@
-OpenStack Identity API v3 OS-REVOKE Extension
-=============================================
+OpenStack Identity API v3 OS-REVOKE
+===================================
 
-This extension provides a list of token revocations. Each event expresses a set
-of criteria which describes a set of tokens that are no longer valid.
-
-This extension requires v3.2+ of the Identity API.
+This API provides a list of token revocations. Each event expresses a set
+of criteria which describes a set of tokens that are no longer valid. Requires
+v3.2+ of the Identity API.
 
 What's New in v1.1
 ------------------

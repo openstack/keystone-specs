@@ -1,7 +1,7 @@
-OpenStack Identity API v3 OS-ENDPOINT-POLICY Extension
-======================================================
+OpenStack Identity API v3 OS-ENDPOINT-POLICY
+============================================
 
-This extension provides associations between service endpoints and policies
+This API provides associations between service endpoints and policies
 that are already stored in the Identity server and referenced by policy ID.
 Such associations enable an endpoint to request the appropriate policy for
 itself. Three types of association are supported:
@@ -12,7 +12,7 @@ itself. Three types of association are supported:
 
 - A policy associated to any endpoint of a given service type
 
-When an endpoint requests the appropriate policy for itself, the extension will
+When an endpoint requests the appropriate policy for itself, the API will
 look for an association *in the order given above* (which is essentially in
 order from most specific to least specific) and select the first one it finds.
 For region associations, any parent regions will also be examined in ascending

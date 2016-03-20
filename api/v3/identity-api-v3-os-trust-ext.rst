@@ -1,5 +1,5 @@
-OpenStack Identity API v3 OS-TRUST Extension
-============================================
+OpenStack Identity API v3 OS-TRUST
+==================================
 
 Trusts provide project-specific role delegation between users, with optional
 impersonation.

@@ -1,10 +1,10 @@
-OpenStack Identity API v3 OS-EP-FILTER Extension
-================================================
+OpenStack Identity API v3 OS-EP-FILTER
+======================================
 
-This extension enables creation of ad-hoc catalogs for each project-scoped
-token request. To do so, this extension uses either static project-endpoint
-associations or dynamic custom endpoints groups to associate service endpoints
-with projects.
+This API enables creation of ad-hoc catalogs for each project-scoped token
+request. To do so, this API uses either static project-endpoint associations
+or dynamic custom endpoints groups to associate service endpoints with
+projects.
 
 What's New in Version 1.1
 -------------------------

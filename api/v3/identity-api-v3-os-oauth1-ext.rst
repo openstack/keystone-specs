@@ -1,10 +1,10 @@
-OpenStack Identity API v3 OS-OAUTH1 Extension
-=============================================
+OpenStack Identity API v3 OS-OAUTH1
+===================================
 
 Provide the ability for identity users to delegate roles to third party
 consumers via the `OAuth 1.0a specification <http://oauth.net/core/1.0a/>`__.
-This extension requires v3.0+ of the Identity API. An OAuth-derived token will
-provide a means of acting on behalf of the authorizing user.
+Requires v3.0+ of the Identity API. An OAuth-derived token will provide
+a means of acting on behalf of the authorizing user.
 
 Definitions
 -----------

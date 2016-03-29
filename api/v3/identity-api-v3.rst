@@ -5129,19 +5129,93 @@ Response:
                 "id": "--prior-role-id--",
                 "links": {
                     "self": "http://identity:35357/v3/roles/--prior-role-id--"
-                }
+                },
                 "name": "prior role name"
             },
-            "implies":
-                {
-                    "id": "--implied-role1-id--",
-                    "link": {
-                        "self": "http://identity:35357/v3/roles/--implied-role1-id--"
-                    },
-                    "name": "implied role1 name"
-                }
+            "implies": {
+                "id": "--implied-role1-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--implied-role1-id--"
+                },
+                "name": "implied role1 name"
+            }
         },
+        "links": {
+            "self": "http://identity:35357/v3/roles/--prior-role-id--/implies/--implied-role-id--"
+        }
     }
+
+
+Get role inference rule
+^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    GET /roles/{prior_role_id}/implies/{implied_role_id}
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
+
+Response:
+
+::
+
+    Status: 200 OK
+
+    {
+        "role_inference": {
+            "prior_role": {
+                "id": "--prior-role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--prior-role-id--"
+                },
+                "name": "prior role name"
+            },
+            "implies": {
+                "id": "--implied-role-id--",
+                "links": {
+                    "self": "http://identity:35357/v3/roles/--implied-role-id--"
+                },
+                "name": "implied role name"
+            }
+        },
+        "links": {
+            "self": "http://identity:35357/v3/roles/--prior-role-id--/implies/--implied-role-id--"
+        }
+    }
+
+
+Confirm a role inference rule
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    HEAD /roles/{prior_role_id}/implies/{implied_role_id}
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
+
+Response:
+
+::
+
+    Status: 204 No Content
+
+Delete role inference rule
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    DELETE /roles/{prior_role_id}/implies/{implied_role_id}
+
+Relationship:
+``http://developer.openstack.org/api-ref-identity-v3.html#deleteRoleInference``
+
+Response:
+
+::
+
+    Status: 204 No Content
 
 
 List implied roles for role
@@ -5166,20 +5240,20 @@ Response:
                 "id": "--prior-role-id--",
                 "links": {
                     "self": "http://identity:35357/v3/roles/--prior-role-id--"
-                }
+                },
                 "name": "prior role name"
             },
             "implies": [
                 {
                     "id": "--implied-role1-id--",
-                    "link": {
+                    "links": {
                         "self": "http://identity:35357/v3/roles/--implied-role1-id--"
                     },
                     "name": "implied role1 name"
                 },
                 {
                     "id": "--implied-role2-id--",
-                    "link": {
+                    "links": {
                         "self": "http://identity:35357/v3/roles/--implied-role2-id--"
                     },
                     "name": "implied role2 name"
@@ -5187,7 +5261,7 @@ Response:
             ]
         },
         "links" : {
-            "self":     "self": "http://identity:35357/v3/prior_role/--prior-role-id--"
+            "self": "http://identity:35357/v3/roles/--prior-role-id--/implies"
         }
     }
 
@@ -5222,14 +5296,14 @@ Response:
                 "implies": [
                     {
                         "id": "--implied-role1-id--",
-                        "link": {
+                        "links": {
                             "self": "http://identity:35357/v3/roles/--implied-role1-id--"
                         },
                         "name": "implied role1 name"
                     },
                     {
                         "id": "--implied-role2-id--",
-                        "link": {
+                        "links": {
                             "self": "http://identity:35357/v3/roles/--implied-role2-id--"
                         },
                         "name": "implied role2 name"
@@ -5247,92 +5321,25 @@ Response:
                 "implies": [
                     {
                         "id": "--implied-role3-id--",
-                        "link": {
+                        "links": {
                             "self": "http://identity:35357/v3/roles/--implied-role1-id--"
                         },
                         "name": "implied role1 name"
                     },
                     {
                         "id": "--implied-role4-id--",
-                        "link": {
+                        "links": {
                             "self": "http://identity:35357/v3/roles/--implied-role2-id--"
                         },
                         "name": "implied role2 name"
                     }
                 ]
             }
-        ]
-    }
-
-
-Get role inference rule
-^^^^^^^^^^^^^^^^^^^^^^^
-
-::
-
-    GET /roles/{prior_role_id}/implies/{implied_role_id}
-
-Relationship:
-``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
-
-Response:
-
-::
-
-    Status: 200 OK
-
-    {
-        "prior_role": {
-            "id": "--prior-role-id--",
-            "links": {
-                "self": "http://identity:35357/v3/roles/--prior-role-id--"
-            }
-           "name": "prior role name"
-           "implies": {
-                "id": "--implied-role-id--",
-                "links": {
-                    "self": "http://identity:35357/v3/roles/--implied-role-id--"
-                }
-                "name": "implied role name"
-           }
-           "links": {
-               "self": "http://identity:35357/v3/prior_role/--prior-role-id--/implies/--implied-role-id--"
-           },
+        ],
+        "links": {
+            "self": "http://identity:35357/v3/role_inferences"
         }
     }
-
-Confirm a role inference rule
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-::
-
-    HEAD /roles/{prior_role_id}/implies/{implied_role_id}
-
-Relationship:
-``http://developer.openstack.org/api-ref-identity-v3.html#getRoleInference``
-
-Response:
-
-::
-
-    Status: 204 No Content
-
-Delete role inference rule
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-::
-
-    DELETE /roles/{prior_role_id}/implies/{implied_role_id}
-
-Relationship:
-``http://developer.openstack.org/api-ref-identity-v3.html#deleteRoleInference``
-
-Response:
-
-::
-
-    Status: 204 No Content
-
 
 
 Grant role to user on domain

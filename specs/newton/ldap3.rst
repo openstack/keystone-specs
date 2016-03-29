@@ -105,7 +105,7 @@ Assignee(s)
 -----------
 
 Primary assignee:
-  blk-u
+  knikolla  <Kristi Nikolla>
 
 Other contributors:
   None

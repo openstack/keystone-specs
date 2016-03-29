@@ -4,6 +4,14 @@
 Previously Implemented Identity Program Specifications
 ======================================================
 
+Mitaka implemented specs:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/mitaka/*
+
 Liberty implemented specs:
 
 .. toctree::

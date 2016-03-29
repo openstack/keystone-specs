@@ -36,13 +36,13 @@ Project Documentation:
    README <readme>
    Specification Template <specs/template>
 
-Mitaka approved specs:
+Newton approved specs:
 
 .. toctree::
    :glob:
    :maxdepth: 1
 
-   specs/mitaka/*
+   specs/newton/*
 
 Keystone client approved specs:
 

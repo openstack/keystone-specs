@@ -55,6 +55,11 @@ for the originally-proposed changes and additional detail.
    no longer ephemeral, we can ignore the "ephemeral" vs "local" user type and
    treat all users equally.
 
+#. **Relax the requirement for mappings to result in group memberships.** Now
+   that we're able to grant authorization to federated users using concrete
+   role assignments, we can drop the requirement for the mapping engine to
+   result in any authorization (via group membership) at all.
+
 Alternatives
 ------------
 

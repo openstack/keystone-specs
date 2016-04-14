@@ -223,6 +223,23 @@ Required attributes:
     <http://docs.python.org/2/library/re.html>`__ search against the remote
     attribute ``type``.
 
+  The ``blacklist`` and ``whitelist`` rules are always used in conjuction with
+  ``type``.
+
+  - ``blacklist`` (list of strings)
+
+    This is mutually exclusive with ``whitelist``.
+
+    The rule works as a filter, removing any specified strings that are
+    listed there from the remote attribute ``type``.
+
+  - ``whitelist`` (list of strings)
+
+    This is mutually exclusive with ``blacklist``.
+
+    The rule works as a filter, allowing only the specified strings in
+    the remote attribute ``type`` to be passed ahead.
+
 Service Providers
 ~~~~~~~~~~~~~~~~~
 

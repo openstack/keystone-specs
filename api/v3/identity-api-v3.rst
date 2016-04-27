@@ -1837,17 +1837,7 @@ authenticating the user, and nothing to do with authorization. Example request:
 
 If a ``project`` is specified by ``name``, then the ``domain`` of the
 ``project`` must also be specified in order to uniquely identify the
-``project``. Since it is possible for a project to have the same name as its
-owning domain, the following rules are applied in determining scope:
-
-- If the project name is truly unique, the token will be scoped to the
-  project.
-- If there is a name clash between a project acting as a domain and a regular
-  project within that domain, the token will be scoped to the regular project.
-- If, in such a clashing situation, the user wants a project scoped token
-  to the project acting as the domain, then it is necessary to either specify
-  scope using the project ``id`` or rename either the project acting as a
-  domain or the regular project first.
+``project``.
 
 Example request:
 

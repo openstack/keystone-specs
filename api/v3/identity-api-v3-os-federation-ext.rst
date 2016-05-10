@@ -1456,7 +1456,7 @@ Example request:
                 "methods": [
                     "token"
                 ],
-                "token: {
+                "token": {
                     "id": "--federated-token-id--"
                 }
             }

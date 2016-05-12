@@ -918,7 +918,27 @@ Optional attributes:
   project are immediately invalidated. Re-enabling a project does not re-enable
   pre-existing tokens.
 
-Example entity:
+Example entity of a project acting as a domain:
+
+::
+
+    {
+        "project": {
+            "domain_id": null,
+            "enabled": true,
+            "id": "1789d1",
+            "links": {
+                "self": "http://identity:35357/v3/projects/1789d1"
+            },
+            "name": "development",
+            "parent_id": null,
+            "is_domain": true
+        }
+    }
+
+A project that is not acting as a domain, but is a top level project, will have
+both the ``parent_id`` and ``domain_id`` referencing the project acting as a
+domain, for example:
 
 ::
 
@@ -931,8 +951,28 @@ Example entity:
                 "self": "http://identity:35357/v3/projects/263fd9"
             },
             "name": "project-x",
-            "parent_id": "183ab2",
-            "is_domain": true
+            "parent_id": "1789d1",
+            "is_domain": false
+        }
+    }
+
+A project that is the child of the above project, will have the same
+``domain_id`` as its parent, and a ``parent_id`` that references its parent,
+for example:
+
+::
+
+    {
+        "project": {
+            "domain_id": "1789d1",
+            "enabled": true,
+            "id": "63abc1",
+            "links": {
+                "self": "http://identity:35357/v3/projects/63abc1"
+            },
+            "name": "project-y",
+            "parent_id": "263fd9",
+            "is_domain": false
         }
     }
 

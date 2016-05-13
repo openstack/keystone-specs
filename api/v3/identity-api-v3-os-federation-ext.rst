@@ -983,6 +983,10 @@ Response:
         }
     }
 
+- Note: a valid URL value is required for both the `auth_url` and `sp_url`
+        fields, registering a service provider with invalid URLs yields a HTTP
+        ``400 Bad Request``.
+
 Listing Service Providers
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1121,6 +1125,10 @@ Response:
             "sp_url": "https://new.example.com:5000/Shibboleth.sso/SAML2/ECP"
         }
     }
+
+- Note: a valid URL value is required for both the `auth_url` and `sp_url`
+        fields, updating a service provider with invalid URLs yields a HTTP
+        ``400 Bad Request``.
 
 
 Listing projects and domains

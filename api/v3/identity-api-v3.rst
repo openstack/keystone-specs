@@ -1623,9 +1623,11 @@ Describe API version
 
     GET /v3/
 
-The fields in the ``version`` object are as follows:
+The attributes in the ``version`` object are as follows:
 
-- ``id``: A string with the current version. For V3, it's "v3.0".
+- ``id``: A string with the current version, with major and minor components.
+  For V3, the major version is "3". For an Identity server running Mitaka, the
+  minor version is "6", so the ``id`` is "3.6".
 
 - ``status``: A string with the current maturity level of the specification.
   This may be one of ``stable``, or ``deprecated``.
@@ -1641,7 +1643,7 @@ Response:
 
     {
         "version": {
-            "id": "v3.0",
+            "id": "v3.6",
             "links": [
                 {
                     "href": "http://identity:35357/v3/",

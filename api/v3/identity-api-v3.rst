@@ -3627,6 +3627,12 @@ Optional query parameters:
 
 - ``enabled`` (key-only, no value expected)
 
+- ``is_domain`` (boolean, defaults to false) *New in version 3.6*
+
+  If this is not specified, then only projects that are not acting as a
+  domain will be included in the collection. If it is specified as true, then
+  only projects acting as a domain are included.
+
 - ``name`` (string)
 
 - ``parent_id`` (string) *New in version 3.4*

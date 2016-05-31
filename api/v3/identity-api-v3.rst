@@ -9,6 +9,11 @@ The Identity API also provides endpoint discovery through a service catalog,
 identity management, project management, and a centralized repository for
 policy engine rule sets.
 
+What's New in Version 3.7
+-------------------------
+
+- Microversioning of the Identity API.
+
 What's New in Version 3.6
 -------------------------
 
@@ -215,6 +220,29 @@ Headers
   For tokenless authorization, these headers are used to convey the domain
   scope information. To scope to a domain, caller must provide either
   ``X-Domain-Id`` or ``X-Domain-Name``.
+
+*New in version 3.7*
+
+- ``X-OpenStack-API-Version: [SERVICE_TYPE] microversion``
+
+  This header is used to convey the microversion with which the client is
+  communicating for OpenStack APIs, specifying a microversion for given
+  service type. Multiple service types can be specified, for example:
+
+  ``X-OpenStack-API-Version: identity 3.7, compute 2.12``
+
+  The Identity server will ignore any components of the header other than that
+  for the `identity`` service type. The server will respond as appropriate for
+  that microversion, provided that it can support the requested version. It
+  will include the same header in the response to indicate this. If the server
+  does not support the requested version an HTTP ``406 Not Acceptable`` is
+  returned. The version specified by the client is of the form "X.Y", where "X"
+  is the major version supported and "Y" is the microversion within that major
+  version. For Newton, this is "3.7". The earliest microversion that can be
+  requested is "3.6". Two special values of the header are supported, namely
+  "latest" and "X.latest", where "X" is the major version. In both cases, the
+  server will indicate the exact microversion being used in the header in the
+  response.
 
 Required Attributes
 ~~~~~~~~~~~~~~~~~~~
@@ -1627,7 +1655,19 @@ The attributes in the ``version`` object are as follows:
 
 - ``id``: A string with the current version, with major and minor components.
   For V3, the major version is "3". For an Identity server running Mitaka, the
-  minor version is "6", so the ``id`` is "3.6".
+  minor version is "6", so the ``id`` is "3.6", and for Newton the ``id``
+  is "3.7". *New in version 3.7* Starting with 3.7, the Identity API will be
+  incremented via microversions, allowing a client to negotiate the required
+  microversion. The supported microversions will be defined by the
+  ``max_version`` and ``min_version`` attributes, while going forward the
+  ``id`` attribute will remain at "3.7" (representing the first version in
+  which microversioning was supported).
+
+- ``max_version``: *New in version 3.7*  A string giving the latest
+  microversion supported by the Identity server.
+
+- ``min_version``: *New in version 3.7* A string giving the oldest
+  microversion supported by the Identity server.
 
 - ``status``: A string with the current maturity level of the specification.
   This may be one of ``stable``, or ``deprecated``.
@@ -1643,13 +1683,15 @@ Response:
 
     {
         "version": {
-            "id": "v3.6",
+            "id": "v3.7",
             "links": [
                 {
                     "href": "http://identity:35357/v3/",
                     "rel": "self"
                 }
             ],
+            "max_version": "3.7",
+            "min_version": "3.6",
             "status": "stable",
             "updated": "2013-03-06T00:00:00Z"
         }

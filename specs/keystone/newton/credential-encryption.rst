@@ -84,9 +84,10 @@ Work Items
 ----------
 
 * Update credentials driver to support encryption.
-* Document Credential driver configuration changes.
-* Write Keystone database migration for existing credentials.  If deployer has
-  not specified encryption keys, migration will not re-encrypt the credentials.
+* Document upgrade process and how to enable encryption.
+* Write keystone-manage command to encrypt existing credentials.  If deployer
+  has not specified encryption keys, migration will not re-encrypt the
+  credentials.
 * Write tests to verify functionality.
 
 Dependencies

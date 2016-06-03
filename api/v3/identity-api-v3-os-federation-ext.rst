@@ -5,10 +5,30 @@ Provide the ability for users to manage Identity Providers (IdPs) and establish
 a set of rules to map federation protocol attributes to Identity API
 attributes. Requires v3.0+ of the Identity API.
 
+What's New in Version 1.3
+-------------------------
+
+Corresponding to Identity API v3.5 release.
+
+- Add Identity Provider specific websso routes.
+
+
+What's New in Version 1.2
+-------------------------
+
+Corresponding to Identity API v3.4 release.
+
+- Add websso routes.
+
+
 What's New in Version 1.1
 -------------------------
 
-These features are considered stable as of September 4th, 2014.
+Corresponding to Identity API v3.3 release. These features are considered
+stable as of September 4th, 2014.
+
+- Deprecate list projects and domains in favour of core functionality available
+  in Identity API v3.3.
 
 - Introduced a mechanism to exchange an Identity Token for a SAML assertion.
 
@@ -30,22 +50,6 @@ Definitions
   overcome such mismatches, a mapping can be done either on the sending side
   (third party identity provider), on the consuming side (Identity API
   service), or both.
-
-What's New in Version 1.1
--------------------------
-
-Corresponding to Identity API v3.3 release. These features are considered
-stable as of September 4th, 2014.
-
-- Deprecate list projects and domains in favour of core functionality available
-  in Identity API v3.3.
-
-What's New in Version 1.3
--------------------------
-
-Corresponding to Identity API v3.5 release.
-
-- Add Identity Provider specific websso routes.
 
 
 API Resources

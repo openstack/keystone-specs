@@ -1471,11 +1471,11 @@ Example request:
                 "token": {
                     "id": "--federated-token-id--"
                 }
-            }
-        },
-        "scope": {
-            "project": {
-                "id": "263fd9"
+            },
+            "scope": {
+                "project": {
+                    "id": "263fd9"
+                }
             }
         }
     }

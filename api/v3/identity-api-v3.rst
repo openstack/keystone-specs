@@ -13,6 +13,7 @@ What's New in Version 3.7
 -------------------------
 
 - Microversioning of the Identity API.
+- Addition of the ``password_expires_at`` field to the user response object.
 
 What's New in Version 3.6
 -------------------------
@@ -765,9 +766,13 @@ Example entity:
             "links": {
                 "self": "http://identity:35357/v3/users/0ca8f6"
             },
-            "name": "Joe"
+            "name": "Joe",
+            "password_expires_at": "2016-11-06T15:32:17.000000"
         }
     }
+
+Note: password_expires_at is new a response only attribute; is not a valid
+request attribute. A null value means that the password never expires.
 
 Groups: ``/v3/groups``
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -1349,7 +1354,8 @@ Example token with ``audit_ids`` attribute (first element is the token's
                     "name": "example.com"
                 }
                 "id": "0ca8f6",
-                "name": "Joe"
+                "name": "Joe",
+                "password_expires_at": "2016-11-06T15:32:17.000000"
             }
         }
     }
@@ -1429,7 +1435,8 @@ Optional attributes:
                     "name": "example.com"
                 }
                 "id": "0ca8f6",
-                "name": "Joe"
+                "name": "Joe",
+                "password_expires_at": "2016-11-06T15:32:17.000000"
             }
         }
     }
@@ -1544,7 +1551,8 @@ Example entity:
                     "name": "example.com"
                 },
                 "id": "0ca8f6",
-                "name": "Joe"
+                "name": "Joe",
+                "password_expires_at": "2016-11-06T15:32:17.000000"
             }
         }
     }
@@ -2095,7 +2103,8 @@ identify the user. Example response:
                     "name": "example.com"
                 },
                 "id": "0ca8f6",
-                "name": "Joe"
+                "name": "Joe",
+                "password_expires_at": "2016-11-06T15:32:17.000000"
             }
         }
     }
@@ -2195,7 +2204,8 @@ Example response:
                     "name": "example.com"
                 },
                 "id": "0ca8f6",
-                "name": "Joe"
+                "name": "Joe",
+                "password_expires_at": "2016-11-06T15:32:17.000000"
             }
         }
     }
@@ -2264,7 +2274,8 @@ the user's roles applicable to the ``domain``. Example response:
                     "name": "example.com"
                 },
                 "id": "0ca8f6",
-                "name": "Joe"
+                "name": "Joe",
+                "password_expires_at": "2016-11-06T15:32:17.000000"
             }
         }
     }
@@ -4217,7 +4228,8 @@ Response:
                 "links": {
                     "self": "https://identity:35357/v3/users/0ca8f6"
                 },
-                "name": "admin"
+                "name": "admin",
+                "password_expires_at": "2016-11-06T15:32:17.000000"
             },
             {
                 "default_project_id": "263fd9",
@@ -4228,7 +4240,8 @@ Response:
                 "links": {
                     "self": "https://identity:35357/v3/users/9fe1d3"
                 },
-                "name": "jsmith"
+                "name": "jsmith",
+                "password_expires_at": null
             }
         ],
         "links": {
@@ -4264,7 +4277,8 @@ Response:
             "links": {
                 "self": "https://identity:35357/v3/users/9fe1d3"
             },
-            "name": "jsmith"
+            "name": "jsmith",
+            "password_expires_at": null
         }
     }
 
@@ -4409,7 +4423,8 @@ Response:
             "links": {
                 "self": "https://identity:35357/v3/users/ff4e51"
             },
-            "name": "jdoe"
+            "name": "jdoe",
+            "password_expires_at": "2016-11-06T15:32:17.000000"
         }
     }
 
@@ -4445,7 +4460,8 @@ Response:
             "links": {
                 "self": "https://identity:35357/v3/users/ff4e51"
             },
-            "name": "jamesdoe"
+            "name": "jamesdoe",
+            "password_expires_at": "2016-11-06T15:32:17.000000"
         }
     }
 
@@ -4653,7 +4669,8 @@ Response:
                 "links": {
                     "self": "http://identity:35357/v3/users/--user-id--"
                 },
-                "name": "admin"
+                "name": "admin",
+                "password_expires_at": "2016-11-06T15:32:17.000000"
             },
             {
                 "default_project_id": "--default-project-id--",
@@ -4664,7 +4681,8 @@ Response:
                 "links": {
                     "self": "http://identity:35357/v3/users/--user-id--"
                 },
-                "name": "someone"
+                "name": "someone",
+                "password_expires_at": "2016-11-06T15:32:17.000000"
             }
         ],
         "links": {
@@ -6436,7 +6454,8 @@ Response:
                         "name": "--domain-name--"
                     },
                     "id": "--user-id--",
-                    "name": "--user-name--"
+                    "name": "--user-name--",
+                    "password_expires_at": "--password-expires-at--"
                 }
             },
             {
@@ -6464,7 +6483,8 @@ Response:
                         "name": "--domain-name--"
                     },
                     "id": "--user-id--",
-                    "name": "--user-name--"
+                    "name": "--user-name--",
+                    "password_expires_at": "--password-expires-at--"
                 }
             }
         ],

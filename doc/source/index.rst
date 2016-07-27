@@ -1,29 +1,5 @@
 .. identity-specs documentation master file
 
-==========================
-Identity API Specification
-==========================
-
-v3 API
-======
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
-   api/v3/*
-
-
-v2.0 API
-========
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
-   api/v2.0/*
-
-
 ================================
 Identity Program Specifications
 ================================

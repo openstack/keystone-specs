@@ -4,16 +4,14 @@
 
  http://creativecommons.org/licenses/by/3.0/legalcode
 
-==========================================
-Migration completion after rolling upgrade
-==========================================
+=======================================
+Migration commands for rolling upgrades
+=======================================
 
 `bp manage-migration <https://blueprints.launchpad.net/keystone/+spec/manage-migration>`_
 
-
-Provide a "migration complete" step in keystone-manage to allow for any
-database tidy-ups.
-
+Provide a rolling upgrade steps in ``keystone-manage`` to allow for zero
+downtime database upgrades.
 
 Problem Description
 ===================
@@ -27,188 +25,156 @@ claim any such support, but we have decided to add this.
 First, it is important to state that there are actually two intertwined
 features when people talk about rolling upgrades;
 
-a) The ability, in a multi-node service, to roll upgrades to nodes one at a
-time while the overall services remains in operation - so by definition
-allowing a mix of old and new nodes to run together at the same time using
-the same database.
+1. The ability, in a multi-node service, to roll upgrades to nodes one at a
+   time while the overall services remains in operation - so by definition
+   allowing a mix of old and new nodes to run together at the same time using
+   the same database.
 
-b) Provide zero down-time for the service, including no temporary lockout of
-users during large database migrations while carrying out a).
+2. Provide zero downtime for the service, including no temporary lockout of
+   users during large database migrations while carrying out (1).
 
-In Newton, we plan to support a), but not b), although will attempt to
-minimize any temporary lockout (e.g. when database writes might be blocked
-while data migration is happening). We initiated support for rolling upgrades
-by only allowing additive changes to the database (this is protected via
-tests).
+In Newton, we plan to support both (1) and (2). We have already initiated
+support for rolling upgrades by only allowing additive changes to the database
+(this is protected via tests).
 
 To support just the rolling upgrade part, keystone would allow (given we have
 only permitted additive database changes) the following sequence:
 
-1) Take a keystone out of service and replace keystone with the new version,
-but don't run it yet. Execute the keystone-manage command to sync the database.
-Wait and ensure all older nodes run fine. Only when you are happy with the
-situation, start the new keystone and bring it online.
+1. Take a keystone out of service and replace keystone with the new version,
+   but don't run it yet. Execute the keystone-manage commands to upgrade the
+   database. Wait and ensure all older nodes run fine. Only when you are happy
+   with the situation, start processes running the new release and bring it
+   online, one node at a time.
 
-2) Upgrade the other nodes one at a time, by taking them out of whatever proxy
-configuration is being rnn, upgrading keystone and bringing them back on line.
-No database changes will take place during these steps since this was already
-done in 1).
+2. Upgrade the other nodes one at a time, by taking them out of whatever proxy
+   configuration is being run, upgrading keystone and bringing them back on
+   line. No database changes will take place during these steps since this was
+   already done in (1).
 
-In order to support such rolling upgrades, some migration scripts
-cannot leave the database in the state they would ideally like. An example
-of this is where a new attribute is added which has a default which needs
-to be written manually by code (rather than a server default). If, during a
-rolling upgrade, new entities are created via un-migrated nodes, such a new
-attribute will not get the default. See:
-<https://bugs.launchpad.net/keystone/+bug/1596500>`_
+In order to support such rolling upgrades, some migration scripts cannot leave
+the database in the state they would ideally like. An example of this is where
+a new attribute is added which has a default which needs to be written manually
+by code (rather than a server default). If, during a rolling upgrade, new
+entities are created via un-migrated nodes, such a new attribute will not get
+the default. This causes a race condition between the process trying to clean
+up such data and the processes creating it, and requires that the new release
+of keystone understand both data schemas in order to function properly. See:
+`Bug 1496500 <https://bugs.launchpad.net/keystone/+bug/1596500>`_.
 
-Support for zero down-time, would require keystone to support the gradual
-on-the-fly migration of data as they are accessed, with support for a final
-manual "migrate anything left" action. Such on-the-fly support is usually
-implemented in the database object layer, which has support for looking in
-both the old and new locations for data. It is anticipated that keystone will
-eventually require this level of support.
+Support for zero downtime upgrades without service interruption would require
+keystone to support the gradual on-the-fly migration of data as they are
+modified, with support for a final manual "migrate anything left" action. Such
+on-the-fly support is implemented in the database object layer by Nova and
+Neutron, which have support for looking in both the old and new locations for
+data.
+
+To solve that problem without writing and maintaining the necessary Python
+code, we can instead rely on database triggers. Database triggers would give us
+the ability to continue coding each release against a single schema, regardless
+of the actual schema underlying the application (which must at least be a
+superset of the schema the application knows about). More specifically, when
+the previous release writes to the database schema it knows about, database
+triggers would also update the new schema. When the next release writes to the
+database schema it knows about, database triggers would also update the old
+schema.
+
+This approach allows us to eliminate:
+
+1. The need to have the next release understand the previous release's schema
+   (which would put a complex maintenance burden on developers, substantially
+   raises the barrier to entry for new developers, and presents a risk of
+   relatively subtle bugs).
+
+2. The need for any clean up operations beyond a one-time data migration.
+
+3. The need for the application to discover the state of the schema at runtime
+   (a requirement which presents numerous possible race conditions).
 
 Proposed Change
 ===============
 
-It is proposed that we add to keystone-manage a new capability that just solves
-the existing rolling upgrade problem, and yet fits within the context of the
-full rolling upgrades and zero down-time cross project initiative. This
-"migration complete" command, which an operator will run once all nodes have
-had their code upgrade to the new version, and will tidy up the database
-(e.g. write defaults to any new attributes that need them).
+It is proposed that we add new capabilities to ``keystone-manage`` which solve
+the existing rolling upgrade problem and fit within the context of the full
+rolling upgrades and zero downtime cross-project initiative.
 
 There seems little or no commonality of the actual commands used by other
-services' manage utility for the full zero down-time support. In order to
-see decide how our proposed initial support fits within this full support,
-here are the conceptual steps that will eventually be needed to upgrade
-a multi-node configuration running code release X to X+1, where X+1 moves
-data from one column to a new column:
+services' ``*-manage`` utility for the full zero downtime support. In order to
+see how our proposed initial support fits within this full support, here are
+the conceptual steps that will eventually be needed to upgrade a multi-node
+configuration running code release X to X+1, where, for example, X+1 moves data
+from one column to a new column:
 
-1) One node has its code upgraded to X+1 the
-   *<service>-manage upgrade --expand* command is run which creates new
-   database structures, but does not migrate any data. This command also sets
-   the database status flag "migration_phase" to "Mixed X and X+1 nodes"
-2) This node is restarted and we are now running a mix of X and X+1. X+1 code
-   knows that if we are in a mix of X and X+1 nodes, then it must still read
-   and write data to the old column location. If there are also new columns
-   that have been introduced for new functionality (that X nodes know nothing
-   about), then X+1 can write to these new columns.
-3) The other nodes have their code updated one at a time
-4) Once all the nodes are upgraded, set the "migration_phase" status to
-   "X+1 nodes", using the *<service>-manage upgrade --rolling-upgrade-complete*
-   command. Each node is then re-cycled one at a time. All code is now X+1.
-   In this phase X+1 code will write to both old and new columns, and when
-   reading will first look in the new column, then the old column, ensuring
-   that X+1 nodes that have not been restarted yet still see data in the old
-   locations.
-5) Once all nodes have been restarted (so are aware of the "upgrade complete"
-   status), then another status update is made
-   (*<service>-manage upgrade --rolling-restart-complete*), at which point
-   any node that sees this new status can now start migrating data on-the-fly.
-   This migration means write to the new column only (although in an update
-   the data may come from the old column). For read, you simply migrate the
-   data to the new column before returning the entity.
-6) At some point in the future (and before an upgrade to X+2), the
-   *<service>-manage upgrade --force-migrate-complete* command is executed
-   (perhaps with options for batching) that migrates any remaining data. (Note
-   the actual command name for this phase varies wildly across services, the
-   name given here is my own suggestion). On successful migration of all data,
-   the status is automatically updated to mark that X+1 nodes no longer need to
-   read or write to old locations. Restarting the nodes will bring this into
-   effect (this is a performance optimzation, and no data integrity loss would
-   occur if this was never carried out).
-7) The process above is repeated for X+2. Once all X+1 nodes have been upgraded
-   (i.e. the "migration_phase" will be "X+2 nodes") then the
-   *<service>-manage upgrade --contract* command can be executed that
-   will remove any columns/tables that wanted to be removed from X.
+1. One node has its code upgraded to X+1. The ``<service>-manage db_sync
+   --expand`` command is run which creates new database structures, but does
+   not migrate any data itself. It does, however, create database triggers to
+   facilitate live migrating data between the two schema versions.
 
-For keystone in this release, it is proposed that we support all the
-above commands, with slight variation given that we are not yet supporting
-on-the-fly migration:
+3. On the X+1 node, run ``<service>-manage db_sync --migrate`` to "forcefully"
+   migrate all data from the old schema to the new schema. Database triggers
+   will continue to maintain consistency between the old schema and new schema
+   while nodes running the X release continue to write to the old schema.
 
-*keystone-manage db_sync --expand* - this will, for Newton, both expand the
-database and do the migration. We would need to document that phase might take
-some time for large databases. It will also set the database status flag to
-indicate a rolling upgrade is underway. This migration status flag will
-be read by keystone on startup. For the Newton release, there is no difference
-between upgrading from Liberty or Mitaka to Newton.
+4. Upgrade and restart all remaining nodes to the X+1 release one at a time.
+   There will be a mix of releases writing to the database during this process,
+   but database triggers will keep them in sync.
 
-*keystone-manage db_sync --rolling-upgrade-complete* - this will mark the
-code upgrade complete in a database status flag.
+5. Once all the nodes are upgraded and writing to the new schema, remove the
+   old schema and triggers using ``<service>-manage db_sync --contract``.
 
-*keystone-manage db_sync --rolling-restart-complete* - this technically isn't
-needed without on-the-fly migrations, but is included so that we get operators
-used to the sequence.
+For keystone in this release, it is proposed that we support all the above
+commands:
 
-*keystone-manage db_sync --force-migrate-complete* - this should be run once
-all the nodes have been upgrade to the new release. Note that, for consistency
-across installations, we want this to be run even if the upgrade was not
-executed in a rolling fashion (i.e. even if this is a single node
-configuration). Although not doing so would not cause any errors under normal
-circumstances, it would be better to have all deployed databases at the same
-migration level.
+- ``keystone-manage db_sync --expand``: Expands the database schema by
+  performing purely "additive" operations such as creating new columns,
+  indexes, tables, and triggers. This can be run while all nodes are still on
+  the X release.
 
-*keystone-manage db_sync --contract*. Typically this would need to wait until
-all nodes are at X+2 (so Ocata), however for the current changes in Newton
-(which consists of making one column non-nullable) it is OK to be run once
-*db_sync --force-complete* has been run - and so we will also allow this.
+  The new schema will begin to be populated by triggers while the X release
+  continues to write to the old schema.
 
-When each command is run, it will check the migration status flag in the
-database to ensure the command is being run at the appropriate point in the
-migration sequence, and if not, will issue an error.
+- ``keystone-manage db_sync --migrate``: Will perform on-the-fly data
+  migrations from old schema to new schema, while all nodes serving requests
+  are still running the X release.
 
-The *db_sync* command (without options) will still be supported, first to
-ensure that existing tooling and upgrade processes (which do not try and
-execute a rolling upgrade) will continue to operate, and second to provide
-a "force a database upgrade to completion" in case a deployer gets into
-problems with a rolling upgrade. Once a *db_sync* command (without options) is
-executed, however, nodes running old code are no longer supported. Running
-db_sync in this fashion will execute all the phases (including the contract
-phase, if it is safe to do so), and set the database migration status. This
-ensures subsequent rolling update attempts at the next release are possible.
+- ``keystone-manage db_sync --contract``: Removes any old schema and triggers
+  from the database once all nodes are running X+1.
 
-One final new db_sync command will be provided
-(*keystone-manage db_sync --status*), which will print out where we are in
-the migration sequence (by reading the database status flag) and tell the
-operator what the next step is.
+The ``keystone-manage db_sync`` command (without options) will still be
+supported, first to ensure that existing tooling and upgrade processes (which
+do not try to execute a rolling upgrade) will continue to operate, and second
+to provide a "force a database upgrade to completion" in case a deployer gets
+into problems with a rolling upgrade. Once a ``keystone-manage db_sync``
+command (without options) is executed, however, nodes running old code are no
+longer supported. Running ``keystone-manage db_sync`` in this fashion will
+execute all the phases (including the contract phase, if it is safe to do so),
+and set the database migration status. This ensures subsequent rolling update
+attempts at the next release are possible.
 
-In terms of implementation, the *db_sync --expand* and *db_sync --contract*
-phases will be driven by sqlalchemy migration repos (the *db_sync --expand*
-one is, of course, the existing migrate repo).  The *db_sync --force-complete*
-phase is, in general, not suitable for a migrate repo since you want to allow
-it to be run multiple times to batch the migration updates.
+In terms of implementation, the ``keystone-manage db_sync --expand``,
+``keystone-manage db_sync --migrate`` and ``keystone-manage db_sync
+--contract`` phases will be driven by ``sqlalchemy-migrate`` repositories.
 
 The proposed approach is designed to support both deployers who are upgrading
-at major release cycles, as well as those more closely tracking master.
+at major release cycles as well as those more closely tracking master.
 
 One other aspect is that, in conjunction with services, we will not support
-rolling upgrades across 2 releases, i.e. once on Newton, we will not support
-a rolling upgrade direct to the P release, you will need to go to O first. We
-will, however, continue to support upgrading across 2 releases for the non
-rolling upgrade approach (i.e. db_syns with no options).
+rolling upgrades across 2 releases. For example, once you are running Newton,
+we will not support a rolling upgrade direct to the P release, you will need to
+go to Ocata first.
 
 Alternatives
 ------------
 
-We could just use "db_sync" as the expand step, but since this would still want
-to print a reminder to run migrate-force-complete, this would mean operators
-would not have a set of commands that did not print a warning (which doesn't
-seem a good idea for production).
+We could just use ``keystone-manage db_sync`` as the ``--expand`` step, but
+since this would still want to print a reminder to run additional commands,
+this would mean operators would not have a set of commands that did not print a
+warning (which doesn't seem a good idea for production).
 
-We could just use totally different keystone-manage commands, and not try
-and make this fit the general trend for now (given that we are not providing
-zero down-time support), e.g.
+We could just use totally different ``keystone-manage`` commands, and not try
+to make this fit the general trend for now::
 
-*keystone-manage db_sync --initial-migration*
-*keystone-manage db_sync --complete-migration*
-
-We could use config value instead of a "migration_phase" database flag.
-However, this would require pushing a new version of the config settings to
-all nodes every time we wanted to change the value (as opposed to just bouncing
-every node with a database flag), which seems to add additional complications
-to the process.
+    keystone-manage db_sync --initial-migration
+    keystone-manage db_sync --complete-migration
 
 Security Impact
 ---------------
@@ -243,7 +209,8 @@ None
 Developer Impact
 ----------------
 
-Deployers would need to be aware of the new keystone-manage commands.
+Developers would need to be aware of the new database migration repositories,
+and the requirements for each of them.
 
 Implementation
 ==============
@@ -254,8 +221,26 @@ Assignee(s)
 Primary assignee:
   Henry Nash (henry-nash)
 
+Additional assignees:
+- Dolph Mathews (dolphm)
+- Dave Chen (davechen)
+
 Work Items
 ----------
+
+1. Create three new database migration repositories (expand, migrate,
+   contract).
+
+2. Update the base ``keystone-manage db_sync`` (without options) to run any
+   outstanding migrations from the legacy migration repository, all the
+   ``--expand`` migrations, all the ``--migrate`` migrations, and then all the
+   ``--contract`` migrations.
+
+3. Implement the three new ``keystone-manage db_sync`` options, ``--expand``,
+   ``--migrate``, and ``--contract`` to run their corresponding migration
+   repositories.
+
+4. Provide documentation to operators about the intended workflow.
 
 Dependencies
 ============

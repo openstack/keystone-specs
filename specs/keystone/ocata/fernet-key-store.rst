@@ -80,13 +80,17 @@ Assignee(s)
 -----------
 
 Primary assignee:
-  <None>
+  mnikolaenko
 
 Other contributors:
-  <None>
+  breton (bbobrov)
 
 Work Items
 ----------
+
+* Implement manager layer, define interfaces
+* Implement ``files`` backend that would preserve current behavior
+* Decide on and implement another backend, discussed in another spec
 
 Dependencies
 ============

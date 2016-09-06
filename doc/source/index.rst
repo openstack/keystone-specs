@@ -15,13 +15,14 @@ Project Documentation:
 keystone
 ========
 
-Newton approved specs:
+Ocata approved specs:
 
 .. toctree::
    :glob:
    :maxdepth: 1
 
-   specs/keystone/newton/*
+   specs/keystone/ocata/*
+
 
 Backlog:
 
@@ -98,6 +99,14 @@ Implemented Identity Program Specifications
 
 keystone
 ========
+
+Newton implemented specs:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/keystone/newton/*
 
 Mitaka implemented specs:
 

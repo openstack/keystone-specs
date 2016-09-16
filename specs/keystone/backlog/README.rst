@@ -1,6 +1,6 @@
-=======
-Backlog
-=======
+====================
+Backlog Instructions
+====================
 
 
 This directory is for specifications that have been approved but not yet

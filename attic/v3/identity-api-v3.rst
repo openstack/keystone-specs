@@ -13,6 +13,7 @@ What's New in Version 3.7
 -------------------------
 
 - Addition of the ``password_expires_at`` field to the user response object.
+- Introduce a flag to bypass expiration and revocation checking.
 
 What's New in Version 3.6
 -------------------------
@@ -2038,6 +2039,22 @@ Relationship:
 the authentication request, then the authentication response will not contain
 the service catalog. The service catalog will otherwise be included in the
 response by default.
+
+
+Ignore Expiry and Revocation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    GET /v3/auth/tokens?allow_expired=1
+
+Relationship:
+``http://docs.openstack.org/api/openstack-identity/3/rel/auth_tokens``
+
+*New in version 3.7* If the caller specifies a true ``allow_expired`` query
+parameter in the authentication request, then the authentication will return
+expired token data within a server specified window.
+
 
 Authentication responses
 ''''''''''''''''''''''''

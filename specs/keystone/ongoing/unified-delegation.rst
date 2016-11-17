@@ -204,7 +204,7 @@ but we're mostly trying to understand the timeline for implementation.
 Dependencies
 ============
 
-* This design is not currently dependant on other specifications.
+* This design is not currently dependent on other specifications.
 
 * This blueprint and the implied roles blueprint are related.  Future
   work will build on the two specifications together.

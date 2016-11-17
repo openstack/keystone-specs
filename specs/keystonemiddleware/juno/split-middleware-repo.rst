@@ -60,7 +60,7 @@ The old middleware code would remain deprecated and available for
 at least two full OpenStack release cycles. Options for removal
 will be considered during the L and later development cycles.
 
-The new middleware package will be released independantly of
+The new middleware package will be released independently of
 the OpenStack named releases (similar to the python-keystoneclient
 library).
 

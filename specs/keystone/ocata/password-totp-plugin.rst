@@ -130,7 +130,7 @@ Work Items
 Dependencies
 ============
 
-Not entirely dependant on, but a useful related change is:
+Not entirely dependent on, but a useful related change is:
 - Credential Encryption
 
 Documentation Impact

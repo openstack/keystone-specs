@@ -3368,7 +3368,7 @@ Domain configuration management
 
 Keystone optionally supports the ability to manage domain specific
 configuration options via the API, allowing configuration options to be
-overriden for a given domain. In addition, *New in version 3.6 (experimental)*,
+overridden for a given domain. In addition, *New in version 3.6 (experimental)*,
 the default configuration options can also be retrieved.
 
 Domain specific configuration options are structured within their group
@@ -3451,7 +3451,7 @@ Response:
     }
 
 A similar form of URL can be used to retrieve the values of those options that
-have been overriden for a domain by the API.
+have been overridden for a domain by the API.
 
 ::
 

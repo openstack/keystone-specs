@@ -9,7 +9,6 @@ Project Documentation:
 .. toctree::
    :maxdepth: 1
 
-   README <readme>
    Specification Template <specs/template>
 
 keystone

@@ -127,7 +127,8 @@ of allowing for a rule-set to manage which auth-plugins are required.
 Security Impact
 ---------------
 
-TBD
+This adds in optional security features, allowing different authentication
+security levels on a per user basis.
 
 Notifications Impact
 --------------------

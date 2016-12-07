@@ -29,7 +29,7 @@ Proposed Change
 ===============
 
 Keystone's token providers should be loaded with stevedore and have an
-extemely stable API. This API should be very stable (enforced as a stable
+extremely stable API. This API should be very stable (enforced as a stable
 contract in the same manner we enforce the REST API contract).
 
 The new interface should be:

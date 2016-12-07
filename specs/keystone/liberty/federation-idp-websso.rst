@@ -65,7 +65,7 @@ validate against either of them and then we use the remote-ids parameter of a
 keystone IdP to ensure that the URL that issued the assertion is one of those
 already known and we discover mappings that way.
 
-With this change we would have seperate URLs for instigating websso against
+With this change we would have separate URLs for instigating websso against
 Google or Facebook and the Apache module is configured to only allow assertions
 from the configure remote IdP.
 

@@ -103,7 +103,7 @@ Performance Impact
 None - global target enforcement will be turned off by default. If enabled then
 the service catalog will be processed to establish compliance with the
 configuration.  No additional calls to keystone will be necessary so
-Impact on performance will be neglible.
+Impact on performance will be negligible.
 
 Other Deployer Impact
 ---------------------

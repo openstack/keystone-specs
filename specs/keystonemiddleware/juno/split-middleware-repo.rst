@@ -64,7 +64,7 @@ The new middleware package will be released independently of
 the OpenStack named releases (similar to the python-keystoneclient
 library).
 
-The inital release of the middleware package will be version 1.0.0
+The initial release of the middleware package will be version 1.0.0
 (using semver for versioning scheme).
 
 Alternatives

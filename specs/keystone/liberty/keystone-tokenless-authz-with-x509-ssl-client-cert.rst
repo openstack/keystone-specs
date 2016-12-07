@@ -164,7 +164,7 @@ balancer must be configured to forward the SSL client certificate.
 In order for Apache mod_ssl to convey the SSL client certificate information in
 the request environment, the `SSLOptions` directive must contains `+StdEnvVars`
 and the `SSLUserName` directive must be set to a valid SSL requirement
-enviroment attribute.
+environment attribute.
 
 For example::
 

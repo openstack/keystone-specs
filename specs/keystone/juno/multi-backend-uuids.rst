@@ -381,7 +381,7 @@ The set of items required are:
 
 - Modify ``keystone-manage`` to provide options for purging the mappings.
 
-- Ammend the existing ldap backend unit testing to cover the cases of
+- Amend the existing ldap backend unit testing to cover the cases of
   backward compatible and non backward compatible IDs as well as to provide
   better coverage for the multi-backend scenarios.
 

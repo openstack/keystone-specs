@@ -135,7 +135,7 @@ Performance Impact
 ------------------
 
 Interservice communication will now include a service token which is validated
-seperately. At this time keystone does not support doing multiple token
+separately. At this time keystone does not support doing multiple token
 validations at once so this is another validation request for each request.
 This is a cacheable operation.
 

@@ -1372,7 +1372,7 @@ Optional attributes:
 - ``is_admin_project`` (boolean) *New in version 3.6*
 
   A deployment can and should indicate that a specific project has elevated
-  priviledges.  Tokens scoped to this project, called the `admin` project can
+  privileges.  Tokens scoped to this project, called the `admin` project can
   then be identified as being associated with this project.  For deployments
   using this mechanism, policy rules can then check the value of this field
   to allow the bearer of such a token access to priviledged operations, for
@@ -6234,7 +6234,7 @@ a tree of projects:
 ``GET /role_assignments?scope.project.id={project_id}&include_subtree=true``
 would list all role assignments involving the specified project and all
 sub-projects. ``include_subtree=true`` can only be specified in conjunction
-with ``scope.project.id``, specifiying it without this will result in an
+with ``scope.project.id``, specifying it without this will result in an
 HTTP ``400 Bad Request`` being returned.
 
 Each role assignment entity in the collection contains a link to the assignment

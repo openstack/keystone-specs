@@ -227,7 +227,7 @@ Required attributes:
     <http://docs.python.org/2/library/re.html>`__ search against the remote
     attribute ``type``.
 
-  The ``blacklist`` and ``whitelist`` rules are always used in conjuction with
+  The ``blacklist`` and ``whitelist`` rules are always used in conjunction with
   ``type``.
 
   - ``blacklist`` (list of strings)

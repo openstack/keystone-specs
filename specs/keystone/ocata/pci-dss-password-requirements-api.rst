@@ -13,7 +13,7 @@ PCI-DSS Password Requirements API
 
 Part of the PCI-DSS work included enforcing password strength requirements.
 These requirements are kept within keystone, but they should be discoverable so
-other services can advertize and leverage them.
+other services can advertise and leverage them.
 
 
 Problem Description

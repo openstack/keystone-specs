@@ -106,7 +106,6 @@ result of this spec:
     PUT /OS-FEDERATION/mappings/{mapping_id}
     {
         "mapping": {
-            "domain_id": "ab4e2e",
             "rules": [
                 {
                     "remote": [
@@ -166,7 +165,10 @@ The above example is constructed with the following considerations in mind:
 - The mapping explicitly references a ``domain_id``, which applies to all
   objects in the mapping schema (users, projects, and possibly even roles).
   This would allow a domain administrator to control a mapping, without
-  requiring intervention from the cloud operator.
+  requiring intervention from the cloud operator. It is implied that the
+  ``domain_id`` comes from the Identity Provider, which should require a
+  one-to-one relationship with a domain. There is work underway in the Ocata
+  release to map existing Identity Providers to a domain.
 
 - The mapping refers to multiple projects, each with a unique set of role
   references. This implies that the user has those role assignments on each of

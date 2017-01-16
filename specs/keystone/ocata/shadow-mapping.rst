@@ -57,8 +57,7 @@ roles, with local role assignments, which may or may not exist at the time of
 authentication.
 
 For example, if a project name is referenced in the mapping, it may need to be
-automatically created prior to assigning the user a "member" role on it (where
-the member role may or may not exist as well).
+automatically created prior to assigning the user a "member" role on it.
 
 The following is an example of what the mapping engine supports today:
 
@@ -166,23 +165,30 @@ The above example is constructed with the following considerations in mind:
   objects in the mapping schema (users, projects, and possibly even roles).
   This would allow a domain administrator to control a mapping, without
   requiring intervention from the cloud operator. It is implied that the
-  ``domain_id`` comes from the Identity Provider, which should require a
-  one-to-one relationship with a domain. There is work underway in the Ocata
-  release to map existing Identity Providers to a domain.
+  ``domain_id`` comes from the Identity Provider, which is a one-to-one
+  relationship with a domain. There is work underway in the Ocata release to
+  map existing Identity Providers to a domain.
 
 - The mapping refers to multiple projects, each with a unique set of role
   references. This implies that the user has those role assignments on each of
   the respective projects.
 
 - Each project name (and possibly ID) may be determined dynamically based on
-  remote assertions. If any of those projects or roles do not exist, they must
-  be created by Keystone automatically. Since the dynamic values come from the
+  remote assertions. If any of those projects do not exist, they must be
+  created by Keystone automatically. Since the dynamic values come from the
   assertion, it is safe to assume they only need to be created once.
 
 - The user's ``default_project_id`` attribute could be automatically set to the
   first project that appears in the list. This could also be something that is
   added at a later time. Initially it wouldn't be a requirement for a user's
   ``default_project_id`` to be set.
+
+- The roles within the projects should be expected to already exist. The
+  current workflow for adding new roles to a deployment involves not only
+  creating them in keystone, but also might require changes to various policy
+  files across the deployment (and other services). Creating roles on-the-fly
+  during a federated authentication could lead unusable projects if other
+  services don't have the required policy in place.
 
 So, in this example, let's say that the remote ``UserName`` attribute is simply
 "Joe". According to the mapping, if Joe is neither a guest nor contractor, he

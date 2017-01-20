@@ -636,7 +636,7 @@ Documentation Impact
 ====================
 
   *  new APIs
-  *  initialization and managment of the role_api values
+  *  initialization and management of the role_api values
   *  upgrade procedures
   *  creating trusts, oauth, and role assignments based on least
      privilege

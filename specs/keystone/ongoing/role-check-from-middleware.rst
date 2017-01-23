@@ -260,7 +260,7 @@ of verbs.
 
 api_role
 ~~~~~~~~
-API_ID: Indexable String foriegn key to the api table
+API_ID: Indexable String foreign key to the api table
 role_id: Indexable String foreign key to the role table
 
 The service, pattern, and verb fields may be null. Catch all rules

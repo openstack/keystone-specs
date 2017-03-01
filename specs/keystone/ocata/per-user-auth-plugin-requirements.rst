@@ -41,11 +41,13 @@ The rules will be represented in JSON:
 
 .. code-block:: json
 
-  "required_auth_plugins": [
-    ["password", "totp"],
-    ["x509"],
-    ["password", "one-time-backup"]
-  ]
+   {
+       "required_auth_plugins": [
+           ["password", "totp"],
+           ["x509"],
+           ["password", "one-time-backup"]
+       ]
+   }
 
 The value of these required plugins will be added as a new table referenced
 in the user object via ORM relationships. The database schema will utilize

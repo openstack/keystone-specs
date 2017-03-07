@@ -17,9 +17,12 @@ Move from SQLALChemy-migrate to Alembic as the tool for maintaining SQL Repos.
 Problem Description
 ===================
 
-OpenStack is moving from sqlalchemy-migrate to Alembic as the tool for
-maintaining SQL migrations. Keystone needs to follow suit, or we will be using
-an unsupported tool.
+
+The OpenStack community is gradually moving away from using sqlalchemy-migrate
+in favor of Alembic. In order to allow various projects within the community
+time to make the switch, OpenStack is maintaining a fork of `sqlalchemy-migrate
+<https://github.com/openstack/sqlalchemy-migrate>`_.  Keystone needs to follow
+suit, or we will be using an unsupported tool.
 
 Proposed Change
 ===============
@@ -73,11 +76,10 @@ Assignee(s)
 
 
 Primary assignee:
-
-  Boris Bobrov (breton)
+  None
 
 Other contributors:
-  ayoung
+  None
 
 Work Items
 ----------

@@ -26,9 +26,14 @@ import subprocess
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
+              'sphinxcontrib.blockdiag',
               'oslosphinx',
               'yasfb',
              ]
+
+blockdiag_html_image_format = 'SVG'
+
+blockdiag_fontpath = 'DejaVuSans.ttf'
 
 # Feed configuration for yasfb
 feed_base_url = 'http://specs.openstack.org/openstack/keystone-specs'

@@ -4,6 +4,7 @@
 oslosphinx>=2.2.0.0a2
 pbr>=2.0.0
 sphinx!=1.6.1,>=1.5.1
+sphinxcontrib-blockdiag
 testrepository>=0.0.18
 testtools>=0.9.34
 yasfb>=0.5.1

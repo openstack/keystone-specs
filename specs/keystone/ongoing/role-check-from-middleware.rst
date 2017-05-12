@@ -182,28 +182,24 @@ An example of a subset of the response data is shown below:
 .. code-block:: json
 
    {
-      'service': 'compute',
-      'api_roles': [
-         {
-            verbs=["POST"],
-            pattern="/servers/{server_id}/action",
-            roles=["Member", "admin"],
-         },
-         {
-             verbs=["POST"],
-             pattern="/os-cells",
-             roles=["admin"],
-         },
-         {
-             verbs=["GET", "PUT"],
-             pattern="/v2.{subversion}/{tenant_id}/servers/{server_id}"
-             roles=["Member", "admin"],
-         }
-      ],
-      'default': {
-          roles=["Member", "admin"],
-      },
-  }
+       "service": "compute",
+       "api_roles": [{
+           "verbs": ["POST"],
+           "pattern": "/servers/{server_id}/action",
+           "roles": ["Member", "admin"]
+       }, {
+           "verbs": ["POST"],
+           "pattern": "/os-cells",
+           "roles": ["admin"]
+       }, {
+           "verbs": ["GET", "PUT"],
+           "pattern": "/v2.{subversion}/{tenant_id}/servers/{server_id}",
+           "roles": ["Member", "admin"]
+       }],
+       "default": {
+           "roles": ["Member", "admin"]
+       }
+   }
 
 
 Role check
@@ -271,10 +267,15 @@ Thus the default above maps to a row in the table with
 
 .. code-block:: json
 
-    { id: "bcd321", "service": "image", "pattern": None, "verb": None}
+   {
+       "id": "bcd321",
+       "service": "image",
+       "pattern": "None",
+       "verb": "None"
+   }
 
-    As well as an api_role entity with an api_id of `bcd321` and a
-    role_id that corresponds to the "Member" role.
+As well as an api_role entity with an api_id of `bcd321` and a
+role_id that corresponds to the "Member" role.
 
 If there are no `api_role` entities definied for an `api` entity,
 the result will have a special value of `None` for the roles will
@@ -285,8 +286,18 @@ procede. This example shows how to allow version discovery to procede.
 
 .. code-block:: json
 
-    { "service": "identity", "pattern": "/v", "verb": "GET" role: None}
-    { "service": "identity", "pattern": "/v3", "verb": "GET" role: None}
+    [{
+        "service": "identity",
+        "pattern": "/v",
+        "verb": "GET",
+        "role": "None"
+    },
+    {
+        "service": "identity",
+        "pattern": "/v3",
+        "verb": "GET",
+        "role": "None"
+    }]
 
 
 A global catch all rule can be defined for requests for services that
@@ -294,10 +305,15 @@ have not been yet defined.
 
 .. code-block:: json
 
-    { "service": None, "pattern": None, "verb": None role: None}
+    {
+        "service": "None",
+        "pattern": "None",
+        "verb": "None",
+        "role": "None"
+    }
 
-    This rule will only be returned only for queries that have
-    no `api_role` entries defined.
+This rule will only be returned only for queries that have
+no `api_role` entries defined.
 
 The Keystone bootstrap process will define this initial api_role.
 
@@ -315,42 +331,35 @@ the rules for glance could look like this:
 .. code-block:: json
 
    {
-   'service': 'image',
-   'api_roles':[
-      {
-      'pattern': '/v2/images',
-      'verbs': ['POST'],
-      'role': 'member'
-      },
-      {
-      'pattern': '/v2/images/{image_id}',
-      'verbs': ['GET','PATCH','DELETE'],
-      'role': 'member'
-      },
-      {
-      'pattern'='/v2/metadefs/namespaces/{namespace_name}/objects'
-      'verbs'=['POST'],
-      'roles'='admin'
-      },
-      {
-      pattern='/v2/metadefs/namespaces/{namespace_name}/objects'
-      verbs=['GET'],
-      roles='member'
-      },
-      {
-      'pattern': '/v2/images/{image_id}/deactivate',
-      'verbs': ['POST'],
-      'role': 'member'
-      },
-      {
-      'pattern': '/v2/images/{image_id}/reactivate',
-      'verbs': ['POST'],
-      'role': 'member',
-      }
-      ],
-      'default': {
-          roles=["member", "admin"],
-      },
+       "service": "image",
+       "api_roles": [{
+           "pattern": "/v2/images",
+           "verbs": ["POST"],
+           "role": "member"
+       }, {
+           "pattern": "/v2/images/{image_id}",
+           "verbs": ["GET", "PATCH", "DELETE"],
+           "role": "member"
+       }, {
+           "pattern": "/v2/metadefs/namespaces/{namespace_name}/objects",
+           "verbs": ["POST"],
+           "roles": "admin"
+       }, {
+           "pattern": "/v2/metadefs/namespaces/{namespace_name}/objects",
+           "verbs": ["GET"],
+           "roles": "member"
+       }, {
+           "pattern": "/v2/images/{image_id}/deactivate",
+           "verbs": ["POST"],
+           "role": "member"
+       }, {
+           "pattern": "/v2/images/{image_id}/reactivate",
+           "verbs": ["POST"],
+           "role": "member"
+       }],
+       "default": {
+           "roles": ["member", "admin"]
+       }
    }
 
 
@@ -369,18 +378,17 @@ to check a block device, they could take the URL:
 
 Which would match the pattern below:
 
-.. code-block:: bash
-
+.. code-block:: json
 
   {
-     'service': 'storage',
-     'api_roles':[
-     {
-       'pattern': '/v1/{tenant_id}/volumes/{volume_id}',
-       'verbs': ['GET'],
-       'role': 'auditor',
-     }]
-   }
+      "service": "storage",
+      "api_roles": [{
+          "pattern": "/v1/{tenant_id}/volumes/{volume_id}",
+          "verbs": ["GET"],
+          "role": "auditor"
+      }]
+  }
+
 
 and determine they need to delegate the `auditor` role. Assuming the role
 inference rule that states `Member` implies `auditor`, a user with the
@@ -489,29 +497,30 @@ And an URL pattern rule like this:
 
 .. code-block:: json
 
-      {
-      'pattern': '/v2/images/{image_id}/reactivate',
-      'verbs': ['POST'],
-      'role': 'r7',
-      },
+   {
+       "pattern": "/v2/images/{image_id}/reactivate",
+       "verbs": ["POST"],
+       "role": "r7"
+   }
 
 The implementation will have an api_role response that
 looks like this:
 
 .. code-block:: json
 
-      {
-      'pattern': '/v2/images/{image_id}/reactivate',
-      'verbs': ['POST'],
-      'roles': ['r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7`]
-      },
+   {
+       "pattern": "/v2/images/{image_id}/reactivate",
+       "verbs": ["POST"],
+       "roles": ["r1", "r2", "r3", "r4", "r5", "r6", "r7"]
+   }
 
 while the token validation response would only have:
 
 .. code-block:: json
 
-  `roles` :[{'name':'r1'}]
-
+   {
+       "roles" :[{"name":"r1"}]
+   }
 
 
 Performance Impact
@@ -573,18 +582,16 @@ Retrieving the api_roles would result in the following entries.
 
 .. code-block:: json
 
-   {
-      {
-      'pattern': '/v2/images/{image_id}',
-      'verbs': ['patch','delete'],
-      'role': 'member'
-      },
-      {
-      'pattern': '/v2/images/{image_id}',
-      'verbs': ['get'],
-      'role': 'reader'
-      },
-  }
+   [{
+        "pattern": "/v2/images/{image_id}",
+        "verbs": ["patch", "delete"],
+        "role": "member"
+    },
+    {
+        "pattern": "/v2/images/{image_id}",
+        "verbs": ["get"],
+        "role": "reader"
+   }]
 
 
 Developer Impact

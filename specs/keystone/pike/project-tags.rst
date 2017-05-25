@@ -57,12 +57,19 @@ Proposed Changes
      )
 
 * There is a limit of 50 tags on a project and each tag cannot exceed 60
-  characters.
+  characters.  See [2]_.
 
-* Add tags field as part of default response when listing projects.
+* Add tags field as part of default response when listing projects and
+  showing a single project.
 
 * Add new API calls to interact with both project tags for basic CRUD
   functionality.
+
+* Tags are URL-safe and should match the following regular expression:
+
+  .. code:: bash
+
+      [\w\@\!\#\$\%\^\&\*\(\)\;\<\>\:\.\"\'\|\+\-\?\=]+
 
 Tags will have the following restrictions as set by the API Working
 Group [1]_:
@@ -73,12 +80,6 @@ Group [1]_:
     * ‘/’ is not allowed to be in a tag name
     * Commas are not allowed to be in a tag name in order to simplify
       requests that specify lists of tags
-
-Regex that matches any VALID tag would be:
-
-.. code-block:: bash
-
-    \w+|\@|\!|\#|\$|\%|\^|\&|\*|\(|\)|\;|\<|\>|\:|\.|\"|\'|\||\+|\-|\?|\=
 
 
 The schema for project tags would be:
@@ -289,8 +290,8 @@ and "bar" tags:
 
    GET /v3/projects?tags=foo,bar
 
-To request the list of projects that have one OR more of a list of given
-tags, the `tags-any` argument should be set to the list of tags, separated
+To request the list of projects that have at least one tag from a given list,
+the ``tags-any`` argument should be set to the list of tags, separated
 by commas. In this situation as long as one of the given tags is present,
 the project will be included in the query result. Example that returns the
 projects that have the “foo” OR “bar” tag:
@@ -299,10 +300,10 @@ projects that have the “foo” OR “bar” tag:
 
    GET /v3/projects?tags-any=foo,bar
 
-To request the list of projects that do not have one or more tags, the
-`not-tags` argument should be set to the list of tags, separated by commas.
-In this situation, only the projects that do not have any of the given tags
-will be included in the query results. Example that returns the projects that
+To request the list of projects that do not have a list of tags, the
+``not-tags`` argument should be set to the list of tags, separated by commas.
+In this situation, the tags given must all be absent for a project to be
+included in the query result. Example that returns the projects that
 do not have the “foo” nor the “bar” tag:
 
 .. code-block:: bash
@@ -310,9 +311,9 @@ do not have the “foo” nor the “bar” tag:
    GET /v3/projects?not-tags=foo,bar
 
 To request the list of projects that do not have at least one of a list of
-tags, the `not-tags-any` argument should be set to the list of tags,
-separated by commas. In this situation, only the projects that do not have
-at least one of the given tags will be included in the query result. Example
+tags, the ``not-tags-any`` argument should be set to the list of tags,
+separated by commas. In this situation, as long as one of the given tags
+is absent, the project will be included in the query result. Example
 that returns the projects that do not have the “foo” tag, or do not have
 the “bar” tag:
 
@@ -320,7 +321,7 @@ the “bar” tag:
 
    GET /v3/projects?not-tags-any=foo,bar
 
-The `tags`, `tags-any`, `not-tags` and `not-tags-any` arguments can
+The ``tags``, ``tags-any``, ``not-tags`` and ``not-tags-any`` arguments can
 be combined to build more complex queries. Example that returns any projects
 that have the “foo” and “bar” tags, plus at least one of “red” and “blue”.
 
@@ -439,3 +440,5 @@ References
 .. [0] `<http://docs.openstack.org/newton/networking-guide/ops-resource-tags.html>`_
 
 .. [1] `<https://specs.openstack.org/openstack/api-wg/guidelines/tags.html>`_
+
+.. [2] `<https://specs.openstack.org/openstack/nova-specs/specs/kilo/approved/tag-instances.html#rest-api-impact>`_

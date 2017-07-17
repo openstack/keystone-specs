@@ -46,14 +46,14 @@ projects change frequently and are often deleted within a few days.
 Proposed Changes
 ================
 
-* Add a new table ``tags`` to map strings to projects:
+* Add a new table ``project_tag`` to map strings to projects, uniqueness will
+  be enforced between ``project_id`` and ``name``:
 
   .. code:: SQL
 
-     CREATE TABLE `tags` (
-        `id`               int(11) NOT NULL AUTO_INCREMENT,
-        `project_id`       int(11) NOT NULL,
-        `name`             varchar(80) NOT NULL
+     CREATE TABLE `project_tag` (
+        `project_id`       varchar(64) NOT NULL,
+        `name`             varchar(60) NOT NULL
      )
 
 * There is a limit of 50 tags on a project and each tag cannot exceed 60
@@ -69,7 +69,7 @@ Proposed Changes
 
   .. code:: bash
 
-      [\w\@\!\#\$\%\^\&\*\(\)\;\<\>\:\.\"\'\|\+\-\?\=]+
+      ^[^,/]*$
 
 Tags will have the following restrictions as set by the API Working
 Group [1]_:
@@ -87,18 +87,14 @@ The schema for project tags would be:
 .. code-block:: json
 
    {
-       "title": "Project tags",
        "type": "array",
        "items": {
-           "$ref": "#/definitions/tag"
+           "type": "string",
+           "minLength": 1,
+           "maxLength": 60,
+           "pattern": "^[^,/]*$"
        },
-       "definitions": {
-           "tag": {
-               "type": "string",
-               "maxLength": 60,
-               "maxItems": 50
-           }
-       }
+       "maxItems": 50
    }
 
 where if a tag would be added to a project and the max number of items

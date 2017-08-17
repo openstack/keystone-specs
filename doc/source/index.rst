@@ -14,13 +14,13 @@ Project Documentation:
 keystone
 ========
 
-Pike approved specs:
+Queens approved specs:
 
 .. toctree::
    :glob:
    :maxdepth: 1
 
-   specs/keystone/pike/*
+   specs/keystone/queens/*
 
 
 Backlog:
@@ -98,6 +98,14 @@ Implemented Identity Program Specifications
 
 keystone
 ========
+
+Pike approved specs:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/keystone/pike/*
 
 Ocata approved specs:
 

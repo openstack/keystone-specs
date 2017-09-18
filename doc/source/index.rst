@@ -39,6 +39,14 @@ Ongoing:
 
    specs/keystone/ongoing/*
 
+Ideas:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/keystone/ideas/*
+
 keystoneauth
 ============
 

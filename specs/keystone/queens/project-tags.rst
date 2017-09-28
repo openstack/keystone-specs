@@ -56,8 +56,8 @@ Proposed Changes
         `name`             varchar(60) NOT NULL
      )
 
-* There is a limit of 50 tags on a project and each tag cannot exceed 60
-  characters.  See [2]_.
+* There is a limit of 80 tags on a project and each tag cannot exceed 255
+  characters. See [2]_.
 
 * Add tags field as part of default response when listing projects and
   showing a single project.
@@ -78,8 +78,8 @@ Group [1]_:
 
     * Tags are case sensitive
     * ‘/’ is not allowed to be in a tag name
-    * Commas are not allowed to be in a tag name in order to simplify
-      requests that specify lists of tags
+    * Commas ',' are not allowed to be in a tag name in order
+      to simplify requests that specify lists of tags
 
 
 The schema for project tags would be:
@@ -91,10 +91,10 @@ The schema for project tags would be:
        "items": {
            "type": "string",
            "minLength": 1,
-           "maxLength": 60,
+           "maxLength": 255,
            "pattern": "^[^,/]*$"
        },
-       "maxItems": 50
+       "maxItems": 80
    }
 
 where if a tag would be added to a project and the max number of items
@@ -125,10 +125,24 @@ List all tags for a project
       "tags": ["foo", "bar"]
     }
 
+Check if a project contains any tags
+------------------------------------
+
+**Request:** ``HEAD /v3/projects/{project_id}/tags``
+
+**Parameters**
+
+* ``project_id`` - The project ID.
+
+**Response**
+
+* 204 - No Content
+* 404 - Project does not contain tags
+
 Check if a project contains a specified tag
 -------------------------------------------
 
-**Request:** ``GET /v3/projects/{project_id}/tags/{value}``
+**Request:** ``GET or HEAD /v3/projects/{project_id}/tags/{value}``
 
 **Parameters**
 

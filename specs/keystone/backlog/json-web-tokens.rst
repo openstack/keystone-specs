@@ -106,10 +106,13 @@ Security Impact
 ---------------
 
 Since JWT is a widely used web standard, this will have a net positive impact
-on security. Choosing to use JWE, an optional feature of the JWT spec, will
-ensure that the data within the token is at least as secure as it is in fernet
-tokens. These will still be bearer tokens and so interception of one must still
-be guarded against.
+on security. The implementation will use JWE even though it is an optional
+feature of the JWT spec. While this will not protect against an attacker using
+a valid token to query keystone for information about the token, it protects
+against an attacker gaining information from an expired or revoked token. This
+will ensure that the data within the token is at least as secure as it is in
+fernet tokens. These will still be bearer tokens and so interception of one
+must still be guarded against.
 
 Notifications Impact
 --------------------

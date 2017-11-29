@@ -55,9 +55,6 @@ nova is also a *system* level resource that doesn't make sense to associate to
 a single project. Multiple projects can have instances hosted on a single
 hypervisor due to multi-tenancy.
 
-After realizing this, it became apparent that *system* is a more appropriate
-term than *global* for isolating infrastructure and project operations.
-
 Proposed Change
 ===============
 
@@ -73,7 +70,7 @@ List system role assignments for a user
 **Response**
 
 * 200 - OK
-* 404 - Not Found if a role or user doesn't exist
+* 404 - Not Found if a user doesn't exist
 * 401 - If the operation isn't permitted to the user
 
 **Response Body**
@@ -159,7 +156,7 @@ List system role assignments for a group
 **Response**
 
 * 200 - OK
-* 404 - Not Found if a role or user doesn't exist
+* 404 - Not Found if a group doesn't exist
 * 401 - If the operation isn't permitted to the user
 
 **Response Body**
@@ -230,7 +227,7 @@ Unassign a system role from a group
 **Response**
 
 * 204 - No Content
-* 404 - Not Found if a role or user doesn't exist
+* 404 - Not Found if a role or group doesn't exist
 * 401 - If the operation isn't permitted to the user
 
 List role assignments
@@ -250,8 +247,6 @@ system-specific role assignment. It will be a boolean value.
 **Response**
 
 * 200 - OK
-* 400 - Bad Request
-* 404 - Not Found if a role or user doesn't exist
 * 401 - If the operation isn't permitted to the user
 
 **Response Body**
@@ -303,7 +298,7 @@ system-specific role assignment. It will be a boolean value.
                     "id": "ab29d6fff51c43478b00bb16bfb771fc"
                 },
                 "scope": {
-                    "system": "true"
+                    "system": true
                 }
             }
         ],
@@ -430,7 +425,7 @@ An alternative to this approach would be to leverage the `admin_project` in
 order to achieve global scoping. The `admin_project` is a special project that
 allows for elevated privileges if role assignments are given to that project.
 Let's consider the following example. Let's say there is an `observer` role
-that allows users to do perform read-only operations within a specific scope.
+that allows users to perform read-only operations within a specific scope.
 If Bob has the `observer` role on project `foo`, he should be able to view
 things within that project. If Alice has the `observer` role on the
 `admin_project`, she should be able to view things across the deployment, like

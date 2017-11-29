@@ -56,12 +56,14 @@ potential security risk.
   can make to a pre-defined subset of what my User otherwise has access to do.
 
 By using a User's credentials, the Application will have all of that User's
-access. This is likely more access than needed. For instance, a regular
+access. This is likely more access than needed. For instance, today a regular
 Consumer cannot set up an application that can only upload images to Glance but
-cannot create or delete servers in Nova.
+cannot create or delete servers in Nova because they would need to create a
+role and custom policy.
 
 * As an OpenStack Consumer and an OpenStack Deployer, I need to be able to
-  gracefully rotate application credentials.
+  gracefully update credentials used by Applications without downtime for the
+  Applications.
 
 The current system of Users and Passwords requires simultaneously changing the
 Password and updating any Application configuration. For a Deployer this means
@@ -71,16 +73,6 @@ updated, the Application will not be able to talk to the OpenStack API and will
 be down. The Application Credential should allow for the creation of a new
 credential, rolling the new credential out, then deleting the old credential
 for credential rotation with no downtime.
-
-* As a team of OpenStack Consumers, I want to be able to make Applications
-  that will not stop working when one of my Team Members leaves.
-
-As the use of Automation increases in the world, more and more teams have
-problems with automation that was tied to a specific Consumer's User
-credentials. The application credentials should be managed as Project level
-resources so that all Consumers who have Users with write-allowed roles on the
-Project can rotate or delete them as they see fit if membership in their Team
-changes.
 
 * As an OpenStack Deployer, I need to configure some OpenStack Services to be
   able to make API calls to other OpenStack Services.
@@ -117,20 +109,17 @@ Creating User has at creation time.
           intended to be, which is identification information intended for use
           only by applications.
 
-.. _`on the mailing list`: http://lists.openstack.org/pipermail/openstack-dev/2017-May/116596.html
-
 Application Credentials will have the following characteristics:
 
 * Immutable.
 * Allow for optionally setting limits, e.g. 5 Application Credentials per User
   or Project, to prevent abuse of the resource.
-* Assigned the curent roles the creating User has on the Project at creation
-  time, or optionally a list of roles that is a subset of the creating User's
-  roles on the Project.
+* Assigned the set of current roles the creating User has on the Project at
+  creation time, or optionally a list of roles that is a subset of the creating
+  User's roles on the Project.
 * Secret exposed only once at creation time in the create API response.
 * Limited ability to manipulate identity objects (see `Limitations Imposed`_)
 * Support expiration.
-* Support deletion by any user with a write-allowed role in the project.
 * Will be deleted when the associated User is deleted.
 
 Application Credentials will be treated as credentials and not authorization
@@ -146,38 +135,32 @@ never expire and have custom validation.
           described or implemented here, but is required to fully meet the Use
           Case associated with pre-defined subset of User actions.
 
-.. note:: In the future, it may be possible to create an Application Credential
-          that can persist past the lifecycle of the User. That functionality
-          is not described or implemented here, but is required to fully meet
-          the Use Case associated with automation not ceasing to work when
-          a human leaves a team.
-
 Application Credential Management
 ---------------------------------
 
-By default, any User with at least a member role on a Project should be able to
-list, add, and delete Application Credentials for that project. For example,
-adding an Application Credentials:
+Users can create, list, and delete Application Credentials for themselves. For
+example, adding an Application Credential:
 
 ::
 
-    POST /v3/projects/{project_id}/application_credentials
+    POST /v3/users/{user_id}/application_credentials
 
 .. code-block:: json
 
     {
         "application_credential": {
-            "name:" "backup",
+            "name": "backup",
             "description": "Backup job...",
             "expires_at": "2017-11-06T15:32:17.000000",
-            "roles": ["Member"]
+            "roles": [
+                {"name": "Member"}
+            ]
         }
     }
 
-`name` must be unique within a given Project, but `name` is only guaranteed to
-be unique within its Project. This is consistent with how the other keystone
-resources operate. `name` may be useful for Consumers who want human readable
-config files.
+`name` must be unique among a User's application credentials, but `name` is
+only guaranteed to be unique under that User. `name` may be useful for
+Consumers who want human readable config files.
 
 `description` is a long description for storing information about the purpose
 of the Application Credential. It is mostly useful in reports or listings of
@@ -188,9 +171,9 @@ Application Credential does not automatically expire. `expires_at` is in `ISO
 Date Time Format`_ and is assumed to be in UTC if an explicit timezone offset
 is not included.
 
-`roles` is an optional list of role names that is a subset of the roles
-the Creating User has on the Project. Roles that the Creating User does not
-have on a project are an error.
+`roles` is an optional list of role names or ids that is a subset of the roles
+the Creating User has on the Project to which they are scoped at creation time.
+Roles that the Creating User does not have on the Project are an error.
 
 In the initial implementation, the Application Credential will assume the roles
 of the Creating User or the given subset and we will not implement
@@ -208,8 +191,12 @@ Response example:
             "description": "Backup job...",
             "expires_at": "2017-11-06T15:32:17.000000",
             "project_id": "1a6f968a-cebe-4265-9b36-f3ca2801296c",
-            "user_id": "9ac4bbe2-36c7-49ee-b296-59ce7a4d3edf",
-            "roles": ["Member"]
+            "roles": [
+                {
+                    "id": "d49d6689-b0fc-494a-abc6-e2e094131861",
+                    "name": "Member"
+                }
+            ]
         }
     }
 
@@ -227,14 +214,10 @@ Credential will not return the secret field.
           `random.choice` should be replaced for Python 3 with
           `secrets.choice`.
 
-`roles` is a list of role names. It is informational and can be used by the
+`roles` is a list of role names and ids. It is informational and can be used by the
 Consumer to verify that the Application Credential inherited the roles from
 the User that the Consumer expected. This is not a policy enforcement, it is
 simply for human validation.
-
-`user_id` contains the `id` of the Creating User. It can be used by other
-Consumers who have a User with access to the Project in question to manage and
-audit Application Credentials that were created by other Team members.
 
 If the Consumer prefers to generate their own `secret`, they can do so and
 provide it in the create call. Keystone will store a hash of the given
@@ -242,11 +225,11 @@ provide it in the create call. Keystone will store a hash of the given
 would if it was generated, but will not store the secret itself nor return it
 after the initial creation.
 
-A Consumer can list the existing Application Credentials for a Project:
+A Consumer can list their existing Application Credentials:
 
 ::
 
-    GET /v3/projects/{project_id}/application_credentials
+    GET /v3/users/{user_id}/application_credentials
 
 .. code-block:: json
 
@@ -258,8 +241,12 @@ A Consumer can list the existing Application Credentials for a Project:
             "description": "Backup job...",
             "expires_at": "2017-11-06T15:32:17.000000",
             "project_id": "1a6f968a-cebe-4265-9b36-f3ca2801296c",
-            "user_id": "9ac4bbe2-36c7-49ee-b296-59ce7a4d3edf",
-            "roles": ["Member"]
+            "roles": [
+                {
+                    "id": "d49d6689-b0fc-494a-abc6-e2e094131861",
+                    "name": "Member"
+                }
+            ]
         }
       ]
     }
@@ -269,7 +256,7 @@ Credential:
 
 ::
 
-    GET /v3/projects/{project_id}/application_credentials/{application_credential_id}
+    GET /v3/users/{user_id}/application_credentials/{application_credential_id}
 
 .. code-block:: json
 
@@ -281,30 +268,33 @@ Credential:
             "description": "Backup job...",
             "expires_at": "2017-11-06T15:32:17.000000",
             "project_id": "1a6f968a-cebe-4265-9b36-f3ca2801296c",
-            "user_id": "9ac4bbe2-36c7-49ee-b296-59ce7a4d3edf",
-            "roles": ["Member"]
+            "roles": [
+                {
+                    "id": "d49d6689-b0fc-494a-abc6-e2e094131861",
+                    "name": "Member"
+                }
+            ]
         }
       ]
     }
 
-A Consumer can delete an existing Application Credential to invalidate it:
+A Consumer can delete one of their own existing Application Credential to
+invalidate it:
 
 ::
 
-    DELETE /v3/projects/{project_id}/application_credentials/{credential_id}
+    DELETE /v3/users/{user_id}/application_credentials/{application_credential_id}
 
 .. note:: Application Credentials that expire will be deleted. The alternative
           would be to allow them to accumulate for forever in the hopes that
           keeping them around will make investigation as to why an Application
-          is not working harder, but the only real benefit to this is providing
+          is not working easier, but the only real benefit to this is providing
           a different error message. More thought and feedback on this are
           needed, but are not essential for the first round of work.
 
-When the Creating User for an Application Credential is deleted, that
-Application Credential is also deleted.
-
-.. note:: In the future there may be a way to create a persistent credential,
-          but that mechanism is not defined.
+When the Creating User for an Application Credential is deleted, or if their
+roles on the Project to which the Application Credential is scoped are
+unassigned, that Application Credential is also deleted.
 
 Aside from deletion, Application Credentials are immutable and may not be
 modified.
@@ -341,16 +331,10 @@ Keystone will validate the Application Credential by matching a hash of the key
 secret associated with the id using `passlib`_ similar to how Keystone does
 Password authentication currently.
 
-This improves security as the Application Credentials can have
-Consumer-controlled limited lifespan and can be rotated and safely stored in
-configuration files. For Consumers that do not currently have a User with
-privileges to create Users, this will provide both security and additional
-flexibility in how they can manage Applications.
-
 If the Application Credential is referred to by `name`, it will be necessary to
-provide either `project_id` or the combination of `project_name` and
-`project_domain_name` so that Keystone can look up the Application Credential
-in the appropriate Project.
+provide either `user_id` or the combination of `user_name` and
+`user_domain_name` so that Keystone can look up the Application Credential
+for the User.
 
 ::
 
@@ -366,7 +350,7 @@ in the appropriate Project.
                 ],
                 "application_credential": {
                     "name": "backup",
-                    "project": {
+                    "user": {
                         "id": "1a6f968a-cebe-4265-9b36-f3ca2801296c"
                     },
                     "secret": "a49670c3c18b9e079b9cfaf51634f563dc8ae3070db2..."
@@ -389,36 +373,33 @@ restricting an Application Credential's API Access.
 Limitations Imposed
 -------------------
 
-Since API Access Lists are not implemented at this stage, Keystone
-will explicitly block tokens generated from an Application Credential from
-doing the following:
+In general, Application Credentials should be prevented from themselves
+generating other Application Credentials, because we do not want to allow a
+compromised Application Credential to make copies of itself. By extension, they
+should be prevented from creating trusts since a self-trust could also be used
+to generate another Application Credential. Since API Access Lists are not
+implemented at this stage, Keystone will, initially, by default, explicitly
+block tokens generated from an Application Credential from doing the following:
 
-* POST /projects/{}/application_credentials
-* DELETE /projects/{}/application_credentials/{}
-* POST /users
-* PATCH /users/{}
-* DELETE /users/{}
-* POST /projects
-* PATCH /projects/{}
-* DELETE /projects/{}
-* PUT /projects/{}/users/{}/roles/{}
-* PUT /domains/{}/users/{}/roles/{}
-* PUT /projects/{}/groups/{}/roles/{}
-* PUT /domains/{}/groups/{}/roles/{}
+* POST /v3/users/{}/application_credentials
+* DELETE /v3/users/{}/application_credentials/{}
+* POST /v3/OS-TRUST/trusts
+* DELETE /v3/OS-TRUST/trusts/{}
 
-.. note:: It might be simpler and safer for now to just block a token
-          generated from an Application Credential from doing any action in
-          Keystone altogether. This would check for an "application_credential"
-          value in the "methods" key of a token object. This would be a
-          temporary measure until the followup API action exclusion support is
-          implemented.
+It will do this by checking for an "application_credential" value in the
+"methods" key of a token object.
 
-In the future, when the Consumer can expess additional REST API limitations
-at Application Credential creation time, the built-in identity blacklist should
-be migrated to being content in that system. It is entirely reasonable that
-a Consumer desire to grant the ability to automate Identity operations.
-However, until the the additional system is in place, it is safer to block
-the operations altogether.
+This block can be disabled by adding an
+``"allow_application_credential_creation": true`` property to the application
+credential at creation. This is to support a use case specific to Heat, where
+the Heat user's application credential should be allowed to create new
+application credentials to be injected into an instance. Even though the
+purpose is to accomodate this particular service, any user can effectively
+declare "I accept the risks" and enable this potentially dangerous behavior by
+adding this property at creation time.
+
+In the future, more fine-grained API Access List Controls will remove the need
+for such a block and the workaround for the block.
 
 Design Justifications
 ---------------------
@@ -441,24 +422,20 @@ necessitates tying an application to a User, and token expiry makes it
 insufficient for use by applications.
 
 `Enhance users`_ by adding new credential types and then allowing role
-assignments to be assigned to credential types instead of users. This doesn't
-solve the problem of applications needing to continue running after a User has
-been decommissioned. Additionally, regular Consumers frequently do not have
-permission to create Users, especially in places that use an identity backend
-like LDAP or AD.
+assignments to be assigned to credential types instead of users. Regular
+Consumers frequently do not have permission to create Users, especially in
+places that use an identity backend like LDAP or AD.
 
 Just use OAuth. Keystone already supports OAuth-based authentication. However,
 adding OAuth on top of an existing Auth system is a deployer opt-in task that
 involves considerable deployer effort. If the goal is to add support for a
 concept that will always dependably exist, OAuth represents too high of a
-burden to be reasonable. Moreover, OAuth tokens have the same flaws as regular
-keystone tokens, namely that they are tied to a User, rather than a project,
-and that they are required to expire, rather than optionally expiring.
+burden to be reasonable.
 
-`Enhance trusts`_ by detaching them from Users. Trusts still require role
-assignments on projects to be created by administrators. Adding the ability to
-allow users to delegate their own roles to trusts would require a much more
-significant rework of the trusts model.
+`Enhance trusts`_ by detaching them from trustees. Trusts still require the
+User's password for authentication, and so it prevents seamless rotation. This
+implementation may build on the existing framework for trusts but must build in
+a secret that is separate from the User's password to allow for that rotation.
 
 On naming: GCE uses the term "Service Account" and discusses the concept of
 "Application Access". Both could be useful alternate terms to Application
@@ -491,7 +468,7 @@ This would have a positive security impact:
   single Service User and multiple Application Credentials. This decreases the
   attack vector of gaining access to privileged operations by reducing the
   number of accounts to attack.
-* User names and passwords are kept out of configuration files. While
+* Usernames and passwords are kept out of configuration files. While
   Application Credentials are still extremely sensitive, if compromised they do
   not allow attackers to glean service user password conventions from
   configuration.
@@ -501,6 +478,13 @@ This would have a positive security impact:
   periodically, allowing Consumers and Deployers a mechanism to prevent
   compromised Users without requiring swapping credentials in short amounts of
   time that might cause service interruption or downtime.
+* Although we had long considered allowing application credentials to live
+  beyond the lifetime of its creating user in order to allow seamless
+  application uptime when the user leaves the team, it unfortunately poses too
+  high a risk for abuse. Ensuring the application credential is deleted when
+  the user is deleted or removed from the project will prevent malicious or
+  lazy users from giving themselves access to a project when they should no
+  longer have it.
 
 There is an inherent risk with adding a new credential type and changing
 authentication details. One such risk would be the allowing of many credentials
@@ -562,9 +546,7 @@ Primary assignee:
 
 Other contributors:
 
-- Ron De Rose
-- Anthony Washington
-- TBD
+- Colleen Murphy
 
 Work Items
 ----------
@@ -577,7 +559,7 @@ Work Items
 
 #. Add new Application Credential authentication plugin
 
-#. Block access to Keystone CRUD
+#. Block access to Keystone application credential APIs
 
 #. Add consumption support to keystoneauth
 
@@ -597,12 +579,12 @@ None
 Documentation Impact
 ====================
 
-The documentation team, along with the documentation liaison for keystone
-should update the installation guide to account for Application Credentials and
-Service Users. The user guides should also be updated to reflect the ability
-for Users to use Application Credentials for application authentication.
+The in-tree installation guide should be updated to account for Application
+Credentials and Service Users. The user guides should also be updated to
+reflect the ability for Users to use Application Credentials for application
+authentication.
 
 References
 ==========
 
-None
+http://lists.openstack.org/pipermail/openstack-dev/2017-May/116596.html

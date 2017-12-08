@@ -214,8 +214,8 @@ Credential will not return the secret field.
           `random.choice` should be replaced for Python 3 with
           `secrets.choice`.
 
-`roles` is a list of role names and ids. It is informational and can be used by the
-Consumer to verify that the Application Credential inherited the roles from
+`roles` is a list of role names and ids. It is informational and can be used by
+the Consumer to verify that the Application Credential inherited the roles from
 the User that the Consumer expected. This is not a policy enforcement, it is
 simply for human validation.
 

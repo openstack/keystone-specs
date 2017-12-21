@@ -56,7 +56,7 @@ The following are benefits from the approach:
   added.
 * We can provide a tool to help reduce redundancy in policy files.
 * It will be easier to provide a description of each policy much like we do
-  configuartion options.
+  configuration options.
 
 Alternatives
 ------------

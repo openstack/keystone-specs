@@ -244,7 +244,7 @@ and are not meant to mean these will also be implemented.
   This is a lower level specification (with POC code) that includes
   putting the limits information in the Token. Overuse of token was a
   primary concern. Tokens, are by definition, stale information, and
-  can be long lived, thus an adminstrator changing limits would have
+  can be long lived, thus an administrator changing limits would have
   no idea when the system would start enforcing them. Token bloat is
   also a concern for projects that have worker daemons and rely
   heavily on RPC, as it means more load on the RPC bus.

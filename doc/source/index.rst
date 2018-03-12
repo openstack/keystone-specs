@@ -1,8 +1,8 @@
 .. identity-specs documentation master file
 
-================================
+===============================
 Identity Program Specifications
-================================
+===============================
 
 Project Documentation:
 
@@ -12,7 +12,7 @@ Project Documentation:
    Specification Template <specs/template>
 
 keystone
-========
+--------
 
 Queens approved specs:
 
@@ -50,7 +50,7 @@ Ideas:
    specs/keystone/ideas/*
 
 keystoneauth
-============
+------------
 
 keystoneauth approved specs for the Newton release:
 
@@ -65,7 +65,7 @@ keystoneauth approved specs for the Newton release:
       specs/keystoneauth/newton/*
 
 keystoneclient
-==============
+--------------
 
 keystoneclient approved specs for the Newton release:
 
@@ -80,7 +80,7 @@ keystoneclient approved specs for the Newton release:
       specs/keystoneclient/newton/*
 
 keystonemiddleware
-==================
+------------------
 
 keystonemiddleware approved specs for the Newton release:
 
@@ -102,12 +102,11 @@ Backlog:
 
    specs/keystonemiddleware/backlog/*
 
-===========================================
 Implemented Identity Program Specifications
 ===========================================
 
 keystone
-========
+--------
 
 Pike approved specs:
 
@@ -166,7 +165,7 @@ Juno implemented specs:
    specs/keystone/juno/*
 
 keystoneauth
-============
+------------
 
 - None
 
@@ -179,7 +178,7 @@ keystoneauth
       specs/keystoneauth/mitaka/*
 
 keystoneclient
-==============
+--------------
 
 Mitaka implemented specs:
 
@@ -198,7 +197,7 @@ Liberty implemented specs:
    specs/keystoneclient/liberty/*
 
 keystonemiddleware
-==================
+------------------
 
 Kilo implemented specs:
 
@@ -216,7 +215,6 @@ Juno implemented specs:
 
   specs/keystonemiddleware/juno/*
 
-==================
 Indices and tables
 ==================
 

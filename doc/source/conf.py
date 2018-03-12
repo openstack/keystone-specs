@@ -11,6 +11,7 @@
 
 import datetime
 import subprocess
+import warnings
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -24,20 +25,16 @@ import subprocess
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
+
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinxcontrib.blockdiag',
-              'oslosphinx',
-              'yasfb',
+              'openstackdocstheme',
              ]
 
 blockdiag_html_image_format = 'SVG'
 
 blockdiag_fontpath = 'DejaVuSans.ttf'
-
-# Feed configuration for yasfb
-feed_base_url = 'http://specs.openstack.org/openstack/keystone-specs'
-feed_author = 'OpenStack Identity Team'
 
 todo_include_todos = True
 
@@ -97,7 +94,7 @@ modindex_common_prefix = ['identity-specs.']
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'nature'
+html_theme = 'openstackdocs'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

@@ -14,6 +14,17 @@ Project Documentation:
 keystone
 --------
 
+Rocky approved specs:
+
+`Rocky Roadmap <https://trello.com/b/wmyzbFq5/keystone-rocky-roadmap>`_
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/keystone/rocky/*
+
+
 Queens approved specs:
 
 `Queens Roadmap <https://trello.com/b/5F0h9Hoe/keystone-queens-roadmap>`_

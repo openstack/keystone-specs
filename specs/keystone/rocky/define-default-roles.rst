@@ -56,8 +56,8 @@ use to adopt the proposed default roles in a future `community goal
 Default Roles
 -------------
 
-**auditor**: It should only be used for read-only APIs and operations. Alternatively
-referred to as ``reader``, this role fills an extremely popular need from operators.
+**reader**: It should only be used for read-only APIs and operations. Alternatively
+referred to as ``readonly`` or ``observer``, this role fills an extremely popular need from operators.
 
 **member**: serves as the
 general purpose ‘do-er’ role. It introduces granularity between the administrator(s)
@@ -87,7 +87,7 @@ along with relevant historical context justifying the `need for system-scope
 Examples
 --------
 
-`auditor:`
+`reader:`
 An example project-scoped application of this role would be listing project tags (``identity:get_project_tags``).
 An example system-scoped application of this role would be listing service endpoints
 (``identity:list_endpoints``).
@@ -108,7 +108,7 @@ It serves merely as a snippet of existing rules to showcase how policies, scope,
 default roles can work together to provide a richer policy experience.
 
 +-------------+------------------------------+---------------------------------+---------------------------------+
-|             | auditor                      | member                          | admin                           |
+|             | reader                       | member                          | admin                           |
 +=============+==============================+=================================+=================================+
 | **Project** | * identity:list_project_tags | * identity:list_project_tags    | * identity:list_project_tags    |
 |             | * identity:get_project_tag   | * identity:get_project_tag      | * identity:get_project_tag      |
@@ -133,13 +133,13 @@ the following.
   The default roles discussed will be created by Keystone, during the bootstrap process, using `implied roles
   <https://docs.openstack.org/python-openstackclient/latest/cli/command-objects/implied_role.html>`_.
   As indicated in the above table, having ``admin`` role implies a user also has the same rights as
-  the ``member`` role. Therefore this user will also has the same rights as the ``auditor`` role as
-  ``member`` implies ``auditor``.
+  the ``member`` role. Therefore this user will also has the same rights as the ``reader`` role as
+  ``member`` implies ``reader``.
 
   This keeps policy files clean. For example:
 
-  "identity:list_endpoints": "role:auditor OR role:member OR role:admin" is equivalent to
-  "identity:list_endpoints": "role:auditor" as a result of the implied roles chain.
+  "identity:list_endpoints": "role:reader OR role:member OR role:admin" is equivalent to
+  "identity:list_endpoints": "role:reader" as a result of the implied roles chain.
 
    The chain of implied roles will be documented alongside of the `policy-in-code defaults
    <https://github.com/openstack/keystone/blob/master/keystone/common/policies/base.py>`_ in addition to
@@ -148,15 +148,15 @@ the following.
 ::
 
     # scope_types = ('project')
-    "identity:list_project_tags": "role:auditor"
-    "identity:get_project_tag": "role:auditor"
+    "identity:list_project_tags": "role:reader"
+    "identity:get_project_tag": "role:reader"
     "identity:update_project_tags": "role:member"
     "identity:create_project_tag": "role:admin"
     "identity:delete_project_tags": "role:admin"
 
     # scope_types = ('system')
-    "identity:list_endpoints": "role:auditor"
-    "identity:get_endpoints": "role:auditor"
+    "identity:list_endpoints": "role:reader"
+    "identity:get_endpoints": "role:reader"
     "identity:update_endpoint": "role:member"
     "identity:create_endpoint": "role:admin"
     "os_compute_api:os-hypervisors": "role:admin"
@@ -165,10 +165,10 @@ the following.
 
 Let's assume the following role assignment exist:
 
-- **Alice** has role **auditor** on system
+- **Alice** has role **reader** on system
 - **Bob** has the role **member** on system
 - **Charlie** has role **admin** on system
-- **Qiana** has role **auditor** on Project Alpha
+- **Qiana** has role **reader** on Project Alpha
 - **Rebecca** has role **member** on Project Alpha
 - **Steve** has role **admin** on Project Alpha
 
@@ -201,15 +201,15 @@ Risk Mitigation
 
 **Scenario One -- A role serving the purposes described in this spec exists under another name**:
 Let us assume that Deployment A already has ``Role X`` which serves the purpose of the proposed here as
-the ``auditor`` role. In this instance, it is reasonable to assume that operators may have custom policy
+the ``reader`` role. In this instance, it is reasonable to assume that operators may have custom policy
 work in place and do not want to port immediately.
 
 This issue may be mitigated through the use of implied roles. Operators need simply to ensure that
-``auditor`` implies ``Role X``. Please review the documentation on `implied roles
+``reader`` implies ``Role X``. Please review the documentation on `implied roles
 <https://docs.openstack.org/python-openstackclient/latest/cli/command-objects/implied_role.html>`_. for
 specific instructions on how make one role imply another.
 
-**Scenario Two -- An existing ``auditor``, ``member``, or ``admin`` role already exists**: Let us assume
+**Scenario Two -- An existing ``reader``, ``member``, or ``admin`` role already exists**: Let us assume
 that Deployment B already has a ``member`` role. Keystone will not attempt to overwrite any existing roles
 that have been populated. It will instead note that a role with the name ``member`` already exists in log
 output.
@@ -217,8 +217,8 @@ output.
 Alternatives
 ------------
 
-reader/writer/admin vs auditor/member/admin. There was much debate regarding the naming
-conventions for these roles. We have opted to use `auditor`, `member`, and `admin` as we
+reader/writer/admin vs reader/member/admin. There was much debate regarding the naming
+conventions for these roles. We have opted to use `reader`, `member`, and `admin` as we
 believe they most accurately describe their purpose when the context of OpenStack is taken
 into consideration.
 
@@ -237,7 +237,7 @@ Work Items
 ----------
 
 * Add ability for Keystone bootstrap to create proposed roles
-* Implement auditor role across policies
+* Implement reader role across policies
 * Implement member role across policies
 * Implement admin role across policies
 * Implement scope_types for all policies in Keystone

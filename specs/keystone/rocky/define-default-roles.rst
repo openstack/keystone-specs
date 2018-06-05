@@ -2,7 +2,7 @@
 Basic Default Roles
 ===================
 
-`blueprint basic-default-roles <https://blueprints.launchpad.net/openstack/+spec/basic-default-roles>`_
+`blueprint basic-default-roles <https://blueprints.launchpad.net/keystone/+spec/basic-default-roles>`_
 
 Managing `Role Based Access Control
 <https://csrc.nist.gov/Projects/Role-Based-Access-Control>`_ (RBAC) across

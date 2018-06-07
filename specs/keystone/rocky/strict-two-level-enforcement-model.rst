@@ -100,13 +100,12 @@ respectively.
       A -> B;
       A -> C;
 
-      A [label="A (l=20, u=0)"];
+      A [label="A (l=20, u=4)"];
       B [label="B (u=0)"];
       C [label="C (u=0)"];
    }
 
-Technically, both ``B`` and ``C`` can use up to 10 ``cores`` each and consume
-the entire limit for the tree. Resulting in:
+Technically, both ``B`` and ``C`` can use up to 8 ``cores`` each, resulting in:
 
 .. blockdiag::
 
@@ -116,15 +115,16 @@ the entire limit for the tree. Resulting in:
       A -> B;
       A -> C;
 
-      A [label="A (l=20, u=0)"];
-      B [label="B (u=10)", textcolor = "#00af00"];
-      C [label="C (u=10)", textcolor = "#00af00"];
+      A [label="A (l=20, u=4)"];
+      B [label="B (u=8)", textcolor = "#00af00"];
+      C [label="C (u=8)", textcolor = "#00af00"];
    }
 
-If ``A`` attempts to claim two ``cores``, the usage check will fail because
-``oslo.limit`` will fetch the hierarchy from keystone and check the usage of
-each project in the hierarchy by using the callback provided by the service to
-see that both ``B`` and ``C`` have 10 ``cores`` each:
+If ``A`` attempts to claim two more ``cores``, the usage check will fail
+because ``oslo.limit`` will fetch the hierarchy from keystone and check the
+usage of each project in the hierarchy by using the callback provided by the
+service to see that total usage of ``A``, ``B``, and ``C`` is equal to the
+limit of the tree, set by ``A.limit``.
 
 .. blockdiag::
 
@@ -134,9 +134,9 @@ see that both ``B`` and ``C`` have 10 ``cores`` each:
       A -> B;
       A -> C;
 
-      A [label="A (l=20, u=2)", textcolor = "#FF0000"];
-      B [label="B (u=10)"];
-      C [label="C (u=10)"];
+      A [label="A (l=20, u=6)", textcolor = "#FF0000"];
+      B [label="B (u=8)"];
+      C [label="C (u=8)"];
    }
 
 Despite the usage of the tree being equal to the limit, we can still add
@@ -151,9 +151,9 @@ children to the tree:
       A -> C;
       A -> D;
 
-      A [label="A (l=20, u=0)"];
-      B [label="B (u=10)"];
-      C [label="C (u=10)"];
+      A [label="A (l=20, u=4)"];
+      B [label="B (u=8)"];
+      C [label="C (u=8)"];
       D [label="D (u=0)", textcolor = "#00af00"];
    }
 
@@ -169,9 +169,9 @@ tree prevents ``D`` from claiming any ``cores``:
       A -> C;
       A -> D;
 
-      A [label="A (l=20, u=0)"];
-      B [label="B (u=10)"];
-      C [label="C (u=10)"];
+      A [label="A (l=20, u=4)"];
+      B [label="B (u=8)"];
+      C [label="C (u=8)"];
       D [label="D (u=2)", textcolor = "#FF0000"];
    }
 
@@ -181,9 +181,9 @@ because it provides a very clear escalation path. When a request fails because
 the tree limit has been exceeded, a user has all the information they need to
 provide meaningful context in a support ticket (e.g. their project ID and the
 parent project ID). An administrator of project ``A`` should be able to
-reshuffle usage accordingly. A system administrator should be able to do the
-same thing. Providing this information in tree structures with more than a
-depth of two is much harder, but may be implemented with a separate model.
+reshuffle usage accordingly. A system administrator should be able to as well.
+Providing this information in tree structures with more than a depth of two is
+much harder, but may be implemented with a separate model.
 
 .. blockdiag::
 
@@ -194,9 +194,9 @@ depth of two is much harder, but may be implemented with a separate model.
       A -> C;
       C -> D;
 
-      A [label="A (l=20, u=0)"];
-      B [label="B (u=10)"];
-      C [label="C (u=10)"];
+      A [label="A (l=20, u=4)"];
+      B [label="B (u=8)"];
+      C [label="C (u=8)"];
       D [label="D (u=0)", textcolor = "#FF0000"];
    }
 
@@ -211,14 +211,15 @@ project-specific override for ``cores``:
       A -> B;
       A -> C;
 
-      A [label="A (l=20, u=0)"];
-      B [label="B (l=12, u=10)", textcolor = "#00af00"];
-      C [label="C (u=10)"];
+      A [label="A (l=20, u=4)"];
+      B [label="B (l=12, u=8)", textcolor = "#00af00"];
+      C [label="C (u=8)"];
    }
 
 Note that regardless of this update, any subsequent requests to claim more
 ``cores`` in the tree will be forbidden since the usage is equal to the limit
-of the ``A``. If ``cores`` are released from ``C``, ``B`` can claim them:
+of the ``A``. If ``cores`` are released from ``A`` and ``C``, ``B`` can claim
+them:
 
 .. blockdiag::
 
@@ -228,9 +229,9 @@ of the ``A``. If ``cores`` are released from ``C``, ``B`` can claim them:
       A -> B;
       A -> C;
 
-      A [label="A (l=20, u=0)"];
-      B [label="B (l=12, u=10)"];
-      C [label="C (u=8)", textcolor = "#00af00"];
+      A [label="A (l=20, u=2)", textcolor = "#00af00"];
+      B [label="B (l=12, u=8)"];
+      C [label="C (u=6)", textcolor = "#00af00"];
    }
 
 .. blockdiag::
@@ -241,9 +242,9 @@ of the ``A``. If ``cores`` are released from ``C``, ``B`` can claim them:
       A -> B;
       A -> C;
 
-      A [label="A (l=20, u=0)"];
+      A [label="A (l=20, u=2)"];
       B [label="B (l=12, u=12)", textcolor = "#00af00"];
-      C [label="C (u=8)"];
+      C [label="C (u=6)"];
    }
 
 While ``C`` is still under its default allocation of 10 ``cores``, it won't be
@@ -259,9 +260,9 @@ had:
       A -> B;
       A -> C;
 
-      A [label="A (l=20, u=0)"];
+      A [label="A (l=20, u=2)"];
       B [label="B (l=12, u=12)"];
-      C [label="C (u=10)", textcolor = "#FF0000"];
+      C [label="C (u=8)", textcolor = "#FF0000"];
    }
 
 Creating or updating a project with a limit that exceeds the limit of ``A`` is
@@ -362,12 +363,17 @@ to validate limits before writing them to the backend.
 
 If keystone is configured to use the ``strict-two-level`` enforcement model and
 current project structure within keystone violates the two-level project
-constraint, keystone should fail to start. To aid operators, we can develop a
-``keystone-manage`` command, to check the hierarchical structure of the
-projects in the deployment and warn operators if keystone is going to fail to
-start. This gives operators the ability to check and fix their project
-hierarchy before they deploy keystone with the new model. This clearly
-communicates a set project structure to operators at run time.
+constraint, keystone should fail to start. On start-up, keystone will scan the
+database to ensure that all projects don't exceed two levels of hierarchy and
+that ``keystone.conf [DEFAULT] max_project_tree_depth = 2``. If either
+condition fails, keystone will report an appropriate error message and refuse
+to start.
+
+To aid operators, we can develop a ``keystone-manage`` command, to check the
+hierarchical structure of the projects in the deployment and warn operators if
+keystone is going to fail to start. This gives operators the ability to check
+and fix their project hierarchy before they deploy keystone with the new model.
+This clearly communicates a set project structure to operators at run time.
 
 Proposed Library Changes & Consumption
 --------------------------------------
@@ -544,22 +550,52 @@ None
 Performance Impact
 ------------------
 
+Usage Caching
+^^^^^^^^^^^^^
+
 Performance of this model is expected to be sub-optimal in comparison to flat
 enforcement. The main factor contributing to expected performance loss is the
 calculation of usage for the tree. The ``oslo.limit`` library will need to
 calculate the usage for every project in the tree in order to provide an answer
 to the service regarding the request.
 
+One possible solution to mitigate performance concerns here would be to
+calculate usage for projects in parallel.
+
+Limit Caching
+^^^^^^^^^^^^^
+
 Other services will be required to make additional calls to keystone to
 retrieve limit information in order to do quota enforcement. This will add some
-overhead to the overall performance of the API call.
+overhead to the overall performance of the API call because it requires a
+round-trip to keystone.
 
 It is also worth noting that both Registered Limits and Project Limits are not
-expected to change frequently. This means the data is safe to cache for some
-period of time. Caching has already been implemented internally to keystone,
-similar to how keystone caches responses for other resources. Caching can also
-be done client-side to avoid making frequent calls to keystone for relatively
-static limit information.
+expected to change frequently. This means that the limit data could possibly be
+cached client-side in ``oslo.limit``. However, this introduces concerns about
+limit invalidation. Consider the following example:
+
+* client-side cache TTL is set to one hour for limit information from keystone
+* one minute later, an administrator decreases the limit for ``cores`` on a
+  particular project
+* two minutes later, a user makes a request to create an instance in the
+  project that should bring them over the limit just set by the administrator
+* due to client-side caching, the service considers the project within it's
+  limit and allows the instance to be created
+* the current usage is out of sync with the limit set by the administrator and
+  the service won't realize this until the TTL expires in another 57 minutes
+
+Client-side caching is going to be a very specific case that needs to be
+handled carefully because cache invalidation strategies are going to be
+distributed across services. One possible mitigation would be for client-side
+caching and keystone to share the same cache instance, making it easier to
+perform cache invalidation. Conversely, this raises the operational bar for
+administrators and requires assumptions about underlying infrastructure.
+
+Until we know we can make those types of assumptions or find an alternative
+solution for cache invalidation, client-side caching should be avoided to
+prevent situations like what was described above. We should error on the side
+of accuracy when retrieving limit information.
 
 Other Deployer Impact
 ---------------------

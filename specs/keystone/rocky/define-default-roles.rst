@@ -270,7 +270,8 @@ for specific instructions on how make one role imply another.
 exists**: Let us assume that Deployment B already has a ``member`` role.
 Keystone will not attempt to overwrite any existing roles that have been
 populated. It will instead note that a role with the name ``member`` already
-exists in log output.
+exists in log output. However, the role implications *will* still be created
+regardless of whether the role existed previously or not.
 
 Alternatives
 ------------

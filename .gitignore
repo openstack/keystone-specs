@@ -7,4 +7,4 @@ build
 *.swp
 *.swo
 *.pyc
-.testrepository
+.stestr/

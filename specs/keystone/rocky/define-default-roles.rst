@@ -49,6 +49,21 @@ operators in ways that are consistent with changing configuration options.
 This specification proposes that Keystone enhance the basic RBAC experience
 by incorporating the following default roles into its default policies.
 
+The work detailed here can be separated into two initiatives. The first is
+ensuring the defaults proposed are available to operators after installation.
+The second is incorporating those available roles into default policies across
+services. Note that the first initiative was targeted and completed in the
+Rocky release. While this specification does go into detail describing the
+second initiative, it will be implemented in a subsequent release (likely Stein
+or later). The second initiative specifically within keystone will require
+landing a large refactor cleaning up technical debt and moving keystone to
+using `flask <https://bugs.launchpad.net/keystone/+bug/1776504>`_ instead of a
+home-grown WSGI implementation. It is imperative to land this refactor prior to
+starting the second initiative because it will make treating RBAC across
+different scopes like formal business logic across the Manager layers within
+keystone subsystems, as opposed to obfuscating more complexity into the
+``@controller.protected`` decorator that is currently used by most APIs.
+
 Our goal is that this work will serve as a template which other services may
 use to adopt the proposed default roles in a future `community goal
 <https://governance.openstack.org/tc/goals/>`_.
@@ -254,6 +269,8 @@ This work is dependent on the following:
 * `Registering and documenting
   <https://governance.openstack.org/tc/goals/queens/policy-in-code.html>`_
   all policies in code
+
+* `Use flask <https://bugs.launchpad.net/keystone/+bug/1776504>`_
 
 The work detailed in this specification will be supplemented with policy work
 being done in oslo and keystone:

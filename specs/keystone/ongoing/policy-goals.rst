@@ -13,7 +13,7 @@ The implementation is complicated to understand, inconsistent across projects,
 and lacks secure defaults.
 
 The purpose of this document is to define the overall goals we need to achieve
-with OpenStack policy implementation and level-set on policy terminology.
+with OpenStack's policy implementation and level-set on policy terminology.
 
 Goals
 =====

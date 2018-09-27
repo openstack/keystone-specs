@@ -16,7 +16,7 @@ keystone
 
 Stein approved specs:
 
-`Stein Roadmap <https://trello.com/b/YX9ceRRn/keystone-stein-roadmap>`_
+`Stein Roadmap <https://trello.com/b/rj0ECz2c/keystone-stein-roadmap>`_
 
 .. toctree::
    :glob:

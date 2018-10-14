@@ -89,7 +89,7 @@ identity provider (IdP). There would be exactly one mapping per IdP. The
 IdP ID would be the SHA256 hash of the issuer DN.
 
 In addition, this middleware shall accept the following configurable option,
-defined in ``[auth]`` configration section in keystone.conf, to further
+defined in ``[auth]`` configuration section in keystone.conf, to further
 filter the certificates that are allowed to participate in tokenless
 authorization::
 

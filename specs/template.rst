@@ -38,13 +38,6 @@ Some notes about using this template:
   having to look at additional files which can not be viewed in gerrit.  It
   will also allow inline feedback on the diagram itself.
 
-* If your spec has an impact on the HTTP API, propose the corresponding changes
-  to the ``api/`` directory for review along with your spec and add the
-  APIImpact flag to the commit message. Specifications with the APIImpact flag
-  can be found with this query_.
-
-.. _query: https://review.openstack.org/#/q/status:open+project:openstack/keystone-specs+message:apiimpact,n,z
-
 
 Problem Description
 ===================

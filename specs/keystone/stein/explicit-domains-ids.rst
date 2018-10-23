@@ -29,7 +29,7 @@ different Keystone servers.
 
 To avoid this, operators want to keep the LDAP users in a domain with
 a consistent ID across deployments.  The only domain with a
-predictable ID, however, is `default.` Tee default domain is used
+predictable ID, however, is `default.` The default domain is used
 during the initial install, and thus has service users. Thus, it is
 impractical to put the LDAP users in the default domain. If a site
 wished to have two LDAP servers in domain specific backends, only one

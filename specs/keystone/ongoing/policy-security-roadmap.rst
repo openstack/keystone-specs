@@ -13,9 +13,9 @@ The implementation is complicated to understand, inconsistent across projects,
 and exposes security issues across OpenStack.
 
 The purpose of this document is to describe the steps necessary to close
-security flaws within the current Role Based Access Control (RBAC) of
-OpenStack. Roadmaps to improve delegation usecases and policy will be covered
-in a separate document.
+security flaws within the current Role Based Access Control (RBAC)
+implementation used by OpenStack. Roadmaps to improve delegation usecases and
+policy will be covered in a separate document.
 
 Problem Description
 ===================
@@ -130,34 +130,12 @@ communicating proper scope. In the current system, only two scopes are really
 represented within OpenStack. The first is `unscoped`, which can be thought of
 as a valid authentication with an empty set of operations. The second is
 `project-scoped`, which is a valid authentication of a user with a role on a
-specific project. A third scope exists, but is rarely used outside of the
-identity service and that is `domain-scoped`. There isn't an existing mechanism
-to denote `system-scope`, nor does the assignment mechanisms within identity
-allow for it.
-
-The first step of this item would be to advertise proper `system-scope`. This
-requires keystone to understand system scope. One way to do this would be to
-allow the use of system role assignments. Currently, role assignments must
-consist of a user or group on a project or a domain. This would have to change
-to allow for assignments on a `system` scope. In addition to allowing roles to
-be assigned on the system, the existing scope mechanisms will need to be
-modified to allow users to obtain system-scoped tokens.
-
-The following are assumptions about the system scoping mechanism:
-
-* A request for a system-scoped token returns a token with
-  `token.system={'all'=True}` for a specific role or roles.
-* System scoping should not be piggy-backed onto unscoped requests. Doing so
-  could lead to security vulnerabilities given the existing usage pattern of
-  unscoped tokens today.
-
-Work Items
-~~~~~~~~~~
-
-* Make it so assignments can be set on the system (e.g. `openstack role add
-  --user Bob --system observer`) in both the client and identity server.
-* Introduce a new scoping mechanism that distinguishes `system-scope` from
-  `project-scoped`, `domain-scoped`, and `unscoped` requests.
+specific project. These scopes are the most commonly used scopes within
+OpenStack. However, the identity system supports two additional scopes. One is
+called `domain-scoped`, which is a valid authentication of a user with a role
+on a domain. The other is called `system-scope`, which is a valid
+authentication of a user with a role on the deployment system and meant to be
+used to access system specific resources.
 
 Consuming Libraries
 -------------------

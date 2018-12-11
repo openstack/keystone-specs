@@ -212,6 +212,9 @@ validating multiple blessed algorithms, allowing multiple tokens signed with
 different algorithms to be validated without require configuration changes
 except on the signing node.
 
+For the time being, if a deployment is using JWTs and needs to exercise
+crypto-agility, it is recommended they convert to Fernet tokens.
+
 Alternatives
 ------------
 

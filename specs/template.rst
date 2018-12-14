@@ -8,7 +8,7 @@
 Example Spec - The title of your blueprint
 ==========================================
 
-`bp example <https://blueprints.launchpad.net/keystone/+spec/example>`_
+`bug #XXXXXXX <https://bugs.launchpad.net/keystone/+bug/XXXXXXX>`_
 
 
 Introduction paragraph -- why are we doing anything? A single paragraph of
@@ -21,9 +21,27 @@ Some notes about using this template:
 
 * Wrap text at 79 columns.
 
-* The filename in the git repository should match the launchpad URL, for
-  example a URL of: https://blueprints.launchpad.net/keystone/+spec/new-feature
-  should be named new-feature.rst
+* The filename in the git repository should be descriptive of the feature.
+  For example, if the feature is called "new feature", the file should be
+  named new-feature.rst
+
+  Note that this process no longer uses the blueprints in launchpad and
+  instead uses a bug for tracking. Bugs are superior to blueprints in that
+  patches proposed and merged get a comment and comments on bugs are not
+  mutable. This ensures that the tracking of patches in our bug tracker
+  cannot be accidently lost if someone edits the body of the bug (unlike
+  blueprints, where all data is similar to the bug description and has
+  no history tracking.
+
+* You will need to open a bug in launchpad for tracking the changes. This
+  bug will be linked in the commit message of each patch for the feature
+  (including this specification) so that when a change is made the CI
+  system generate a comment on the bug and help us track all work being
+  done towards the feature. The bug number should replace the ``XXXXXXX``
+  above in the link.
+
+  Please be sure to use ``partial-bug: #XXXXXXX`` in the commit message
+  for landing this spec (where ``XXXXXXX`` is the bug id.
 
 * Do not delete any of the sections in this template.  If you have
   nothing to say for a whole section, just write: None

@@ -345,7 +345,7 @@ although there are two changes to the controller-manager interface:
 
 - The explicit ``user_id`` and ``group_id`` parameters in the Create call
   for those entities, since the manager layer will now generate the ID.  The
-  manager will will then pass this ID to the driver layer.
+  manager will then pass this ID to the driver layer.
 
 
 Implementation

@@ -148,7 +148,6 @@ Users will request and present tokens in exactly the same way they currently do
 with Fernet tokens. There is no need to add or change any APIs.
 
 .. _`JSON Web Token standard`: https://tools.ietf.org/html/rfc7519
-.. _`JWS`: https://tools.ietf.org/html/rfc7515
 .. _`JWE`: https://tools.ietf.org/html/rfc7516
 .. _`registered claims`: https://tools.ietf.org/html/rfc7519#section-4.1
 .. _`Python libraries`: https://jwt.io/#libraries
@@ -168,28 +167,42 @@ key with a special name, in order to ensure tokens can be validated during the
 rotation process. This won't be required with JWT and the following steps
 should be sufficient to perform key rotation without token invalidation due to
 missing signing keys. Assume the following steps are being performed on three
-different API servers, named `K1`, `K2`, and  `K3`, that need to validate
+different API servers, named `A`, `B`, and  `C`, that need to validate
 tokens issued by each other.
 
-1. A key pair is created for each API server. `K1.private`, `K1.pub` for
-   `K1`, `K2.private`, `K2.pub` for `K2`, and `K3.private`, `K3.pub` for `K3`.
-2. A copy of each public key is transferred to each API server. `K1`, `K2`, and
-   `K3` all have copies of `K1.pub`, `K2.pub`, and `K3.pub`.
+1. A key pair is created for each API server. `A.priv`, `A.pub` for `A`,
+   `B.priv`, `B.pub` for `B`, and `C.priv`, `C.pub` for `C`.
+2. A copy of each public key is transferred to each API server. `A`, `B`, and
+   `C` all have copies of `A.pub`, `B.pub`, and `C.pub`.
 
 At this point, tokens issued from any API server can be validated anywhere. In
-the event a single API server needs to rotate keypairs:
+the event a single API server needs to rotate key pairs:
 
-1. A new key pair is created for `K1` called `K1-new.private` and `K1-new.pub`.
-   `K1` is configured to start signing tokens with both `K1.private` and
-   `K1-new.private.`
-2. `K1-new.pub` is copied to the public key repository of each API server. So
-   long as `K2` and `K3` have either `K1.pub` or `K1-new.pub` they can validate
-   tokens issued by `K1`.
-3. After `K2` and `K3` have been updated with copies of `K1-new.pub`,
-   `K1.private` can be removed from `K1` and `K1.pub` can be removed from `K2`
-   and `K3`. Tokens that were signed with only `K1.private` are unable to be
-   verified and `K1.pub` should only be removed after those tokens have expired
-   anyway.
+1. A new key pair is created for `A` called `A'.priv` and `A'.pub`. `A` is not
+   configured to start signing tokens with `A'.priv` until all other nodes in
+   the cluster have a copy of `A'.pub`.
+2. `A'.pub` is copied to the public key repository of each API server. So
+   long as `B` and `C` have `A'.pub` they are ready to validate tokens signed
+   by the new private key `A'.priv`.
+3. After `B` and `C` have been updated with copies of `A'.pub`, server `A` can
+   be updated to start signing tokens with the new key `A'.priv`. Once all
+   tokens signed with `A.priv` are expired, `A.priv` and `A.pub` can be removed
+   from all servers. It is important to allow for a grace period between
+   configuring `A` to use `A'.priv` and removing `A.priv` in order to prevent
+   the premature invalidation of tokens that haven't expired yet.
+
+Note that the rotation process could be simplified slightly in step #1. The
+`JWS`_ specification goes into detail about serialization and support for
+multiple signatures in a single token. See `JWS section 7`_ for more
+information. The `PyJWT`_ library does not support multiple signatures on a
+single token. If it did, it would be possible to configure server `A` in step
+#1 to sign tokens with multiple private keys. Servers `B` and `C` would still
+be able to validate tokens from `A` because they have a copy of the public key
+(`A.pub`) used to create one of the token's signatures. The rest of the
+rotation process remains the same as far as propagating `A'.pub` to the other
+servers and eventually configuring `A` to only sign tokens with `A'.priv`. If,
+or when, `PyJWT`_ supports this functionality, support for multiple signatures
+in the JWS provider can be reconsidered.
 
 Traditional asymmetric keys can be revoked using revocation lists. At this time
 we are not going to support a revocation list implementation for JWT key pairs.
@@ -197,6 +210,9 @@ The operator has the ability to sync public keys accordingly when they rotate
 new keys in and out. Keystone will only use the public keys on disk to validate
 tokens. Is could change in the future, but for now it keeps the key rotation
 and key utilities with keystone simpler.
+
+.. _`JWS section 7`: https://tools.ietf.org/html/rfc7515#section-7
+.. _`JWS`: https://tools.ietf.org/html/rfc7515
 
 Crypto-Agility & Future Work
 ----------------------------

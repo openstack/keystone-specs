@@ -10,7 +10,6 @@ Example Spec - The title of your blueprint
 
 `bug #XXXXXXX <https://bugs.launchpad.net/keystone/+bug/XXXXXXX>`_
 
-
 Introduction paragraph -- why are we doing anything? A single paragraph of
 prose that operators can understand.
 
@@ -45,6 +44,9 @@ Some notes about using this template:
 
 * Do not delete any of the sections in this template.  If you have
   nothing to say for a whole section, just write: None
+
+  Note that the boilerplate text should be replaced with real text or
+  ``None``.
 
 * To test out your formatting, build the docs using tox, or see:
   http://rst.ninjs.org

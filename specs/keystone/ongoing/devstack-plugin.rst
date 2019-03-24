@@ -46,7 +46,7 @@ The keystone plugin will be enabled by adding the following to the
 .. code::
 
     # local.conf
-    enable_plugin keystone git://git.openstack.org/openstack/keystone.git
+    enable_plugin keystone https://git.openstack.org/openstack/keystone.git
 
 
 If you are checking out for Gerrit, substitute the git url for

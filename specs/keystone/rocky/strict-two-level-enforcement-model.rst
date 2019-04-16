@@ -23,7 +23,7 @@ model is `flat`_. This means limits associated to any part of the tree are not
 validated against each other.
 
 .. _specification: http://specs.openstack.org/openstack/keystone-specs/specs/keystone/queens/limits-api.html
-.. _flat: https://docs.openstack.org/keystone/latest/admin/identity-unified-limits.html#flat
+.. _flat: https://docs.openstack.org/keystone/latest/admin/unified-limits.html#flat
 
 Proposed Change
 ===============

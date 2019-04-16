@@ -14,15 +14,15 @@ Project Documentation:
 keystone
 --------
 
-Stein approved specs:
+Train approved specs:
 
-`Stein Roadmap <https://trello.com/b/rj0ECz2c/keystone-stein-roadmap>`_
+`Train Roadmap <https://trello.com/b/ClKW9C8x/keystone-train-roadmap>`_
 
 .. toctree::
    :glob:
    :maxdepth: 1
 
-   specs/keystone/stein/*
+   specs/keystone/train/*
 
 Backlog:
 
@@ -106,6 +106,16 @@ Implemented Identity Program Specifications
 
 keystone
 --------
+
+Stein approved specs:
+
+`Stein Roadmap <https://trello.com/b/rj0ECz2c/keystone-stein-roadmap>`_
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/keystone/stein/*
 
 Rocky approved specs:
 

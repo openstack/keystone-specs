@@ -145,7 +145,7 @@ like any other Keystone user.
 Alternatives
 ------------
 
-Continue with shadow mapping [2] as the only option for providing federated
+Continue with shadow mapping [3] as the only option for providing federated
 user provisioning.
 
 We could extend OS-FEDERATION to support federated user operations.
@@ -188,11 +188,11 @@ Assignee(s)
 
 Primary assignee:
 
-- Ron De Rose
+- Kristi Nikolla
 
 Other contributors:
 
-- TBD
+- Ron De Rose
 
 Work Items
 ----------

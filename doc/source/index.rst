@@ -93,14 +93,6 @@ keystonemiddleware approved specs for the Newton release:
 
       specs/keystonemiddleware/newton/*
 
-Backlog:
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
-   specs/keystonemiddleware/backlog/*
-
 Implemented Identity Program Specifications
 ===========================================
 

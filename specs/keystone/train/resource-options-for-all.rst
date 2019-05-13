@@ -38,6 +38,11 @@ functionality from users to encompass all resource types. This is implementing
 the scaffolding for future options to be built upon. No options will be
 added in the scope of this specification.
 
+This is being added to support concepts such as immutable resources, defaults
+for entire domains related to PCI-DSS options (e.g. exempting all service users
+from password expiry), default Multi-Factor-Auth rules for scoping to a given
+domain, etc.
+
 Proposed Change
 ===============
 

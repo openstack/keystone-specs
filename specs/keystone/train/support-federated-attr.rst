@@ -8,7 +8,7 @@
 Extend user API to support federated attributes
 ===============================================
 
-`bp support-federated-attr <https://blueprints.launchpad.net/keystone/+spec/support-federated-attr>`_
+`bug #1816076 <https://bugs.launchpad.net/keystone/+bug/1816076>`_
 
 Extend the user API to support federated attributes so that we treat federated
 users like any other Keystone user.

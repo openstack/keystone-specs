@@ -4,18 +4,19 @@
 
  http://creativecommons.org/licenses/by/3.0/legalcode
 
-=======================
-Policy Security Roadmap
-=======================
+========================
+Policy Goals and Roadmap
+========================
 
 Policy in OpenStack has long been the forefront of operator concerns and pain.
 The implementation is complicated to understand, inconsistent across projects,
-and exposes security issues across OpenStack.
+and lacks secure defaults.
 
-The purpose of this document is to describe the steps necessary to close
+The purpose of this document is to define the overall goals we need to achieve
+with OpenStack's policy implementation and level-set on policy terminology, as
+well as to describe the steps necessary to achieve those goals and to to close
 security flaws within the current Role Based Access Control (RBAC)
-implementation used by OpenStack. Roadmaps to improve delegation usecases and
-policy will be covered in a separate document.
+implementation used by OpenStack.
 
 Problem Description
 ===================
@@ -92,6 +93,86 @@ for the user or not give the user enough permissions to effectively do their
 job. It's apparent that granting too many permissions violates the principal of
 least privilege, but it's arguably true for the inverse, since too much
 restriction doesn't let the user effectively do their job.
+
+Goals
+=====
+
+The following goals increase OpenStack adoption by reducing complexity,
+allowing better interoperability, and closing security gaps.
+
+1. Administrative rights, via the `admin` role, should be treated consistently
+   across OpenStack. For example, granting an administrator role to a user on a
+   project shouldn't result in the ability to modify endpoints because
+   endpoints aren't a project-specific resource. Likewise, granting a user
+   administrative rights on the deployment system shouldn't result in the
+   ability to do administrative things in a specific project.
+2. The mapping of policies to operations should be easy to understand,
+   customize, and maintain.
+3. A variety of sensible roles should be available by default upon
+   installation, or upgrade. These roles should correspond to the default
+   policies provided by each project. This will require cross-project
+   communication to ensure the roles make sense across project boundaries.
+
+The list above allows operators to more easily accomplish use-cases such as:
+
+* Grant users read-only access to projects
+* Grant users administrator permissions on a per-project basis
+* Grant users access to a subset of resource types for a particular project
+
+Future Goals
+------------
+
+The following goals have been brought up in discussions several times. At this
+point we are not ruling out the possibility of addressing these goals, but
+formally recognizing them as something to be addressed after completing the
+goals listed in the previous section (e.g. you must crawl before you can walk,
+and walk before you can run).
+
+1. It should be possible to delegate fine-grained access of a resource to
+   another user or system.
+2. It should be possible to build custom policies that can take into account
+   users, resources, and scopes. This could result in policy being fed
+   different assertions on specific resources. For example, having a policy
+   that says a specific user can access my instance only on specific days and
+   only if they have specific assertions available in the SAML document they
+   used to authenticate.
+3. It should be possible to determine what operations are available in a
+   deployment while taking role assignments into consideration. This needs to
+   be done in such a way that doesn't duplicate information across OpenStack
+   services or increase maintenance overhead for operators.
+
+Cross-Project Impact
+====================
+
+Policy and Role Based Access Control (RBAC) has traditionally been thought of
+as a problem space within the OpenStack Identity umbrella. While that statement
+logically makes sense, the current implementation of policy is enforced across
+the OpenStack services making the ownership of the problem harder to pinpoint.
+Keystone currently only acts as an information point to the service, which is
+ultimately responsible for enforcing the policy decision based on information
+from keystone and information from the project. The OpenStack community has
+made several attempts to address these issues (linked below in the References
+section), but having the implementation spread across OpenStack makes it
+impossible for a single project to propose and fix these issues without
+cross-project buy-in.
+
+Cross-Project Resolution
+========================
+
+If a proposed solution to one of the above goals requires a coordinated effort
+between projects, we will use either `community goals <https://governance.openstack.org/tc/goals/>`_,
+`tags <https://governance.openstack.org/tc/reference/tags/index.html>`_,
+or both. These tools require cross-project communication, buy-in, and
+commitment.
+
+For example, one community goal might be to define a set of default roles and
+another to implement them consistently across services. Once a project tests
+and implements the standardized default set, they can `assert:basic-rbac` as a
+project tag.
+
+These tools weren't available when previous solutions were proposed. Now that
+we can use them as a community, they are a natural fit for solving complex,
+distributed problems like consistent RBAC enforcement.
 
 Road Map
 ========
@@ -174,4 +255,15 @@ The following are references to past or present specifications:
 
 * `RBAC <http://csrc.nist.gov/groups/SNS/rbac/>`_
 * `Admin-ness bug <https://bugs.launchpad.net/keystone/+bug/968696>`_
+* `Role Check from Middleware specification <https://review.openstack.org/#/c/391624>`_
+* `Tokens with subsets of roles specification <https://review.openstack.org/#/c/186979>`_
+* `Role Check on Body Key specification <https://review.openstack.org/#/c/456974>`_
+* `Dynamic RBAC Policy specification <https://review.openstack.org/#/c/279379>`_
+* `Policy Merge specification <https://review.openstack.org/#/c/295049>`_
+* `Fetch Policy by Tag specification <https://review.openstack.org/#/c/298788>`_
+* `Policy rules managed from a database specification <https://review.openstack.org/#/c/133814>`_
+* `Add policy-remove-scope-checks specification <https://review.openstack.org/#/c/433037/>`_
+* `Add additional-default-policy-roles specification <https://review.openstack.org/#/c/427872/>`_
+* `Add policy-docs specification <https://review.openstack.org/#/c/433010/>`_
+* `Capability API spec <https://review.openstack.org/#/c/386555/>`_
 * `System Scope Specification <https://review.openstack.org/#/c/464763/>`_

@@ -1,7 +1,7 @@
 - project:
     templates:
       - openstack-specs-jobs
-      - openstack-python36-jobs
+      - openstack-python3-train-jobs
     check:
       jobs:
         - openstack-tox-py27

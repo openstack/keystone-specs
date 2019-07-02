@@ -93,20 +93,13 @@ by keystonemiddleware as follows:
    This list is a whitelist, i.e. any request not explicitly allowed by an
    access rule is rejected. Keystone itself does not validate the content of
    access rules because that would require domain knowledge of each service in
-   the catalog. Every access rule must match a permitted access rule as
-   described in the `Access Rules Config`_ section below. If one or more
-   access rule entries fail this test, application credential creation will
-   fail.
+   the catalog.
 
-2) A future iteration of this feature will create a toggle to control whether a
-   service can use one of these token to make background requests on behalf of
-   the user, for example to allow the compute service to make requests to the
-   block storage service even though the block storage API wasn't explicitly
-   whitelisted in the application credential access rules. For the time being,
-   chained service requests like this will be unrestricted and will rely on
-   operator-configured policies to prevent abuse.
+   The access rules are stored in a separate database table and linked to the
+   application credential so that old rules can be re-used with new application
+   credentials.
 
-3) `keystonemiddleware` on the service's side receives the access rule list
+2) `keystonemiddleware` on the service's side receives the access rule list
    during token validation. It then checks
 
    (a) The service type (e.g.  `compute`)
@@ -131,46 +124,6 @@ by keystonemiddleware as follows:
        of this feature will enable a toggle to control this behavior.
 
 .. _published Service Types Authority: https://service-types.openstack.org/
-
-Access Rules Config
--------------------
-
-Every access rule must be validated against an operator-configured list upon
-application credential upon creation, unless the operator has explicitly
-configured a permissive mode that does no validation. This section describes how
-an operator defines a list and how they are used by Keystone.
-
-The allowed access rules are operator configured as a JSON config file on disk,
-with the idea that perhaps such a catalog might be exposed on service endpoints
-someday. Keystone will document a curated list of URL templates for those APIs
-where such a thing can be generated automatically. The operator can then use
-this list as-is in the simplest case, or modify it for their local setup as they
-chose. For every access rule the following information is stored:
-
-1) A service type that matches one of the services in the Keystone catalog.
-
-2) A URL path pattern, such as `/v2.1/servers/{server_id}`. The combination
-   of this string and the service type from (1) must be unique. It is anchored at
-   the beginning of a path, i.e. access rules' path attributes must fully match
-   this pattern and may not be preceded or followed by extra characters. The
-   template string may contain the following special wildcard templates:
-
-   * `{named_variable}`: allows arbitrary strings (excluding the `/` character).
-     Named placeholders in the access rule path pattern are there for
-     readability and direct comparison to API references and policy files, they
-     do not correlate to string formatting substitutions. Examples include
-     `{project_id}`, `{user_id}`, or `{server_id}`.
-
-   * `*`: allows arbitrary strings (excluding the `/` character)
-
-   * `**`: allows arbitrary strings (including the `/` character)
-
-   A user using a path pattern containing wild cards for validating one of
-   their access rules may substitute the wild card by any string fulfilling the
-   constraint imposed by the wild card. This allows the operator to be
-   permissive in their URL templates (to the point of only having one "**"
-   pattern in the most extreme case) and the user to be more restrictive than a
-   wild card template in their access rules.
 
 Preventing Regressions
 ----------------------
@@ -203,70 +156,10 @@ any application credentials that do not have access rules, validation proceeds
 as it would have before the introduction of access rules (regardless of whether
 there is an `Openstack-Identity-Access-Rules` or not).
 
-Discoverability for Access Rules Config
----------------------------------------
-
-Any user with a valid auth token can list the operator maintained access rules
-through the Keystone API::
-
-    GET /v3/access_rules_config
-
-.. code-block:: json
-
-   {
-       "compute": [
-           {
-               "path": "/v2.1/servers",
-               "method": "GET"
-           }
-       ]
-   }
-
-This allows them to discover the URL path templates they can use for creating
-access rules in application credentials.
-
-Access Rules and Roles
-----------------------
-
-Configured access rules will have an optional ROLE_ID value. If this value is
-set, it indicates the role that the user needs to provide in the application
-credential in order for the call to proceed. In addition, if the role_id value
-is set, the user will only be able to use the access rule if the user has that
-role assigned, either directly, or as a result of an implied role.
-
-Chained API Calls
------------------
-
-One thing the access rules make rather tough is chained API calls: if an API
-call is permitted by an access rule, but the service uses the same access rule
-restricted token to call other services' APIs, these will fail. While it would
-be possible to circumvent this problem with additional access rules to cover
-the chained calls, that would be very poor ergonomics, especially for
-operations with a large amount of chained API calls such as creating a Heat
-stack.
-
-A future optimization of this feature will implement a toggle for access
-rules to give services blanket permission to perform chained API calls with the
-token resulting from the Application credential. This is implemented as follows:
-
-1) If `keystonemiddleware` receives a request that is permitted due to an
-   application credential with this toggle set, it requests a service token and
-   adds it to the request's object's headers.
-
-2) Follow-up requests issued by the service will then send this service token
-   along with the regular token resulting from the application credential.
-
-3) If `keystonemiddleware` encounters an application credential generated token
-   with this toggle plus a valid service token it will ignore any
-   non-empty access rulelists and pass the request to the service as-is.
-
 API Examples
 ------------
 
-An example creation request for an application credential might look as
-follows:
-
-::
+An example creation request for an application credential looks as follows::
 
     POST /v3/users/{user_id}/application_credentials
 
@@ -276,21 +169,65 @@ follows:
         "application_credential": {
             "name": "allow-metrics-logs",
             "description": "Allow submitting metrics and logs to Monasca",
-            "roles": [
-                {"name": "monasca-agent"}
-            ]
             "access_rules": [
-              {
-                "path": "/v2.0/metrics",
-                "method": "POST"
-              },
-              {
-                "path": "/v3.0/logs",
-                "method": "POST"
-              }
+                {
+                    "path": "/v2.0/metrics",
+                    "method": "POST"
+                },
+                {
+                    "path": "/v3.0/logs",
+                    "method": "POST"
+                }
             ]
         }
     }
+
+With this, two new access rules will be created under the user's ID. They can be
+queried like this:
+
+Request::
+
+    GET /v3/users/{user_id}/access_rules
+
+Response:
+
+.. code-block:: json
+
+    {
+        "access_rules": [
+            {
+                "id": "180e86bc",
+                "path": "/v2.0/metrics",
+                "method": "POST"
+            },
+            {
+                "id": "03e13d17",
+                "path": "/v3.0/logs",
+                "method": "POST"
+            }
+        ]
+    }
+
+If desired, they could then be re-used for another application credential by
+providing the ID::
+
+    POST /v3/users/{user_id}/application_credentials
+
+.. code-block:: json
+
+    {
+        "application_credential": {
+            "name": "allow-just-metrics",
+            "description": "Allow submitting only metrics to Monasca",
+            "access_rules": [
+                {
+                    "id": "180e86bc"
+                }
+            ]
+        }
+    }
+
+
 
 Alternatives
 ------------
@@ -353,6 +290,44 @@ Alternatives
 
      (b) URL paths can be rejected in keystonemiddleware, without involving
          `oslo.policy`, leading to a faster failure for unauthorized requests.
+
+Future Considerations
+---------------------
+
+Chained API Calls
+~~~~~~~~~~~~~~~~~
+
+A future iteration of this feature may create a toggle to control whether a
+service can use one of these tokens to make background requests on behalf of
+the user, for example to allow the compute service to make requests to the
+block storage service even though the block storage API wasn't explicitly
+whitelisted in the application credential access rules. For the time being,
+chained service requests like this will leverage service tokens to ensure
+that subsequent requests made on behalf of a user will be completed as normal,
+and will rely on operator-configured policies to prevent abuse.
+
+Access Rules Config
+~~~~~~~~~~~~~~~~~~~
+
+A future iteration of this feature may enable a way for operators to restrict
+the allowed access rules that a user may configure by creating a global
+whitelist of access rules against which users' access rules are validated prior
+to the creation of the application credential. The value of this would be to assist
+users in creating valid access rules by validating them against known working
+rules. It would also give the operator more control of the overall access
+control configuration. However, for the time being, this feature is infeasible
+because we lack discoverability of APIs and it is impossible to create a
+complete list of valid access rules for all services across OpenStack and
+external to OpenStack. Since providing a complete list is infeasible, leaving it
+up to the operator to curate their own list causes a poor operating experience
+for the operator and the list would be susceptible to mistakes, which in turn
+would cause an extremely poor user experience for the end user.
+
+When this feature becomes feasible, another possibility is to allow operators to
+configure a role ID for each access rule to indicate that the user needs to
+provide that role in the application credential in order for the call to
+proceed. This allows for greater alignment between policy rules and access
+rules.
 
 Limitations
 -----------
@@ -494,3 +469,9 @@ References
 
 * Updated design discussion:
   http://lists.openstack.org/pipermail/openstack-discuss/2019-February/003031.html
+
+* Notes from Train Forum session:
+  https://etherpad.openstack.org/p/DEN-keystone-forum-sessions-app-creds
+
+* Notes from Train PTG session:
+  https://etherpad.openstack.org/p/keystone-train-ptg-application-credentials

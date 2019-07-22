@@ -22,13 +22,14 @@ Keystone is responsible for many resources that are used through out other
 services in an OpenStack deployment. For example, roles essentially map
 permissions to a string that can be associated to a user via a role assignment.
 Many roles are reused across OpenStack and some carry elevated authorization
-needed to manage the deployment. In some cases, the accidental removal of a role
-can be catastrophic to the deployment, since the deletion of a role triggers the
-deletion of all role assignments any user has in any scope for that role. This
-is particularly relevant to service users, which usually have an admin role
-assignment, without which they cannot perform basic operations needed for the
-cloud to be usable. The fix in such a case usually requires modifying database
-entries by hand, which is a terrible practice in production environments.
+needed to manage the deployment. In some cases, the accidental removal of a
+role can be catastrophic to the deployment, since the deletion of a role
+triggers the deletion of all role assignments any user has in any scope for
+that role. This is particularly relevant to service users, which usually have
+an admin role assignment, without which they cannot perform basic operations
+needed for the cloud to be usable. The fix in such a case usually requires
+modifying database entries by hand, which is a terrible practice in production
+environments.
 
 Keystone should implement a more robust mechanism that allows operators to lock
 specific resources, like important roles. A locked resource shouldn't be
@@ -51,11 +52,11 @@ implement this in steps:
 #. Add an ``immutable`` resource option to the role model. This will be off by
    default, always.
 
-#. Add an opt-in flag ``--immutable-roles`` to the ``keystone-manage bootstrap``
-   command which sets the ``immutable`` resource option on the default roles
-   (``admin``, ``member``, ``reader``) to ``true``. The command should also log
-   a warning that this will become default behavior in the future if they do not
-   set it.
+#. Add an opt-in flag ``--immutable-roles`` to the ``keystone-manage
+   bootstrap`` command which sets the ``immutable`` resource option on the
+   default roles (``admin``, ``member``, ``reader``) to ``true``. The command
+   should also log a warning that this will become default behavior in the
+   future if they do not set it.
 
 #. Add a ``keystone-status`` check to alert operators if they have not made the
    default roles immutable.
@@ -75,8 +76,8 @@ Alternatives
   assignments are hard-deleted, but could make it easier to recover since the
   role ID still resides in the database.
 
-* Change horizon to give a visual alert for potentially destructive actions like
-  deleting the admin role. This doesn't protect against bad scripts.
+* Change horizon to give a visual alert for potentially destructive actions
+  like deleting the admin role. This doesn't protect against bad scripts.
 
 Security Impact
 ---------------
@@ -93,8 +94,8 @@ Other End User Impact
 
 Administrative users will need to unset the ``immutable`` flag for a role if
 they truly want to delete or alter the role. Client changes will be needed to
-allow the adminitrator to set a role as immutable or mutable. Non-administrative
-end users should see no difference.
+allow the adminitrator to set a role as immutable or mutable.
+Non-administrative end users should see no difference.
 
 Performance Impact
 ------------------

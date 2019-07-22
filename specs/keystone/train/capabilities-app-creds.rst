@@ -84,8 +84,8 @@ by keystonemiddleware as follows:
 
    (a) A URL path (e.g. `/v2.1/servers`, `/v2.1/servers/*` or
        `/v2.1/servers/{server_id}`). This URL path must be explicitly permitted
-       according to an operator-configured list of access rules (see `Access Rules
-       Config`_ below).
+       according to an operator-configured list of access rules (see `Access
+       Rules Config`_ below).
    (b) A request method (e.g. `GET`)
    (c) A service type (ideally matching the `published Service Types Authority`_)
        from the Keystone service catalog.
@@ -108,9 +108,9 @@ by keystonemiddleware as follows:
    (c) The request method (e.g. `GET`)
 
    Against every entry in the access rule list retrieved from the token. If an
-   access rule matches the request, checking stops and the request is handed over
-   to `oslo.policy` for the regular role based checking. If no access rules
-   match, the request is rejected right away.
+   access rule matches the request, checking stops and the request is handed
+   over to `oslo.policy` for the regular role based checking. If no access
+   rules match, the request is rejected right away.
 
    There are three special cases to access rule list processing:
 
@@ -120,8 +120,8 @@ by keystonemiddleware as follows:
    (b) If an empty list is provided (i.e. `[]`), all requests are rejected
        (even if the request would otherwise pass the test in (c).
    (c) If there is a valid service token in the request, `keystonemiddleware`
-       passes the request to `oslo.policy` right away, though a future iteration
-       of this feature will enable a toggle to control this behavior.
+       passes the request to `oslo.policy` right away, though a future
+       iteration of this feature will enable a toggle to control this behavior.
 
 .. _published Service Types Authority: https://service-types.openstack.org/
 
@@ -182,8 +182,8 @@ An example creation request for an application credential looks as follows::
         }
     }
 
-With this, two new access rules will be created under the user's ID. They can be
-queried like this:
+With this, two new access rules will be created under the user's ID. They can
+be queried like this:
 
 Request::
 
@@ -312,19 +312,19 @@ Access Rules Config
 A future iteration of this feature may enable a way for operators to restrict
 the allowed access rules that a user may configure by creating a global
 whitelist of access rules against which users' access rules are validated prior
-to the creation of the application credential. The value of this would be to assist
-users in creating valid access rules by validating them against known working
-rules. It would also give the operator more control of the overall access
-control configuration. However, for the time being, this feature is infeasible
-because we lack discoverability of APIs and it is impossible to create a
-complete list of valid access rules for all services across OpenStack and
-external to OpenStack. Since providing a complete list is infeasible, leaving it
-up to the operator to curate their own list causes a poor operating experience
-for the operator and the list would be susceptible to mistakes, which in turn
-would cause an extremely poor user experience for the end user.
+to the creation of the application credential. The value of this would be to
+assist users in creating valid access rules by validating them against known
+working rules. It would also give the operator more control of the overall
+access control configuration. However, for the time being, this feature is
+infeasible because we lack discoverability of APIs and it is impossible to
+create a complete list of valid access rules for all services across OpenStack
+and external to OpenStack. Since providing a complete list is infeasible,
+leaving it up to the operator to curate their own list causes a poor operating
+experience for the operator and the list would be susceptible to mistakes,
+which in turn would cause an extremely poor user experience for the end user.
 
-When this feature becomes feasible, another possibility is to allow operators to
-configure a role ID for each access rule to indicate that the user needs to
+When this feature becomes feasible, another possibility is to allow operators
+to configure a role ID for each access rule to indicate that the user needs to
 provide that role in the application credential in order for the call to
 proceed. This allows for greater alignment between policy rules and access
 rules.

@@ -10,8 +10,6 @@
 # serve to show the default.
 
 import datetime
-import subprocess
-import warnings
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -26,11 +24,16 @@ import warnings
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.viewcode',
+extensions = [
               'sphinxcontrib.blockdiag',
               'openstackdocstheme',
              ]
+
+
+# openstackdocstheme options
+repository_name = "openstack/keystone-specs"
+bug_project = "keystone"
+bug_tag = "specs"
 
 blockdiag_html_image_format = 'SVG'
 
@@ -120,15 +123,6 @@ html_theme = 'openstackdocs'
 # pixels large.
 #html_favicon = None
 
-# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
-# using the given strftime format.
-git_cmd = ["git", "log", "--pretty=format:'%ad, commit %h'", "--date=local",
-    "-n1"]
-try:
-    html_last_updated_fmt = subprocess.check_output(git_cmd).decode('utf-8')
-except Exception:
-    warnings.warn('Cannot get last updated time from git repository. '
-                  'Not setting "html_last_updated_fmt".')
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
 #html_use_smartypants = True

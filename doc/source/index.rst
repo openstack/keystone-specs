@@ -14,15 +14,17 @@ Project Documentation:
 keystone
 --------
 
-Train approved specs:
+Ussuri approved specs:
 
-`Train Roadmap <https://trello.com/b/ClKW9C8x/keystone-train-roadmap>`_
+`Ussuri Roadmap <https://tree.taiga.io/project/keystone-ussuri-roadmap/kanban>`_
 
-.. toctree::
-   :glob:
-   :maxdepth: 1
+.. Uncomment when spec for Ussuri is added
 
-   specs/keystone/train/*
+   .. toctree::
+      :glob:
+      :maxdepth: 1
+
+      specs/keystone/ussuri/*
 
 Backlog:
 
@@ -98,6 +100,16 @@ Implemented Identity Program Specifications
 
 keystone
 --------
+
+Train approved specs:
+
+`Train Roadmap <https://trello.com/b/ClKW9C8x/keystone-train-roadmap>`_
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/keystone/train/*
 
 Stein approved specs:
 

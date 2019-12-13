@@ -18,13 +18,11 @@ Ussuri approved specs:
 
 `Ussuri Roadmap <https://tree.taiga.io/project/keystone-ussuri-roadmap/kanban>`_
 
-.. Uncomment when spec for Ussuri is added
+.. toctree::
+   :glob:
+   :maxdepth: 1
 
-   .. toctree::
-      :glob:
-      :maxdepth: 1
-
-      specs/keystone/ussuri/*
+   specs/keystone/ussuri/*
 
 Backlog:
 

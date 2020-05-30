@@ -31,9 +31,10 @@ extensions = [
 
 
 # openstackdocstheme options
-repository_name = "openstack/keystone-specs"
-bug_project = "keystone"
-bug_tag = "specs"
+openstackdocs_repo_name = "openstack/keystone-specs"
+openstackdocs_auto_name = False
+openstackdocs_bug_project = "keystone"
+openstackdocs_bug_tag = "specs"
 
 blockdiag_html_image_format = 'SVG'
 
@@ -88,7 +89,7 @@ add_module_names = False
 show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = 'native'
 
 # A list of ignored prefixes for module index sorting.
 modindex_common_prefix = ['identity-specs.']

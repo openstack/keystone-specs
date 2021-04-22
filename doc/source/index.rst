@@ -81,17 +81,14 @@ keystoneclient approved specs for the Newton release:
 keystonemiddleware
 ------------------
 
-keystonemiddleware approved specs for the Newton release:
+keystonemiddleware approved specs for the Xena release:
 
-- None
 
-.. Uncomment this section when there is a spec in keystoneclient.
+.. toctree::
+  :glob:
+  :maxdepth: 1
 
-    .. toctree::
-      :glob:
-      :maxdepth: 1
-
-      specs/keystonemiddleware/newton/*
+  specs/keystonemiddleware/xena/*
 
 Implemented Identity Program Specifications
 ===========================================

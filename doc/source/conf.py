@@ -27,6 +27,7 @@ import datetime
 extensions = [
               'sphinxcontrib.blockdiag',
               'openstackdocstheme',
+              'sphinxcontrib.seqdiag',
              ]
 
 

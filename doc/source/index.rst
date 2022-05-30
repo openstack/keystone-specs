@@ -22,14 +22,6 @@ keystone
 
    specs/keystone/2023.1/*
 
-Yoga approved specs:
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-
-   specs/keystone/yoga/*
-
 Backlog:
 
 .. toctree::
@@ -101,6 +93,14 @@ Implemented Identity Program Specifications
 
 keystone
 --------
+
+Yoga approved specs:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/keystone/yoga/*
 
 Ussuri approved specs:
 

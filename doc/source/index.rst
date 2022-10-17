@@ -79,14 +79,14 @@ keystoneclient approved specs for the Newton release:
 keystonemiddleware
 ------------------
 
-keystonemiddleware approved specs for the Xena release:
+keystonemiddleware approved specs for the 2023.1 release:
 
 
 .. toctree::
   :glob:
   :maxdepth: 1
 
-  specs/keystonemiddleware/xena/*
+  specs/keystonemiddleware/2023.1/*
 
 Implemented Identity Program Specifications
 ===========================================
@@ -234,6 +234,14 @@ Liberty implemented specs:
 
 keystonemiddleware
 ------------------
+
+Xena approved specs:
+
+.. toctree::
+  :glob:
+  :maxdepth: 1
+
+  specs/keystonemiddleware/xena/*
 
 Kilo implemented specs:
 

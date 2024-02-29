@@ -14,6 +14,14 @@ Project Documentation:
 keystone
 --------
 
+2024.2 approved specs:
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   specs/keystone/2024.2/*
+
 2024.1 approved specs:
 
 .. toctree::

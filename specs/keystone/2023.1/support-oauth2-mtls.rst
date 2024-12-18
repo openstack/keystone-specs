@@ -81,44 +81,7 @@ Terminology
 OAuth2.0 mutual TLS Flow
 ------------------------
 
-.. seqdiag::
-
-  seqdiag {
-
-    Client;
-    server-os [label="Web Server\n(OpenStack Service)"];
-    middleware [label="Keystone\nMiddleware"];
-    server-ks [label="Web Server\n(Keystone)"];
-    Keystone;
-    os-service [label="OpenStack\nService"];
-
-    Client -> server-ks
-    [label = "1. POST\n /identity/v3/OS-OAUTH2/token\n w/ client ID + client certificate (over mutual TLS)", note = "A client certificates is retrieved from a request sent over mutual TLS"];
-    server-ks <-- server-ks
-    [label = "2. Validate trust chain of the client certificate"];
-    server-ks --> Keystone
-    Keystone <-- Keystone
-    [label = "3. Issue access token and bind client certificate thumbprint to the access token"];
-    server-ks <-- Keystone
-    Client <-- server-ks
-    [label = "Response 200 OK\n w/ access token"];
-    Client -> server-os
-    [label = "4. request\n OpenStack Service API\n w/ access token + client certificate (over mutual TLS)", note = "A client certificates is retrieved from a request sent over mutual TLS"];
-    server-os <-- server-os
-    [label = "5. Validate trust chain of the client certificate"];
-    server-os --> middleware
-    middleware -> Keystone
-    [label = "GET\n /v3/auth/tokens\n w/ access token"];
-    middleware <-- Keystone
-    [label = "Response 200 OK\n w/ access token metadata"];
-    middleware <-- middleware
-    [label = "6. Verify that certificate thumbprint in metadata matches thumbprint of certificate used For mutual TLS"];
-    middleware -> os-service
-    [label = "forward API requst\n w/ access token metadata"];
-    server-os <-- os-service
-    Client <-- server-os
-    [label = "API response"];
-  }
+.. image:: _images/seqdiag-ae6acb56f902293e5b492939b97ba256bbf31fec.png
 
 The flow consists of the following steps as illustrated in the above sequence:
 

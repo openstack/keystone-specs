@@ -681,11 +681,10 @@ Assume project ``P`` is a child of project ``F``, which is a child of project
 
 Assuming we have a default limit of 10
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
-
+   graph {
+      node [shape=box]
       A [label="A (10)"];
       F [label="F (10)"];
       P [label="P (10)"];
@@ -693,26 +692,24 @@ Assuming we have a default limit of 10
 
 And then we ``UPDATE LIMIT on A to 20``
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
-
-      A [label="A (20)", textcolor = "#FF0000"];
+   graph {
+      node [shape=box]
+      A [label="A (20)", fontcolor = "#FF0000"];
       F [label="F (10)"];
       P [label="P (10)"];
    }
 
 Or we can ``UPDATE LIMIT on P to 30``
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
-
+   graph {
+      node [shape=box]
       A [label="A (20)"];
       F [label="F (10)"];
-      P [label="P (30)", textcolor = "#FF0000"];
+      P [label="P (30)", fontcolor = "#FF0000"];
    }
 
 This is allowed with flat enforcement because the hierarchy is not taken into

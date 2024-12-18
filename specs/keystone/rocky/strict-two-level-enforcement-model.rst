@@ -92,10 +92,10 @@ and the default registered limit for ``cores`` is 10.  The labels in the
 diagrams below use shorthand notation for `limit` and `usage` as `l` and `u`,
 respectively.
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
@@ -107,17 +107,17 @@ respectively.
 
 Technically, both ``B`` and ``C`` can use up to 8 ``cores`` each, resulting in:
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
 
       A [label="A (l=20, u=4)"];
-      B [label="B (u=8)", textcolor = "#00af00"];
-      C [label="C (u=8)", textcolor = "#00af00"];
+      B [label="B (u=8)", fontcolor = "#00af00"];
+      C [label="C (u=8)", fontcolor = "#00af00"];
    }
 
 If ``A`` attempts to claim two more ``cores``, the usage check will fail
@@ -126,15 +126,15 @@ usage of each project in the hierarchy by using the callback provided by the
 service to see that total usage of ``A``, ``B``, and ``C`` is equal to the
 limit of the tree, set by ``A.limit``.
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
 
-      A [label="A (l=20, u=6)", textcolor = "#FF0000"];
+      A [label="A (l=20, u=6)", fontcolor = "#FF0000"];
       B [label="B (u=8)"];
       C [label="C (u=8)"];
    }
@@ -142,10 +142,10 @@ limit of the tree, set by ``A.limit``.
 Despite the usage of the tree being equal to the limit, we can still add
 children to the tree:
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
@@ -154,16 +154,16 @@ children to the tree:
       A [label="A (l=20, u=4)"];
       B [label="B (u=8)"];
       C [label="C (u=8)"];
-      D [label="D (u=0)", textcolor = "#00af00"];
+      D [label="D (u=0)", fontcolor = "#00af00"];
    }
 
 Even though the project can be created, the current usage of cores across the
 tree prevents ``D`` from claiming any ``cores``:
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
@@ -172,7 +172,7 @@ tree prevents ``D`` from claiming any ``cores``:
       A [label="A (l=20, u=4)"];
       B [label="B (u=8)"];
       C [label="C (u=8)"];
-      D [label="D (u=2)", textcolor = "#FF0000"];
+      D [label="D (u=2)", fontcolor = "#FF0000"];
    }
 
 Creating a grandchild of project ``A`` is forbidden because it violates the
@@ -185,10 +185,10 @@ reshuffle usage accordingly. A system administrator should be able to as well.
 Providing this information in tree structures with more than a depth of two is
 much harder, but may be implemented with a separate model.
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
@@ -197,22 +197,22 @@ much harder, but may be implemented with a separate model.
       A [label="A (l=20, u=4)"];
       B [label="B (u=8)"];
       C [label="C (u=8)"];
-      D [label="D (u=0)", textcolor = "#FF0000"];
+      D [label="D (u=0)", fontcolor = "#FF0000"];
    }
 
 Granting ``B`` the ability to claim more cores can be done by giving ``B`` a
 project-specific override for ``cores``:
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
 
       A [label="A (l=20, u=4)"];
-      B [label="B (l=12, u=8)", textcolor = "#00af00"];
+      B [label="B (l=12, u=8)", fontcolor = "#00af00"];
       C [label="C (u=8)"];
    }
 
@@ -221,29 +221,29 @@ Note that regardless of this update, any subsequent requests to claim more
 of the ``A``. If ``cores`` are released from ``A`` and ``C``, ``B`` can claim
 them:
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
 
-      A [label="A (l=20, u=2)", textcolor = "#00af00"];
+      A [label="A (l=20, u=2)", fontcolor = "#00af00"];
       B [label="B (l=12, u=8)"];
-      C [label="C (u=6)", textcolor = "#00af00"];
+      C [label="C (u=6)", fontcolor = "#00af00"];
    }
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
 
       A [label="A (l=20, u=2)"];
-      B [label="B (l=12, u=12)", textcolor = "#00af00"];
+      B [label="B (l=12, u=12)", fontcolor = "#00af00"];
       C [label="C (u=6)"];
    }
 
@@ -252,17 +252,17 @@ able to claim any more ``cores`` because the total usage of the tree is equal
 to the limit of ``A``, thus preventing ``C`` from reclaiming the ``cores`` it
 had:
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
 
       A [label="A (l=20, u=2)"];
       B [label="B (l=12, u=12)"];
-      C [label="C (u=8)", textcolor = "#FF0000"];
+      C [label="C (u=8)", fontcolor = "#FF0000"];
    }
 
 Creating or updating a project with a limit that exceeds the limit of ``A`` is
@@ -272,23 +272,23 @@ children to have explicit overrides greater than the limit of the parent would
 result in strange user experience and be misleading since the total usage of
 the tree would be capped at the limit of the parent:
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
 
       A [label="A (l=20, u=0)"];
-      B [label="B (l=30, u=0)", textcolor = "#FF0000"];
+      B [label="B (l=30, u=0)", fontcolor = "#FF0000"];
       C [label="C (u=0)"];
    }
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
@@ -297,20 +297,20 @@ the tree would be capped at the limit of the parent:
       A [label="A (l=20, u=0)"];
       B [label="B (u=0)"];
       C [label="C (u=0)"];
-      D [label="D (l=30, u=0)", textcolor = "#FF0000"];
+      D [label="D (l=30, u=0)", fontcolor = "#FF0000"];
    }
 
 Finally, let's still assume the default registered limit for ``cores`` is 10,
 but we're going to create project ``A`` with a limit of 6.
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A;
 
-      A [label="A (l=6, u=0)", textcolor = "#00af00"];
+      A [label="A (l=6, u=0)", fontcolor = "#00af00"];
    }
 
 When we create project ``B``, which is a child of project ``A``, the limit API
@@ -318,24 +318,24 @@ should ensure that project ``B`` doesn't assume the default of 10. Instead, we
 should obey the parent's limit since no single child limit should exceed the
 limit of the parent:
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
 
       A [label="A (l=6, u=0)"];
-      B [label="B (l=6, u=0)", textcolor = "#00af00"];
+      B [label="B (l=6, u=0)", fontcolor = "#00af00"];
    }
 
 This behavior should be consistent regardless of the number of children added
 under project ``A``.
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
@@ -343,8 +343,8 @@ under project ``A``.
 
       A [label="A (l=6, u=0)"];
       B [label="B (l=6, u=0)"];
-      C [label="C (l=6, u=0)", textcolor = "#00af00"];
-      D [label="D (l=6, u=0)", textcolor = "#00af00"];
+      C [label="C (l=6, u=0)", fontcolor = "#00af00"];
+      D [label="D (l=6, u=0)", fontcolor = "#00af00"];
    }
 
 Creating limit overrides while creating projects seems counter-productive given
@@ -511,10 +511,10 @@ A list of the hierarchy project limits.
 The above is an example response given the following diagram, where the default
 registered limit for ``ram_mb`` is 2560, which applies to ``D``.
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
@@ -655,10 +655,10 @@ performance-related concerns when employing this model for trees with many
 projects. For example, calculating usage for ``cores`` across hundreds or
 thousands of projects. Consider the following tree structure:
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;
@@ -685,10 +685,10 @@ parent.
 
 The following illustrates a more extreme example:
 
-.. blockdiag::
+.. graphviz::
 
-   blockdiag {
-      orientation = portrait;
+   digraph {
+      node [shape=box]
 
       A -> B;
       A -> C;

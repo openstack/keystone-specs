@@ -25,9 +25,8 @@ import datetime
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 
 extensions = [
-              'sphinxcontrib.blockdiag',
               'openstackdocstheme',
-              'sphinxcontrib.seqdiag',
+              'sphinx.ext.graphviz',
              ]
 
 

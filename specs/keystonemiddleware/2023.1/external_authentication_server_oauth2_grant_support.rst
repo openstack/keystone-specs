@@ -64,17 +64,7 @@ Terminology
 
 Preparation for OAuth2.0 Client Credentials Grant
 -------------------------------------------------
-.. seqdiag::
-
-  seqdiag {
-    User; AuthServer [label = "External\nAuthorization\nServer"];
-
-    User -> AuthServer
-    [label = "1. create client credentials"];
-    User <-- AuthServer
-    [label = "client credentials"];
-  }
-
+.. image:: _images/seqdiag-0ed17fa503a68ad017f6ee804bb35d3137a4f217.png
 
 The preparation consists of the following step as illustrated in the above
 sequence:
@@ -86,35 +76,7 @@ sequence:
 
 OAuth2.0 Client Credentials Grant Flow with External Authorization Server
 -------------------------------------------------------------------------
-.. seqdiag::
-
-  seqdiag {
-    Client; AuthServer [label = "External\nAuthorization\nServer"]; "Keystone Middleware"; "OpenStack Service";
-
-    Client -> AuthServer
-    [label = "POST\n /external-authz-server/token\n with client credentials for the Client"];
-    Client <-- AuthServer
-    [label = "Response 200 OK\n with Access Token"];
-    Client -> "Keystone Middleware"
-    [label = "2. request\n OpenStack Service endpoint\n with Access Token"];
-    "Keystone Middleware" -> AuthServer
-    [label = "3. POST\n /external-authz-server/introspect\n with client credentials for the Keystone Middleware\n and the Access Token"];
-    "Keystone Middleware" <-- AuthServer
-    [label = "Response 200 OK\n with Access Token metadata"];
-    "Keystone Middleware" -> "Keystone Middleware"
-    [label = "4. parse\n the necessary\n information\n from the metadata"];
-    "Keystone Middleware" -> "Keystone Middleware"
-    [label = "5. set\n request.environ\n with the necessary\n information"];
-    "Keystone Middleware" -> "Keystone Middleware"
-    [label = "6. cache\n token and metadata (Optional)"];
-    "OpenStack Service" <-- "Keystone Middleware"
-    [label = "return request.environ\n with the necessary\n information"];
-    "OpenStack Service" -> "OpenStack Service"
-    [label = "7. continue\n OpenStack\n Service\n processing"];
-    "Client" <-- "OpenStack Service"
-    [label = "API response"];
-  }
-
+.. image:: _images/seqdiag-99a28327d5abe90669fc0d8e5b0f4ab0b554a198.png
 
 The flow consists of the following steps as illustrated in the above sequence:
 

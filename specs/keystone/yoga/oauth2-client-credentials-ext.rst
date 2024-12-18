@@ -68,32 +68,7 @@ Terminology
 OAuth2.0 Client Credentials Grant Flow
 --------------------------------------
 
-.. seqdiag::
-
-  seqdiag {
-    User; Client; "Keystone Middleware"; Keystone; "OpenStack Service";
-
-    User -> "Keystone" [label = "POST /identity/v3/users/{user_id}/application_credentials"];
-    User <-- Keystone
-    [label = "Response 201 Created\n with Client credentials"];
-
-    User -> "Client"
-    [label = "set credentials"];
-    Client -> "Keystone"
-    [label = "POST\n /identity/v3/OS-OAUTH2/token\n with credentials"];
-    Client <-- "Keystone"
-    [label = "Response 200 OK\n with Access Token"];
-    Client -> "Keystone Middleware"
-    [label = "request\n OpenStack Service API\n with Access Token"];
-    "Keystone Middleware" -> "Keystone"
-    [label = "GET\n /identity/v3/auth/tokens\n with Access Token"];
-    "Keystone Middleware" <-- "Keystone"
-    [label = "Response 200 OK\n with Access Token metadata"];
-    "Keystone Middleware" -> "OpenStack Service"
-    [label = "forward API requst\n with Access Token metadata"];
-    "Client" <-- "OpenStack Service"
-    [label = "API response"];
-  }
+.. image:: _images/seqdiag-4d0fa7286c9f95db7c9aab083def7f30064925f6.png
 
 The flow consists of the following steps as illustrated in the above sequence:
 
@@ -185,9 +160,8 @@ access token from a request with the Authorization header.
 The Keystone Middleware updates request headers with the metadata only if a
 token is valid. If a token is invalid or an error response is returned, it
 rejects a request and returns ``401 Unauthorized``.  The Keystone Middleware
-uses `Authentication and token management
-<#authentication_and_token_management>`_ API to validate and get token
-metadata.
+uses "Authentication and token management API"
+[#authentication_and_token_management]_ to validate and get token metadata.
 
 Alternatives
 ------------

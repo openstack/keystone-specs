@@ -311,10 +311,10 @@ Assignee(s)
 -----------
 
 Primary assignee:
-  bbobrov
+  stanislav-z
 
 Other contributors:
-  None
+  bbobrov
 
 Work Items
 ----------
